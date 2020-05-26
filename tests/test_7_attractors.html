@@ -28,7 +28,6 @@ ZoneMap.load("map7.png", function (zoneMap) {
 
     engine.world.gravity.y = 0;
 
-    new AttractorList(engine).show();
     attractor1 = new AttractorList(engine).get(0);
     attractor2 = new AttractorList(engine).get(1);
 
@@ -46,7 +45,7 @@ ZoneMap.load("map7.png", function (zoneMap) {
   You can say to any body to attract to the given attractor and it will create a special force just between this body and the attractor.
 </p>
 <p>
-<button onclick="AttractorList(engine).show();">Show attractors</button>
+<button onclick="new AttractorList(engine).show();">Show attractors</button>
 </p>
 <p>
 H2:
