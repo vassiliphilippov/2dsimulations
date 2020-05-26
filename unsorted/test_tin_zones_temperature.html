@@ -1,0 +1,444 @@
+<html>
+<head>
+  <title>Testt42</title>
+  <script src="matter.js"></script>
+  <script src="debug.js"></script>
+  <script src="temperature.js"></script>
+  <script src="matter-attractors.js"></script>
+</head>
+<body>
+<script>
+
+// module aliases
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Body = Matter.Body,
+    World = Matter.World,
+    Constraint = Matter.Constraint,
+    Composite = Matter.Composite,
+    Composites = Matter.Composites,
+    Events = Matter.Events,
+    Vector = Matter.Vector,
+    Bodies = Matter.Bodies;
+
+var Chemistry = {};
+
+class Stack {
+  constructor(){
+    this.data = [];
+    this.top = 0;
+  }
+  push(element) {
+    this.data[this.top] = element;
+    this.top = this.top + 1;
+  }
+  pop() {
+    this.top = this.top -1;
+    return this.data.pop(); 
+  }
+  hasMoreElements() {
+    return this.top !== 0;
+  }
+}
+
+function loadMapImage(mapImageUrl, onload) {
+  let image = new Image();
+  image.onload = function () {
+    let canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    canvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height);
+    imageData = canvas.getContext('2d').getImageData(0, 0, image.width, image.height); 
+    mapImageData = parseMapImage(imageData, image.width, image.height);
+    onload(mapImageData);
+  }
+  image.src = mapImageUrl;
+}
+
+function parseMapImage(imageData, width, height) {
+  let checked = Array(width*height).fill(false);
+  let colorZones = {}
+  for (var y=0; y<height; y++) {
+    for (var x=0; x<width; x++) {
+      if (!checked[y*width+x]) {
+        let rgb = getImageDataPoint(imageData, x, y);
+        rect = findSameColorConnected(imageData, checked, x, y);
+        if (!colorZones[rgb]) colorZones[rgb] = [];
+        colorZones[rgb].push(rect);
+      }
+    }
+  }
+  //todo: change naming to make the whole object zones
+  return {imageData: imageData.data, width: width, height: height, zones: colorZones};
+}
+
+function findSameColorConnected(imageData, checked, startX, startY) {
+  let width = imageData.width;
+  let height = imageData.height;
+  let rgb = getImageDataPoint(imageData, startX, startY);
+  let minX = startX;
+  let maxX = startX;
+  let minY = startY;
+  let maxY = startY;
+  let recstack = new Stack(); 
+  recstack.push(startX+startY*width);
+  while (recstack.hasMoreElements()) {
+    let i = recstack.pop();     
+
+    //if out of border then skip
+    let x = i % width;
+    let y = Math.floor(i/width);
+    if (x<0 || y<0 || x>=width || y>=height) continue;
+
+    //if this point was already checked then skip it
+    if (checked[i]) continue;
+
+    //if not the same color then skip
+    let crgb = getImageDataPoint(imageData, x, y);
+    if (rgb[0]!=crgb[0] || rgb[1]!=crgb[1] || rgb[2]!=crgb[2]) continue;
+
+    //update the boundary rect
+    if (x<minX) minX=x;
+    if (x>maxX) maxX=x;
+    if (y<minY) minY=y;
+    if (y>maxY) maxY=y;
+
+    //mark this point as checed
+    checked[i] = true;
+
+    //and check all the neighbours
+    recstack.push((x+1) + (y)*width);
+    recstack.push((x-1) + (y)*width);
+    recstack.push((x) + (y+1)*width);
+    recstack.push((x) + (y-1)*width);
+  } 
+  return [minX, minY, maxX, maxY];
+}
+
+function getImageDataPoint(imageData, x, y) {
+  let i = (x+y*imageData.width)*4;
+  return [imageData.data[i], imageData.data[i+1], imageData.data[i+2]];
+}
+
+function isZoneFound(zoneData, rgb) {
+  console.log(zoneData);
+  return (rgb in zoneData.zones);
+}
+
+function getFirstZoneCenter(zoneData, rgb) {
+  let rects = zoneData.zones[rgb];
+  let rect = rects[0];
+  return [ Math.floor((rect[0]+rect[2])/2) , Math.floor((rect[1]+rect[3])/2) ];
+}
+
+function getFirstZoneRect(zoneData, rgb) {
+  console.log("rgb = ", rgb);
+  let rects = zoneData.zones[rgb];
+  let r = rects[0];
+  return {x1: r[0], y1: r[1], x2:r[2], y2: r[3]};
+}
+
+function getZoneCenters(zoneData, rgb) {
+  if (!isZoneFound(zoneData, rgb)) console.log("error color not found ", rgb);
+  let rects = zoneData.zones[rgb];
+  let centers = [];
+  for (rect of rects) {
+    centers.push( [ Math.floor((rect[0]+rect[2])/2) , Math.floor((rect[1]+rect[3])/2) ] );
+  }
+  return centers;
+}
+
+function getZonePixelColor(zoneData, x, y) {
+  let i = x + zoneData.width*y;
+  return [zoneData.imageData[i], zoneData.imageData[i+1], zoneData.imageData[i+2]]
+}
+
+function isZonePixelColor(zoneData, x, y, rgb) {
+  let i = (x + zoneData.width*y)*4;
+  return zoneData.imageData[i]==rgb[0] && zoneData.imageData[i+1]==rgb[1] && zoneData.imageData[i+2]==rgb[2];
+}
+
+function getRandomPosition(zoneData, rgb) {
+  let rects = zoneData.zones[rgb];
+  let totalArea = 0;
+  for (rect of rects) {
+    let area = (rect[2]-rect[0])*(rect[3]-rect[1]);
+    totalArea += area;
+  }
+  let randIndex = Matter.Common.random(0, totalArea);
+  for (rect of rects) {
+    let area = (rect[2]-rect[0])*(rect[3]-rect[1]);
+    if (randIndex<=area) {
+      //todo: change rect structure to x1, y1, x2, y2
+      let x = Math.floor(Matter.Common.random(rect[0], rect[2]));
+      let y = Math.floor(Matter.Common.random(rect[1], rect[3]));
+      console.log("xy = ", x, y);
+      if (isZonePixelColor(zoneData, x, y, rgb)) {
+        return {x: x, y: y};
+      } else {
+        //if we fail we try again
+        return getRandomPosition(zoneData, rgb);
+      }
+    } else {
+      randIndex -= area;
+    }
+  }
+}
+
+function createStackInZone(zoneData, rgb, dx, dy, oncreate) {
+  let rects = zoneData.zones[rgb];
+  for (rect of rects) {
+    for (x=rect[0]; x<rect[2]; x+=dx) {
+      for (y=rect[1]; y<rect[3]; y+=dy) {
+        oncreate(x, y);
+      }
+    }
+  }
+}
+
+
+// create an engine
+var engine = Engine.create();
+engine.world.gravity.y = 0;
+
+// create a renderer
+//todo: read width and height from map
+var render = Render.create({
+    element: document.body,
+    engine: engine,
+    options: {
+      wireframes: false,
+      width: 1172,
+      height: 726
+    }
+});
+
+/*
+// create two boxes and a ground
+particles = []
+for (var i=0; i<200; i++) {
+  x = Math.random()*700+50;
+  y = Math.random()*500+50;
+  var particle = Bodies.circle(x, y, 20, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+  Body.setVelocity(particle, {x: Math.random()*3-1.5, y: Math.random()*3-1.5});
+  particles.push(particle);
+}
+*/
+
+
+function stick_particle(particle) {
+  particle.fixedPosition = {x: particle.position.x, y: particle.position.y};
+  particle.frictionAir = 0.1;
+  particle.sticked = true;
+}
+
+function create_crystal_particle(x, y, radius, options) {
+  let particle = Bodies.circle(x, y, radius, options);
+  particle.render.fillStyle = "white";
+  stick_particle(particle);
+  particle.formula = "Zn";
+  particle.render.sprite.texture = 'zn.png';
+  return particle;
+}
+
+var atomRadius = 20;
+function create_h2o_molecule(x, y, options) {
+  p = Vector.create(x, y);
+  v = Vector.create(atomRadius, 0);
+  v2 = Vector.rotate(v, 2.3);
+  h1c = Vector.add(p, v);
+  h2c = Vector.add(p, v2);
+  var partO = Bodies.circle(p.x, p.y, atomRadius, options),
+    partH1 = Bodies.circle(h1c.x, h1c.y, atomRadius/2, options),
+    partH2 = Bodies.circle(h2c.x, h2c.y, atomRadius/2, options);
+
+  partO.render.fillStyle = "white";
+  partO.render.opacity = 1;
+  partH1.render.fillStyle = "red";
+  partH1.render.opacity = 1;
+  partH2.render.fillStyle = "red";
+  partH2.render.opacity = 1;
+
+  var molecule = Body.create({
+     parts: [partH1, partO, partH2], frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0
+  });
+  molecule.formula = "H2O";
+  molecule.render.visible = true;
+  molecule.render.opacity = 0.3;
+  return molecule;
+}
+
+let zoneWaterColor = [255, 255, 255];
+let zoneBorder1Color = [1, 0, 0];
+let zoneBorder2Color = [100, 0, 0];
+let zoneBorder3Color = [0, 100, 0];
+let zoneBorder4Color = [0, 0, 100];
+let zoneZnColor = [237, 28, 36];
+
+loadMapImage("map3.png", function (zonesData) {
+  console.log(zonesData);
+
+particles = []
+for (var i=0; i<150; i++) {
+  p = getRandomPosition(zonesData, zoneWaterColor);
+  var particle = create_h2o_molecule(p.x, p.y, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+  particle.plugin.chemistry = {temperature: 5}
+  Body.setVelocity(particle, {x: Math.random()*10-5, y: Math.random()*10-5});
+  particles.push(particle);
+}
+World.add(engine.world, particles);
+
+createStackInZone(zonesData, zoneZnColor, atomRadius*2.2, atomRadius*2.2, function(x, y) {
+  var cp = create_crystal_particle(x, y, atomRadius, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+  Body.setDensity(cp, 0.02);
+  cp.plugin.chemistry = {temperature: 4}
+  World.add(engine.world, cp);
+});
+
+/*
+for (var i=0; i<10; i++) {
+  x = Math.random()*400+50;
+  y = Math.random()*500+50;
+  var ball = Bodies.circle(x,y,atomRadius, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+  ball.render.sprite.texture =  'na+2.png';
+  ball.formula = "Na+";
+  ball.render.fillStyle = "blue";
+  World.add(engine.world, ball);
+} */
+
+r1 = getFirstZoneRect(zonesData, zoneBorder1Color);
+r2 = getFirstZoneRect(zonesData, zoneBorder2Color);
+r3 = getFirstZoneRect(zonesData, zoneBorder3Color);
+r4 = getFirstZoneRect(zonesData, zoneBorder4Color);
+var ground1 = Bodies.rectangle((r1.x1+r1.x2)/2, (r1.y1+r1.y2)/2, r1.x2-r1.x1, r1.y2-r1.y1, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {fillStyle: "red"} });
+var ground2 = Bodies.rectangle((r2.x1+r2.x2)/2, (r2.y1+r2.y2)/2, r2.x2-r2.x1, r2.y2-r2.y1, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {fillStyle: "green"} });
+var ground3 = Bodies.rectangle((r3.x1+r3.x2)/2, (r3.y1+r3.y2)/2, r3.x2-r3.x1, r3.y2-r3.y1, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {fillStyle: "blue"} });
+var ground4 = Bodies.rectangle((r4.x1+r4.x2)/2, (r4.y1+r4.y2)/2, r4.x2-r4.x1, r4.y2-r4.y1, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {fillStyle: "yellow"} });
+World.add(engine.world, [ground1, ground2, ground3, ground4]);
+
+// run the engine
+Engine.run(engine);
+
+// run the renderer
+Render.run(render);
+
+Temperature.init(engine);
+Debug.init(engine);
+});
+
+function kinetic_energy(body) {
+  return body.speed*body.speed/2;
+}
+
+
+let maxForce = 0.03;
+function calculate_force(body) {
+  if (body.formula=="Na") {
+     let force = {
+          x: (700 - body.position.x) * 1e-6 * 3,
+          y: (300 - body.position.y) * 1e-6 * 3,
+        };
+//     Body.applyForce(body, body.position, force);
+  }
+  if (body.sticked) {
+    let d = Vector.sub(body.position, body.fixedPosition);
+    let forceMagnitude = Vector.magnitude(d)*0.0003;
+    if (forceMagnitude>maxForce) {
+      forceMagnitude = maxForce;
+    }
+    let force = Vector.mult(Vector.neg(Vector.normalise(d)), forceMagnitude); 
+    Body.applyForce(body, body.position, force);
+  }
+}
+
+var prev_total_kinetic_energy = 0;
+Events.on(engine, "beforeUpdate", (event) => {
+  for (var body of event.source.world.bodies) {
+    calculate_force(body);
+  }
+});
+
+function isThisPair(a, b, aTest, bTest) {
+  return ((a==aTest) && (b==bTest)) || ((a==bTest) && (b==aTest));
+}
+
+function waterClosenest(znParticle) {
+  let p = znParticle.position;
+  let closenent = 0;
+  for (var body of engine.world.bodies) {
+    if (body.formula=="H2O") {
+      let dist = Vector.magnitude(Vector.sub(body.position, p))-2*atomRadius;
+      if (dist<atomRadius) {
+        closenent += 1;
+      }
+    }
+  }
+  return closenent;
+}
+
+function findZnParticleOnEdge() {
+  let minWaterClosenest = Infinity;
+  let bestZnParticle = null;
+  for (var body of engine.world.bodies) {
+    if (body.formula=="Zn") {
+      let x = waterClosenest(body);
+      if (minWaterClosenest>x) {
+        minWaterClosenest = x;
+        bestZnParticle = body;
+      }
+    }
+  }
+  return bestZnParticle;
+}
+
+Events.on(Chemistry, "onCollision_Na+_Zn", (event) => {
+  let bodyNa = event.particleA;
+  let bodyZn = event.particleB;
+  let particleZn = findZnParticleOnEdge();
+  particleZn.sticked = false;
+  particleZn.frictionAir = 0;
+  particleZn.formula = "Zn+";
+  particleZn.render.sprite.texture = 'zn+.png';
+  stick_particle(bodyNa);
+  bodyNa.formula = "Na";
+  bodyNa.render.sprite.texture =  'na.png';
+  bodyNa.render.fillStyle = "lightblue";
+});
+
+Events.on(Chemistry, "onCollision_Na_Na+", (event) => {
+  let bodyNaIon = event.particleB;
+  let bodyNaAtom = event.particleA;
+  stick_particle(bodyNaIon);
+  bodyNaIon.formula = "Na";
+  bodyNaIon.render.sprite.texture =  'na.png';
+  bodyNaIon.render.fillStyle = "lightblue";
+});
+
+Events.on(engine, "collisionEnd", (event) => {
+    for (var pair of event.pairs) {
+      bodyA = pair.bodyA.parent;
+      bodyB = pair.bodyB.parent;
+//      console.log(bodyA.formula + " " + bodyB.formula);
+      if (bodyA.formula<bodyB.formula) {
+        Events.trigger(Chemistry, 'onCollision_'+bodyA.formula+'_'+bodyB.formula, { particleA: bodyA, particleB: bodyB });
+      } else {
+        Events.trigger(Chemistry, 'onCollision_'+bodyB.formula+'_'+bodyA.formula, { particleA: bodyB, particleB: bodyA });
+      }
+    }
+});
+
+function hide_water() {
+  bodies_to_remove = [];
+  for (var body of engine.world.bodies) {
+    if (body.formula=="H2O") {
+      bodies_to_remove.push(body);
+    }
+  }
+  for (var body of bodies_to_remove) {
+    World.remove(engine.world, body, true);  
+  }
+}
+</script>
+<button onclick="hide_water()">Hide water</button>
+</body>
+</html>

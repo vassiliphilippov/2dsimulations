@@ -1,0 +1,72 @@
+<html>
+<head>
+  <title>Test 7: Attractors</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+</head>
+<body>
+<script>
+
+var engine = null;
+var attractor1 = null;
+
+ZoneMap.load("map7.png", function (zoneMap) {
+    engine = Matter.Engine.create();
+    var render = ChemistryRender.create({element: document.body, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
+    Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
+
+    engine.world.gravity.y = 0;
+
+    new AttractorList(engine).show();
+    attractor1 = new AttractorList(engine).get(0);
+    attractor2 = new AttractorList(engine).get(1);
+
+    Debug.init(engine);
+    Force.init(engine);
+    Temperature.init(engine);
+
+    Matter.Engine.run(engine);
+    ChemistryRender.run(render);
+});
+
+</script>
+<p>
+  Attractors are special bodies that are fixed, invisible, and don't collide with other bodies. Any zone in zonemap with blue=3 is an attractor.
+  You can say to any body to attract to the given attractor and it will create a special force just between this body and the attractor.
+</p>
+<p>
+<button onclick="AttractorList(engine).show();">Show attractors</button>
+</p>
+<p>
+H2:
+<button onclick="new ParticleList(engine).formula('H2').addAttraction(attractor1)">Add attraction #1</button>
+<button onclick="new ParticleList(engine).formula('H2').removeAttraction(attractor1)">Remove attraction #1</button>
+<button onclick="new ParticleList(engine).formula('H2').addAttraction(attractor2)">Add attraction #2</button>
+<button onclick="new ParticleList(engine).formula('H2').removeAttraction(attractor2)">Remove attraction #2</button>
+<button onclick="new ParticleList(engine).formula('H2').setTemperature(30)">T=30</button>
+<button onclick="new ParticleList(engine).formula('H2').setTemperature(300)">T=300</button>
+<button onclick="new ParticleList(engine).formula('H2').setTemperature(1000)">T=1000</button>
+</p>
+<p>
+H20:
+<button onclick="new ParticleList(engine).formula('H2O').addAttraction(attractor1)">Add attraction #1</button>
+<button onclick="new ParticleList(engine).formula('H2O').removeAttraction(attractor1)">Remove attraction #1</button>
+<button onclick="new ParticleList(engine).formula('H2O').addAttraction(attractor2)">Add attraction #2</button>
+<button onclick="new ParticleList(engine).formula('H2O').removeAttraction(attractor2)">Remove attraction #2</button>
+<button onclick="new ParticleList(engine).formula('H2O').setTemperature(30)">T=30</button>
+<button onclick="new ParticleList(engine).formula('H2O').setTemperature(300)">T=300</button>
+<button onclick="new ParticleList(engine).formula('H2O').setTemperature(1000)">T=1000</button>
+</p>
+</body>
+</html>

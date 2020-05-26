@@ -1,0 +1,170 @@
+<html>
+<head>
+  <title>Testt42</title>
+  <script src="matter.js"></script>
+  <script src="force.js"></script>
+  <script src="zonemap.js"></script>
+  <script src="debug.js"></script>
+  <script src="chemistryparticles.json"></script>
+  <script src="periodictable.json"></script>
+  <script src="atomcolors.json"></script>
+  <script src="chemistry.js"></script>
+  <script src="particles.js"></script>
+  <script src="background.js"></script>
+  <script src="temperature.js"></script>
+  <script src="chemistryrender.js"></script>
+</head>
+<body>
+<script>
+
+ZoneMap.load("map6.png", function (zoneMap) {
+    var engine = Matter.Engine.create();
+    var render = ChemistryRender.create({element: document.body, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
+    Background.setBackground(engine.world, 'bkg.png', zoneMap.width, zoneMap.height);
+
+    ZoneMap.spawnRandom(zoneMap, [255,255,255], 10, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.createParticleByStruct("H2O", waterStruct, x, y));
+    });
+
+    Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
+/*    let m1 = Chemistry.createParticleByStruct("H2SO4", teststruct, 100, 300);
+    let m2 = Chemistry.createParticleByStruct("H2SO4", teststruct, 500, 300);
+    let m3 = Chemistry.createParticleByStruct("H2SO4", teststruct, 100, 500);
+    Matter.Body.setVelocity(m2, {x: -1, y: 0});
+    Matter.Body.setVelocity(m3, {x: 0.01, y: -1});
+    Matter.World.add(engine.world, [m1, m2, m3]);
+*/
+    let pl = new ParticleList(engine);
+    pl.setChemistryOptions({temperature: 40});
+    pl.setOptions({plugin: {proximity: {levels: [10]}}});
+    new ParticleList(engine).formula("H2O").setChemistryOptions({temperature: 50});
+
+    //Fix that temperature only works after animation ends
+    //Todo: make a separate object/file for animations
+    let a = new AttractorList(engine).zoneMapColor("0,162,3").first();
+    let attractors = new AttractorList(engine).zoneMapColor("0,100,3").toArray();
+    let pathAttractors = [a];
+    let prevPosition = a.position;
+    while (attractors.length>0) {
+        let iMin = 0;
+        let minDist = Infinity;
+        for (let i=0; i<attractors.length; i++) {
+            let dist = Matter.Vector.magnitude(Matter.Vector.sub(prevPosition, attractors[i].position));
+            if (dist<minDist) {
+                minDist = dist;
+                iMin = i;
+            }
+        }
+        prevPosition = attractors[iMin].position;
+        pathAttractors.push(attractors[iMin]);
+        attractors.splice(iMin, 1);
+    }
+
+//    Force.addAttraction(pl.formula("Na+").first(), a, 0.1);
+
+    pl.formula("Na+").forEach(p => {
+        p.plugin.animation = {
+            wayPoints: pathAttractors,
+            currentWayPointIndex: 0,
+            attractionLevel: 1
+        };
+        Force.addAttraction(p, a, 1);
+        Matter.Events.on(p, "comeClose", event => {
+            let body = event.body;
+            if (body.plugin.animation) {
+                let animation = body.plugin.animation;
+                let target = animation.wayPoints[animation.currentWayPointIndex];
+                if (event.anotherBody==target) {
+                    Force.removeAttraction(body, target);
+                    animation.currentWayPointIndex += 1;
+                    if (animation.currentWayPointIndex < animation.wayPoints.length) {
+                        let nextTarget = animation.wayPoints[animation.currentWayPointIndex];
+                        Force.addAttraction(body, nextTarget, animation.attractionLevel);
+                    } else {
+                        delete body.plugin.animation;
+                    }
+                }
+            }
+        }); 
+    });
+
+    engine.world.gravity.y = 0;
+    Debug.init(engine);
+    Force.init(engine);
+    Temperature.init(engine);
+    Matter.Engine.run(engine);
+    ChemistryRender.run(render);
+    //Todo: decide when run and when init
+
+
+function distanceBetweenAtoms(atomA, atomB) {
+    if (!atomA.circleRadius || !atomB.circleRadius) {
+        console.log("Error, atoms without circleRadius property");
+    }
+    return Matter.Vector.magnitude(Matter.Vector.sub(atomA.position, atomB.position)) - atomA.circleRadius - atomB.circleRadius;
+}
+
+function distanceBetweenParticles(pA, pB) {
+    let minD = Infinity;
+    for (let k = pA.parts.length > 1 ? 1 : 0; k < pA.parts.length; k++) {
+        let partA = pA.parts[k];
+        for (let i = pB.parts.length > 1 ? 1 : 0; i < pB.parts.length; i++) {
+            let partB = pB.parts[i];
+            let d = distanceBetweenAtoms(partA, partB);
+            if (d<minD) {
+                minD = d;
+            }
+        }
+    }
+    return minD;
+}
+
+function distanceBetweenBodies(bodyA, bodyB) {
+    //Todo: replace with distance between any circle bodies
+    if (bodyA.plugin.chemistry && bodyA.plugin.chemistry.particle && bodyB.plugin.chemistry && bodyB.plugin.chemistry.particle) {
+        return distanceBetweenParticles(bodyA, bodyB);
+    } else {
+        return Matter.Vector.magnitude(Matter.Vector.sub(bodyA.position, bodyB.position));
+    }
+}
+
+//Proximity events
+Matter.Events.on(engine, "beforeUpdate", (event) => {
+    let bodies = event.source.world.bodies;
+    for (bodyA of bodies) {
+        if (bodyA.plugin.proximity && bodyA.plugin.proximity.levels) {
+            if (!bodyA.plugin.proximity.levelFlags) {
+                bodyA.plugin.proximity.levelFlags = {};
+            }
+            //Alias
+            let flags = bodyA.plugin.proximity.levelFlags; 
+            for (bodyB of bodies) {
+                if (bodyA==bodyB) continue;
+                let d = distanceBetweenBodies(bodyA, bodyB);
+                for (level of bodyA.plugin.proximity.levels) {
+                    if (!(level in flags)) {
+                        flags[level] = new Set();
+                    }
+                    if (d<level && !flags[level].has(bodyB)) {
+                        //Todo: rename events and change it to engine not body or not
+                        event = {body: bodyA, anotherBody: bodyB, level: level, distance: d}
+                        Matter.Events.trigger(bodyA, "comeClose", event);
+                        flags[level].add(bodyB);
+                    }
+                    if (d>level && flags[level].has(bodyB)) {
+                        event = {body: bodyA, anotherBody: bodyB, level: level, distance: d}
+                        Matter.Events.trigger(bodyA, "comeFarAway", event);
+                        flags[level].delete(bodyB);
+                    }
+                }
+            }
+        }
+    }
+});
+
+
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<html>
+<canvas id="aa" style="width: 1172px; height: 726px"></canvas>
+<script>
+var canvas = document.getElementById("aa");//createElement('canvas');
+let width = 1172;
+let height = 726;
+canvas.width = width;
+canvas.height = height;
+
+image = new Image();//document.getElementById("myImage");
+image.src = "map.png";
+image.crossOrigin = "Anonymous";
+//image.src = "map.png";
+
+
+canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+imgData = canvas.getContext('2d').getImageData(0, 0, width, height); // get the image array
+console.log(imgData);
+
+
+var d = new Date();
+var start_time = d.getTime();
+
+let checked = Array(width*height).fill(false);
+class Stack {
+  constructor(){
+    this.data = [];
+    this.top = 0;
+  }
+  push(element) {
+    this.data[this.top] = element;
+    this.top = this.top + 1;
+  }
+  pop() {
+    this.top = this.top -1;
+    return this.data.pop(); // removes the last element
+  }
+  hasMoreElements() {
+    return this.top !== 0;
+  }
+}
+
+
+function getIndex(x, y) {
+  return y*width+x;
+}
+
+function getX(i) {
+  return i % width;
+}
+
+function getY(i) {
+  return i / width;
+}
+
+function fill(x, y, r, g, b) {
+  let recstack = new Stack(); 
+  recstack.push(getIndex(x, y));
+  while (recstack.hasMoreElements()) {
+    let i = recstack.pop();
+    let x = getX(i);
+    let y = getY(i);
+    if (x<0 || y<0 || x>=width || y>=height) continue;
+    if (checked[i]) continue;
+    let cr = imgData.data[i*4];
+    let cg = imgData.data[i*4+1];
+    let cb = imgData.data[i*4+2];
+    if (r!=cr || g!=cg || b!=cb) continue;
+    checked[i] = true;
+    recstack.push(getIndex(x+1, y));
+    recstack.push(getIndex(x-1, y));
+    recstack.push(getIndex(x, y+1));
+    recstack.push(getIndex(x, y-1));
+  } 
+}
+
+for (var y=0; y<height; y++) {
+  for (var x=0; x<width; x++) {
+    if (!checked[y*width+x]) {
+      let i = (y*width+x)*4;
+      let r = imgData.data[i];
+      let g = imgData.data[i+1];
+      let b = imgData.data[i+2];
+      console.log("fill ", x, y, r, g, b);
+      fill(x, y, r, g, b);  
+    }
+  }
+}
+
+var d = new Date();
+var end_time = d.getTime();
+console.log(end_time-start_time);
+</script>
+</html>

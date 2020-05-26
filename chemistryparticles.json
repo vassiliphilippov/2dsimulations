@@ -1,0 +1,6131 @@
+var ChemistryParticleInfoDatabase = [
+ {
+   "id": 1,
+   "formula": "H2O",
+   "name": "Water",
+   "charge": 0,
+   "compound": true,
+   "type": "molecule",
+   "color": "151,5,5"
+ },
+ {
+   "id": 2,
+   "formula": "O2",
+   "name": "Oxygen",
+   "charge": 0,
+   "compound": true,
+   "type": "molecule",
+   "color": "152,5,5"
+ },
+ {
+   "id": 3,
+   "formula": "H2",
+   "name": "Hydrogen",
+   "charge": 0,
+   "compound": true,
+   "type": "molecule",
+   "color": "153,5,5"
+ },
+ {
+   "id": 4,
+   "formula": "CO2",
+   "name": "Carbon dioxide",
+   "charge": 0,
+   "compound": true,
+   "type": "molecule",
+   "color": "154,5,5"
+ },
+ {
+   "id": 5,
+   "formula": "Cl2",
+   "name": "Chlorine",
+   "charge": 0,
+   "compound": true,
+   "type": "molecule",
+   "color": "155,5,5"
+ },
+ {
+   "id": 6,
+   "formula": "D-",
+   "name": "Deuterium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "156,5,5"
+ },
+ {
+   "id": 7,
+   "formula": "D+",
+   "name": "Deuterium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "157,5,5"
+ },
+ {
+   "id": 8,
+   "formula": "H-",
+   "name": "Hydrogen atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "158,5,5"
+ },
+ {
+   "id": 9,
+   "formula": "H+",
+   "name": "Hydrogen atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "159,5,5"
+ },
+ {
+   "id": 10,
+   "formula": "H2-",
+   "name": "hydrogen diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "160,5,5"
+ },
+ {
+   "id": 11,
+   "formula": "H2+",
+   "name": "Hydrogen cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "161,5,5"
+ },
+ {
+   "id": 12,
+   "formula": "H3+",
+   "name": "hydrogen trimer cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "162,5,5"
+ },
+ {
+   "id": 13,
+   "formula": "He-",
+   "name": "Helium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "163,5,5"
+ },
+ {
+   "id": 14,
+   "formula": "He+",
+   "name": "Helium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "164,5,5"
+ },
+ {
+   "id": 15,
+   "formula": "HeH+",
+   "name": "Helium hydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "165,5,5"
+ },
+ {
+   "id": 16,
+   "formula": "He2+",
+   "name": "helium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "166,5,5"
+ },
+ {
+   "id": 17,
+   "formula": "Li-",
+   "name": "Lithium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "167,5,5"
+ },
+ {
+   "id": 18,
+   "formula": "Li+",
+   "name": "Lithium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "168,5,5"
+ },
+ {
+   "id": 19,
+   "formula": "Na-",
+   "name": "Sodium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "169,5,5"
+ },
+ {
+   "id": 20,
+   "formula": "Na+",
+   "name": "Sodium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "170,5,5"
+ },
+ {
+   "id": 21,
+   "formula": "K-",
+   "name": "Potassium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "171,5,5"
+ },
+ {
+   "id": 22,
+   "formula": "K+",
+   "name": "Potassium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "172,5,5"
+ },
+ {
+   "id": 23,
+   "formula": "Cu-",
+   "name": "Copper atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "173,5,5"
+ },
+ {
+   "id": 24,
+   "formula": "Cu+",
+   "name": "Copper atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "174,5,5"
+ },
+ {
+   "id": 25,
+   "formula": "LiH-",
+   "name": "lithium hydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "175,5,5"
+ },
+ {
+   "id": 26,
+   "formula": "LiH+",
+   "name": "lithium hydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "176,5,5"
+ },
+ {
+   "id": 27,
+   "formula": "NaH-",
+   "name": "sodium hydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "177,5,5"
+ },
+ {
+   "id": 28,
+   "formula": "NaH+",
+   "name": "sodium hydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "178,5,5"
+ },
+ {
+   "id": 29,
+   "formula": "KH+",
+   "name": "Potassium hydrogen cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "179,5,5"
+ },
+ {
+   "id": 30,
+   "formula": "Be-",
+   "name": "Beryllium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "180,5,5"
+ },
+ {
+   "id": 31,
+   "formula": "Be+",
+   "name": "Beryllium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "181,5,5"
+ },
+ {
+   "id": 32,
+   "formula": "Mg-",
+   "name": "Magnesium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "182,5,5"
+ },
+ {
+   "id": 33,
+   "formula": "Mg+",
+   "name": "Magnesium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "183,5,5"
+ },
+ {
+   "id": 34,
+   "formula": "Ca-",
+   "name": "Calcium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "184,5,5"
+ },
+ {
+   "id": 35,
+   "formula": "Ca+",
+   "name": "Calcium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "185,5,5"
+ },
+ {
+   "id": 36,
+   "formula": "Zn-",
+   "name": "Zinc atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "186,5,5"
+ },
+ {
+   "id": 37,
+   "formula": "Zn+",
+   "name": "Zinc atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "187,5,5"
+ },
+ {
+   "id": 38,
+   "formula": "BeH-",
+   "name": "berylium monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "188,5,5"
+ },
+ {
+   "id": 39,
+   "formula": "BeH+",
+   "name": "beryllium monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "189,5,5"
+ },
+ {
+   "id": 40,
+   "formula": "MgH-",
+   "name": "magnesium monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "190,5,5"
+ },
+ {
+   "id": 41,
+   "formula": "MgH+",
+   "name": "magnesium monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "191,5,5"
+ },
+ {
+   "id": 42,
+   "formula": "CaH+",
+   "name": "Calcium monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "192,5,5"
+ },
+ {
+   "id": 43,
+   "formula": "ZnH+",
+   "name": "Zinc, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "193,5,5"
+ },
+ {
+   "id": 44,
+   "formula": "BeH2+",
+   "name": "Beryllium dihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "194,5,5"
+ },
+ {
+   "id": 45,
+   "formula": "B-",
+   "name": "Boron atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "195,5,5"
+ },
+ {
+   "id": 46,
+   "formula": "B+",
+   "name": "Boron atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "196,5,5"
+ },
+ {
+   "id": 47,
+   "formula": "Al-",
+   "name": "Aluminum atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "197,5,5"
+ },
+ {
+   "id": 48,
+   "formula": "Al+",
+   "name": "Aluminum atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "198,5,5"
+ },
+ {
+   "id": 49,
+   "formula": "Sc+",
+   "name": "Scandium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "199,5,5"
+ },
+ {
+   "id": 50,
+   "formula": "Ga-",
+   "name": "Gallium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "200,5,5"
+ },
+ {
+   "id": 51,
+   "formula": "Ga+",
+   "name": "Gallium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "201,5,5"
+ },
+ {
+   "id": 52,
+   "formula": "BH-",
+   "name": "boron monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "202,5,5"
+ },
+ {
+   "id": 53,
+   "formula": "BH+",
+   "name": "boron monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "203,5,5"
+ },
+ {
+   "id": 54,
+   "formula": "AlH-",
+   "name": "aluminum monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "204,5,5"
+ },
+ {
+   "id": 55,
+   "formula": "AlH+",
+   "name": "aluminum monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "205,5,5"
+ },
+ {
+   "id": 56,
+   "formula": "ScH+",
+   "name": "Scandium monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "206,5,5"
+ },
+ {
+   "id": 57,
+   "formula": "GaH+",
+   "name": "Gallium monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "207,5,5"
+ },
+ {
+   "id": 58,
+   "formula": "BH2-",
+   "name": "boron dihydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "208,5,5"
+ },
+ {
+   "id": 59,
+   "formula": "BH2+",
+   "name": "Boron dihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "209,5,5"
+ },
+ {
+   "id": 60,
+   "formula": "AlH2-",
+   "name": "aluminum dihydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "210,5,5"
+ },
+ {
+   "id": 61,
+   "formula": "AlH2+",
+   "name": "aluminum dihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "211,5,5"
+ },
+ {
+   "id": 62,
+   "formula": "BH3-",
+   "name": "boron trihydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "212,5,5"
+ },
+ {
+   "id": 63,
+   "formula": "BH3+",
+   "name": "boron trihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "213,5,5"
+ },
+ {
+   "id": 64,
+   "formula": "AlH3-",
+   "name": "aluminum trihydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "214,5,5"
+ },
+ {
+   "id": 65,
+   "formula": "AlH3+",
+   "name": "aluminum trihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "215,5,5"
+ },
+ {
+   "id": 66,
+   "formula": "BH4-",
+   "name": "borohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "216,5,5"
+ },
+ {
+   "id": 67,
+   "formula": "AlH4-",
+   "name": "Aluminum tetrahydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "217,5,5"
+ },
+ {
+   "id": 68,
+   "formula": "C-",
+   "name": "Carbon atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "218,5,5"
+ },
+ {
+   "id": 69,
+   "formula": "C+",
+   "name": "Carbon atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "219,5,5"
+ },
+ {
+   "id": 70,
+   "formula": "Si-",
+   "name": "Silicon atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "220,5,5"
+ },
+ {
+   "id": 71,
+   "formula": "Si+",
+   "name": "Silicon atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "221,5,5"
+ },
+ {
+   "id": 72,
+   "formula": "Ti-",
+   "name": "Titanium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "222,5,5"
+ },
+ {
+   "id": 73,
+   "formula": "Ti+",
+   "name": "Titanium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "223,5,5"
+ },
+ {
+   "id": 74,
+   "formula": "Ge-",
+   "name": "Germanium anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "224,5,5"
+ },
+ {
+   "id": 75,
+   "formula": "Ge+",
+   "name": "Germanium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "225,5,5"
+ },
+ {
+   "id": 76,
+   "formula": "CH-",
+   "name": "methylidyne anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "226,5,5"
+ },
+ {
+   "id": 77,
+   "formula": "CH+",
+   "name": "Methylidyne cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "227,5,5"
+ },
+ {
+   "id": 78,
+   "formula": "SiH-",
+   "name": "silicon monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "228,5,5"
+ },
+ {
+   "id": 79,
+   "formula": "SiH+",
+   "name": "silicon monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "229,5,5"
+ },
+ {
+   "id": 80,
+   "formula": "GeH+",
+   "name": "Germaniun monohyrdide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "230,5,5"
+ },
+ {
+   "id": 81,
+   "formula": "CH2-",
+   "name": "methylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "231,5,5"
+ },
+ {
+   "id": 82,
+   "formula": "CH2+",
+   "name": "methylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "232,5,5"
+ },
+ {
+   "id": 83,
+   "formula": "SiH2-",
+   "name": "silicon dihydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "233,5,5"
+ },
+ {
+   "id": 84,
+   "formula": "SiH2+",
+   "name": "silicon dihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "234,5,5"
+ },
+ {
+   "id": 85,
+   "formula": "GeH2-",
+   "name": "germylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "235,5,5"
+ },
+ {
+   "id": 86,
+   "formula": "CH3-",
+   "name": "methyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "236,5,5"
+ },
+ {
+   "id": 87,
+   "formula": "CH3+",
+   "name": "methyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "237,5,5"
+ },
+ {
+   "id": 88,
+   "formula": "SiH3-",
+   "name": "Silyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "238,5,5"
+ },
+ {
+   "id": 89,
+   "formula": "SiH3+",
+   "name": "Silyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "239,5,5"
+ },
+ {
+   "id": 90,
+   "formula": "GeH3+",
+   "name": "germyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "240,5,5"
+ },
+ {
+   "id": 91,
+   "formula": "CH4-",
+   "name": "Methane anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "241,5,5"
+ },
+ {
+   "id": 92,
+   "formula": "CH4+",
+   "name": "Methane cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "242,5,5"
+ },
+ {
+   "id": 93,
+   "formula": "SiH4+",
+   "name": "Silane cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "243,5,5"
+ },
+ {
+   "id": 94,
+   "formula": "N-",
+   "name": "Nitrogen atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "244,5,5"
+ },
+ {
+   "id": 95,
+   "formula": "N+",
+   "name": "Nitrogen atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "245,5,5"
+ },
+ {
+   "id": 96,
+   "formula": "P-",
+   "name": "Phosphorus atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "246,5,5"
+ },
+ {
+   "id": 97,
+   "formula": "P+",
+   "name": "Phosphorus atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "247,5,5"
+ },
+ {
+   "id": 98,
+   "formula": "V+",
+   "name": "Vanadium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "248,5,5"
+ },
+ {
+   "id": 99,
+   "formula": "As-",
+   "name": "Arsenic anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "249,5,5"
+ },
+ {
+   "id": 100,
+   "formula": "As+",
+   "name": "Arsenic cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "150,6,5"
+ },
+ {
+   "id": 101,
+   "formula": "NH-",
+   "name": "Imidogen anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "151,6,5"
+ },
+ {
+   "id": 102,
+   "formula": "NH+",
+   "name": "imidogen cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "152,6,5"
+ },
+ {
+   "id": 103,
+   "formula": "PH-",
+   "name": "phosphorus monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "153,6,5"
+ },
+ {
+   "id": 104,
+   "formula": "PH+",
+   "name": "phosphorus monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "154,6,5"
+ },
+ {
+   "id": 105,
+   "formula": "AsH+",
+   "name": "Arsenic monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "155,6,5"
+ },
+ {
+   "id": 106,
+   "formula": "NH2-",
+   "name": "amino anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "156,6,5"
+ },
+ {
+   "id": 107,
+   "formula": "NH2+",
+   "name": "Amino cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "157,6,5"
+ },
+ {
+   "id": 108,
+   "formula": "PH2-",
+   "name": "Phosphino anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "158,6,5"
+ },
+ {
+   "id": 109,
+   "formula": "PH2+",
+   "name": "Phosphino cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "159,6,5"
+ },
+ {
+   "id": 110,
+   "formula": "AsH2+",
+   "name": "Arsenic dihydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "160,6,5"
+ },
+ {
+   "id": 111,
+   "formula": "NH3-",
+   "name": "Ammonia anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "161,6,5"
+ },
+ {
+   "id": 112,
+   "formula": "NH3+",
+   "name": "ammonia cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "162,6,5"
+ },
+ {
+   "id": 113,
+   "formula": "PH3+",
+   "name": "Phosphine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "163,6,5"
+ },
+ {
+   "id": 114,
+   "formula": "AsH3+",
+   "name": "Arsine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "164,6,5"
+ },
+ {
+   "id": 115,
+   "formula": "NH4+",
+   "name": "ammonium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "165,6,5"
+ },
+ {
+   "id": 116,
+   "formula": "PH4+",
+   "name": "phosphonium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "166,6,5"
+ },
+ {
+   "id": 117,
+   "formula": "O-",
+   "name": "Oxygen atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "167,6,5"
+ },
+ {
+   "id": 118,
+   "formula": "O+",
+   "name": "Oxygen atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "168,6,5"
+ },
+ {
+   "id": 119,
+   "formula": "S-",
+   "name": "Sulfur atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "169,6,5"
+ },
+ {
+   "id": 120,
+   "formula": "S+",
+   "name": "Sulfur atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "170,6,5"
+ },
+ {
+   "id": 121,
+   "formula": "Se-",
+   "name": "Selenium atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "171,6,5"
+ },
+ {
+   "id": 122,
+   "formula": "Se+",
+   "name": "Selenium atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "172,6,5"
+ },
+ {
+   "id": 123,
+   "formula": "OH-",
+   "name": "hydroxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "173,6,5"
+ },
+ {
+   "id": 124,
+   "formula": "OH+",
+   "name": "hydoxyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "174,6,5"
+ },
+ {
+   "id": 125,
+   "formula": "HS-",
+   "name": "mercapto anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "175,6,5"
+ },
+ {
+   "id": 126,
+   "formula": "HS+",
+   "name": "sulfur monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "176,6,5"
+ },
+ {
+   "id": 127,
+   "formula": "CrH+",
+   "name": "Chromium hydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "177,6,5"
+ },
+ {
+   "id": 128,
+   "formula": "HSe-",
+   "name": "selenium monohydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "178,6,5"
+ },
+ {
+   "id": 129,
+   "formula": "HSe+",
+   "name": "selenium monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "179,6,5"
+ },
+ {
+   "id": 130,
+   "formula": "H2O-",
+   "name": "water anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "180,6,5"
+ },
+ {
+   "id": 131,
+   "formula": "H2O+",
+   "name": "water cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "181,6,5"
+ },
+ {
+   "id": 132,
+   "formula": "H2S-",
+   "name": "Hydrogen sulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "182,6,5"
+ },
+ {
+   "id": 133,
+   "formula": "H2S+",
+   "name": "Hydrogen sulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "183,6,5"
+ },
+ {
+   "id": 134,
+   "formula": "H2Se+",
+   "name": "Hydrogen selenide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "184,6,5"
+ },
+ {
+   "id": 135,
+   "formula": "H3O+",
+   "name": "hydronium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "185,6,5"
+ },
+ {
+   "id": 136,
+   "formula": "H3S+",
+   "name": "Sulfonium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "186,6,5"
+ },
+ {
+   "id": 137,
+   "formula": "H3Se+",
+   "name": "Hydrogen Selenide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "187,6,5"
+ },
+ {
+   "id": 138,
+   "formula": "F-",
+   "name": "Fluorine atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "188,6,5"
+ },
+ {
+   "id": 139,
+   "formula": "F+",
+   "name": "Fluorine atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "189,6,5"
+ },
+ {
+   "id": 140,
+   "formula": "Cl-",
+   "name": "Chlorine atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "190,6,5"
+ },
+ {
+   "id": 141,
+   "formula": "Cl+",
+   "name": "Chlorine atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "191,6,5"
+ },
+ {
+   "id": 142,
+   "formula": "Br-",
+   "name": "Bromine atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "192,6,5"
+ },
+ {
+   "id": 143,
+   "formula": "Br+",
+   "name": "Bromine atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "193,6,5"
+ },
+ {
+   "id": 144,
+   "formula": "I-",
+   "name": "Iodine atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "194,6,5"
+ },
+ {
+   "id": 145,
+   "formula": "I+",
+   "name": "Iodine atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "195,6,5"
+ },
+ {
+   "id": 146,
+   "formula": "HF-",
+   "name": "hydrogen fluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "196,6,5"
+ },
+ {
+   "id": 147,
+   "formula": "HF+",
+   "name": "hydrogen fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "197,6,5"
+ },
+ {
+   "id": 148,
+   "formula": "HCl-",
+   "name": "hydrogen chloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "198,6,5"
+ },
+ {
+   "id": 149,
+   "formula": "HCl+",
+   "name": "hydrogen chloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "199,6,5"
+ },
+ {
+   "id": 150,
+   "formula": "HBr-",
+   "name": "hydrogen bromide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "200,6,5"
+ },
+ {
+   "id": 151,
+   "formula": "HBr+",
+   "name": "hydrogen bromide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "201,6,5"
+ },
+ {
+   "id": 152,
+   "formula": "H2F+",
+   "name": "dihydrogen fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "202,6,5"
+ },
+ {
+   "id": 153,
+   "formula": "H2Cl+",
+   "name": "dihydrogen monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "203,6,5"
+ },
+ {
+   "id": 154,
+   "formula": "H2Br+",
+   "name": "protonated hydrogen bromide",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "204,6,5"
+ },
+ {
+   "id": 155,
+   "formula": "H2I+",
+   "name": "Iodonium",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "205,6,5"
+ },
+ {
+   "id": 156,
+   "formula": "Ne-",
+   "name": "Neon atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "206,6,5"
+ },
+ {
+   "id": 157,
+   "formula": "Ne+",
+   "name": "Neon atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "207,6,5"
+ },
+ {
+   "id": 158,
+   "formula": "Ar-",
+   "name": "Argon atom anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "208,6,5"
+ },
+ {
+   "id": 159,
+   "formula": "Ar+",
+   "name": "Argon atom cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "209,6,5"
+ },
+ {
+   "id": 160,
+   "formula": "Kr+",
+   "name": "Krypton cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "210,6,5"
+ },
+ {
+   "id": 161,
+   "formula": "NeH+",
+   "name": "neon hydrogen cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "211,6,5"
+ },
+ {
+   "id": 162,
+   "formula": "ArH+",
+   "name": "Argon hydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "212,6,5"
+ },
+ {
+   "id": 163,
+   "formula": "KrH+",
+   "name": "Protonated Krypton",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "213,6,5"
+ },
+ {
+   "id": 164,
+   "formula": "XeH+",
+   "name": "Xenon, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "214,6,5"
+ },
+ {
+   "id": 165,
+   "formula": "Li2-",
+   "name": "lithium diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "215,6,5"
+ },
+ {
+   "id": 166,
+   "formula": "Li2+",
+   "name": "lithium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "216,6,5"
+ },
+ {
+   "id": 167,
+   "formula": "NaLi-",
+   "name": "lithium sodium anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "217,6,5"
+ },
+ {
+   "id": 168,
+   "formula": "NaLi+",
+   "name": "lithium sodium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "218,6,5"
+ },
+ {
+   "id": 169,
+   "formula": "Na2-",
+   "name": "sodium diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "219,6,5"
+ },
+ {
+   "id": 170,
+   "formula": "Na2+",
+   "name": "sodium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "220,6,5"
+ },
+ {
+   "id": 171,
+   "formula": "NaK+",
+   "name": "Sodium Potassium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "221,6,5"
+ },
+ {
+   "id": 172,
+   "formula": "Be2-",
+   "name": "Beryllium diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "222,6,5"
+ },
+ {
+   "id": 173,
+   "formula": "Be2+",
+   "name": "Beryllium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "223,6,5"
+ },
+ {
+   "id": 174,
+   "formula": "Mg2-",
+   "name": "magnesium diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "224,6,5"
+ },
+ {
+   "id": 175,
+   "formula": "Mg2+",
+   "name": "magnesium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "225,6,5"
+ },
+ {
+   "id": 176,
+   "formula": "B2-",
+   "name": "Boron diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "226,6,5"
+ },
+ {
+   "id": 177,
+   "formula": "B2+",
+   "name": "Boron diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "227,6,5"
+ },
+ {
+   "id": 178,
+   "formula": "Al2-",
+   "name": "aluminum diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "228,6,5"
+ },
+ {
+   "id": 179,
+   "formula": "Al2+",
+   "name": "aluminum diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "229,6,5"
+ },
+ {
+   "id": 180,
+   "formula": "BC-",
+   "name": "boron monocarbide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "230,6,5"
+ },
+ {
+   "id": 181,
+   "formula": "BC+",
+   "name": "boron monocarbide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "231,6,5"
+ },
+ {
+   "id": 182,
+   "formula": "C2-",
+   "name": "carbon diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "232,6,5"
+ },
+ {
+   "id": 183,
+   "formula": "C2+",
+   "name": "carbon diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "233,6,5"
+ },
+ {
+   "id": 184,
+   "formula": "SiC-",
+   "name": "silicon monocarbide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "234,6,5"
+ },
+ {
+   "id": 185,
+   "formula": "SiC+",
+   "name": "silicon monocarbide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "235,6,5"
+ },
+ {
+   "id": 186,
+   "formula": "Si2-",
+   "name": "silcon diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "236,6,5"
+ },
+ {
+   "id": 187,
+   "formula": "Si2+",
+   "name": "silcon diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "237,6,5"
+ },
+ {
+   "id": 188,
+   "formula": "C2H-",
+   "name": "Ethynyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "238,6,5"
+ },
+ {
+   "id": 189,
+   "formula": "C2H+",
+   "name": "Ethynyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "239,6,5"
+ },
+ {
+   "id": 190,
+   "formula": "C2H2+",
+   "name": "acetylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "240,6,5"
+ },
+ {
+   "id": 191,
+   "formula": "H2CC-",
+   "name": "vinylidene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "241,6,5"
+ },
+ {
+   "id": 192,
+   "formula": "HCCH-",
+   "name": "acetylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "242,6,5"
+ },
+ {
+   "id": 193,
+   "formula": "C2H3-",
+   "name": "vinyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "243,6,5"
+ },
+ {
+   "id": 194,
+   "formula": "C2H3+",
+   "name": "vinyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "244,6,5"
+ },
+ {
+   "id": 195,
+   "formula": "C2H4-",
+   "name": "Ethylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "245,6,5"
+ },
+ {
+   "id": 196,
+   "formula": "C2H4+",
+   "name": "Ethylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "246,6,5"
+ },
+ {
+   "id": 197,
+   "formula": "C2H5-",
+   "name": "Ethyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "247,6,5"
+ },
+ {
+   "id": 198,
+   "formula": "C2H5+",
+   "name": "Ethyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "248,6,5"
+ },
+ {
+   "id": 199,
+   "formula": "C2H6+",
+   "name": "ethane cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "249,6,5"
+ },
+ {
+   "id": 200,
+   "formula": "C2H7+",
+   "name": "Ethane, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "150,7,5"
+ },
+ {
+   "id": 201,
+   "formula": "LiN+",
+   "name": "Lithium Nitride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "151,7,5"
+ },
+ {
+   "id": 202,
+   "formula": "BeN-",
+   "name": "Beryllium mononitride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "152,7,5"
+ },
+ {
+   "id": 203,
+   "formula": "BeN+",
+   "name": "Beryllium mononitride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "153,7,5"
+ },
+ {
+   "id": 204,
+   "formula": "BN-",
+   "name": "boron nitride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "154,7,5"
+ },
+ {
+   "id": 205,
+   "formula": "AlN-",
+   "name": "aluminum mononitride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "155,7,5"
+ },
+ {
+   "id": 206,
+   "formula": "AlN+",
+   "name": "aluminum mononitride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "156,7,5"
+ },
+ {
+   "id": 207,
+   "formula": "BN+",
+   "name": "boron nitride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "157,7,5"
+ },
+ {
+   "id": 208,
+   "formula": "CN-",
+   "name": "cyanide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "158,7,5"
+ },
+ {
+   "id": 209,
+   "formula": "CN+",
+   "name": "Cyano cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "159,7,5"
+ },
+ {
+   "id": 210,
+   "formula": "CP-",
+   "name": "carbon monophosphide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "160,7,5"
+ },
+ {
+   "id": 211,
+   "formula": "CP+",
+   "name": "carbon monophosphide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "161,7,5"
+ },
+ {
+   "id": 212,
+   "formula": "SiN-",
+   "name": "silicon mononitride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "162,7,5"
+ },
+ {
+   "id": 213,
+   "formula": "SiN+",
+   "name": "silicon mononitride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "163,7,5"
+ },
+ {
+   "id": 214,
+   "formula": "SiP-",
+   "name": "Silicon monophosphide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "164,7,5"
+ },
+ {
+   "id": 215,
+   "formula": "SiP+",
+   "name": "Silicon monophosphide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "165,7,5"
+ },
+ {
+   "id": 216,
+   "formula": "N2-",
+   "name": "nitrogen diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "166,7,5"
+ },
+ {
+   "id": 217,
+   "formula": "N2+",
+   "name": "diatomic nitrogen cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "167,7,5"
+ },
+ {
+   "id": 218,
+   "formula": "PN-",
+   "name": "phosphorus nitride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "168,7,5"
+ },
+ {
+   "id": 219,
+   "formula": "PN+",
+   "name": "phosphorus nitride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "169,7,5"
+ },
+ {
+   "id": 220,
+   "formula": "P2-",
+   "name": "phosphorus diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "170,7,5"
+ },
+ {
+   "id": 221,
+   "formula": "P2+",
+   "name": "phosphorus diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "171,7,5"
+ },
+ {
+   "id": 222,
+   "formula": "HCN-",
+   "name": "Hydrogen cyanide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "172,7,5"
+ },
+ {
+   "id": 223,
+   "formula": "HCN+",
+   "name": "hydrogen cyanide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "173,7,5"
+ },
+ {
+   "id": 224,
+   "formula": "HNC+",
+   "name": "hydrogen isocyanide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "174,7,5"
+ },
+ {
+   "id": 225,
+   "formula": "NNH+",
+   "name": "Dinitrogen monohydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "175,7,5"
+ },
+ {
+   "id": 226,
+   "formula": "HPO+",
+   "name": "HPO cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "176,7,5"
+ },
+ {
+   "id": 227,
+   "formula": "CNH2+",
+   "name": "CNH2+",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "177,7,5"
+ },
+ {
+   "id": 228,
+   "formula": "H2CN+",
+   "name": "hydrocyanonium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "178,7,5"
+ },
+ {
+   "id": 229,
+   "formula": "HCNH+",
+   "name": "HCNH+",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "179,7,5"
+ },
+ {
+   "id": 230,
+   "formula": "N2H2+",
+   "name": "trans-diazine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "180,7,5"
+ },
+ {
+   "id": 231,
+   "formula": "CH2NH2+",
+   "name": "methyleneamine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "181,7,5"
+ },
+ {
+   "id": 232,
+   "formula": "N2H4+",
+   "name": "hydrazine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "182,7,5"
+ },
+ {
+   "id": 233,
+   "formula": "CH3NH2+",
+   "name": "methyl amine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "183,7,5"
+ },
+ {
+   "id": 234,
+   "formula": "N2H5+",
+   "name": "protonated hydrazine",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "184,7,5"
+ },
+ {
+   "id": 235,
+   "formula": "CH3NH3+",
+   "name": "protonated methylamine",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "185,7,5"
+ },
+ {
+   "id": 236,
+   "formula": "CH3PH3+",
+   "name": "methyl phosphine, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "186,7,5"
+ },
+ {
+   "id": 237,
+   "formula": "N2H7+",
+   "name": "ammonia ammonium dimer",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "187,7,5"
+ },
+ {
+   "id": 238,
+   "formula": "LiO-",
+   "name": "lithium oxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "188,7,5"
+ },
+ {
+   "id": 239,
+   "formula": "LiO+",
+   "name": "lithium oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "189,7,5"
+ },
+ {
+   "id": 240,
+   "formula": "LiS+",
+   "name": "Lithium sulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "190,7,5"
+ },
+ {
+   "id": 241,
+   "formula": "NaO-",
+   "name": "sodium oxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "191,7,5"
+ },
+ {
+   "id": 242,
+   "formula": "NaO+",
+   "name": "sodium oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "192,7,5"
+ },
+ {
+   "id": 243,
+   "formula": "KO+",
+   "name": "Potassium monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "193,7,5"
+ },
+ {
+   "id": 244,
+   "formula": "BeO-",
+   "name": "Beryllium monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "194,7,5"
+ },
+ {
+   "id": 245,
+   "formula": "BeO+",
+   "name": "Beryllium monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "195,7,5"
+ },
+ {
+   "id": 246,
+   "formula": "MgO-",
+   "name": "magnesium oxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "196,7,5"
+ },
+ {
+   "id": 247,
+   "formula": "MgO+",
+   "name": "magnesium oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "197,7,5"
+ },
+ {
+   "id": 248,
+   "formula": "MgS-",
+   "name": "magnesium sulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "198,7,5"
+ },
+ {
+   "id": 249,
+   "formula": "MgS+",
+   "name": "magnesium sulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "199,7,5"
+ },
+ {
+   "id": 250,
+   "formula": "BeS-",
+   "name": "Beryllium monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "200,7,5"
+ },
+ {
+   "id": 251,
+   "formula": "BeS+",
+   "name": "Beryllium monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "201,7,5"
+ },
+ {
+   "id": 252,
+   "formula": "BO-",
+   "name": "boron monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "202,7,5"
+ },
+ {
+   "id": 253,
+   "formula": "AlO-",
+   "name": "Aluminum monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "203,7,5"
+ },
+ {
+   "id": 254,
+   "formula": "AlO+",
+   "name": "aluminum monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "204,7,5"
+ },
+ {
+   "id": 255,
+   "formula": "BS-",
+   "name": "boron monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "205,7,5"
+ },
+ {
+   "id": 256,
+   "formula": "BS+",
+   "name": "boron monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "206,7,5"
+ },
+ {
+   "id": 257,
+   "formula": "AlS-",
+   "name": "aluminum monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "207,7,5"
+ },
+ {
+   "id": 258,
+   "formula": "AlS+",
+   "name": "aluminum monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "208,7,5"
+ },
+ {
+   "id": 259,
+   "formula": "BO+",
+   "name": "boron monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "209,7,5"
+ },
+ {
+   "id": 260,
+   "formula": "CO-",
+   "name": "carbon monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "210,7,5"
+ },
+ {
+   "id": 261,
+   "formula": "CO+",
+   "name": "carbon monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "211,7,5"
+ },
+ {
+   "id": 262,
+   "formula": "CS-",
+   "name": "carbon monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "212,7,5"
+ },
+ {
+   "id": 263,
+   "formula": "CS+",
+   "name": "carbon monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "213,7,5"
+ },
+ {
+   "id": 264,
+   "formula": "SiO-",
+   "name": "silicon monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "214,7,5"
+ },
+ {
+   "id": 265,
+   "formula": "SiO+",
+   "name": "silicon monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "215,7,5"
+ },
+ {
+   "id": 266,
+   "formula": "SiS-",
+   "name": "silicon monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "216,7,5"
+ },
+ {
+   "id": 267,
+   "formula": "SiS+",
+   "name": "silicon monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "217,7,5"
+ },
+ {
+   "id": 268,
+   "formula": "CSe-",
+   "name": "Carbon monoselenide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "218,7,5"
+ },
+ {
+   "id": 269,
+   "formula": "CSe+",
+   "name": "Carbon monoselenide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "219,7,5"
+ },
+ {
+   "id": 270,
+   "formula": "GeO+",
+   "name": "Germanium monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "220,7,5"
+ },
+ {
+   "id": 271,
+   "formula": "NO-",
+   "name": "nitric oxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "221,7,5"
+ },
+ {
+   "id": 272,
+   "formula": "NO+",
+   "name": "nitric oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "222,7,5"
+ },
+ {
+   "id": 273,
+   "formula": "NS-",
+   "name": "nitrogen sulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "223,7,5"
+ },
+ {
+   "id": 274,
+   "formula": "NS+",
+   "name": "nitrogen sulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "224,7,5"
+ },
+ {
+   "id": 275,
+   "formula": "PO-",
+   "name": "phosphorus monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "225,7,5"
+ },
+ {
+   "id": 276,
+   "formula": "PO+",
+   "name": "phosphorus monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "226,7,5"
+ },
+ {
+   "id": 277,
+   "formula": "PS-",
+   "name": "phosphorus monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "227,7,5"
+ },
+ {
+   "id": 278,
+   "formula": "PS+",
+   "name": "phosphorus monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "228,7,5"
+ },
+ {
+   "id": 279,
+   "formula": "O2-",
+   "name": "oxygen diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "229,7,5"
+ },
+ {
+   "id": 280,
+   "formula": "O2+",
+   "name": "diatomic oxygen cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "230,7,5"
+ },
+ {
+   "id": 281,
+   "formula": "SO-",
+   "name": "sulfur monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "231,7,5"
+ },
+ {
+   "id": 282,
+   "formula": "SO+",
+   "name": "sulfur monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "232,7,5"
+ },
+ {
+   "id": 283,
+   "formula": "S2-",
+   "name": "sulfur diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "233,7,5"
+ },
+ {
+   "id": 284,
+   "formula": "S2+",
+   "name": "sulfur diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "234,7,5"
+ },
+ {
+   "id": 285,
+   "formula": "SeO-",
+   "name": "selenium monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "235,7,5"
+ },
+ {
+   "id": 286,
+   "formula": "SeO+",
+   "name": "selenium monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "236,7,5"
+ },
+ {
+   "id": 287,
+   "formula": "SeS-",
+   "name": "selenium monosulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "237,7,5"
+ },
+ {
+   "id": 288,
+   "formula": "SeS+",
+   "name": "selenium monosulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "238,7,5"
+ },
+ {
+   "id": 289,
+   "formula": "Se2-",
+   "name": "selenium diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "239,7,5"
+ },
+ {
+   "id": 290,
+   "formula": "Se2+",
+   "name": "selenium diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "240,7,5"
+ },
+ {
+   "id": 291,
+   "formula": "COH+",
+   "name": "Carbon Monoxide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "241,7,5"
+ },
+ {
+   "id": 292,
+   "formula": "HCO-",
+   "name": "formyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "242,7,5"
+ },
+ {
+   "id": 293,
+   "formula": "HCO+",
+   "name": "Formyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "243,7,5"
+ },
+ {
+   "id": 294,
+   "formula": "HCS-",
+   "name": "Thioformyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "244,7,5"
+ },
+ {
+   "id": 295,
+   "formula": "HCS+",
+   "name": "Thioformyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "245,7,5"
+ },
+ {
+   "id": 296,
+   "formula": "HNO-",
+   "name": "Nitrosyl hydride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "246,7,5"
+ },
+ {
+   "id": 297,
+   "formula": "HNO+",
+   "name": "Nitrosyl hydride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "247,7,5"
+ },
+ {
+   "id": 298,
+   "formula": "NOH+",
+   "name": "nitric oxide O-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "248,7,5"
+ },
+ {
+   "id": 299,
+   "formula": "HNS-",
+   "name": "HNS-",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "249,7,5"
+ },
+ {
+   "id": 300,
+   "formula": "HO2-",
+   "name": "Hydroperoxy anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "150,8,5"
+ },
+ {
+   "id": 301,
+   "formula": "HO2+",
+   "name": "Hydroperoxy cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "151,8,5"
+ },
+ {
+   "id": 302,
+   "formula": "HSO+",
+   "name": "Sulfur Monoxide, S-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "152,8,5"
+ },
+ {
+   "id": 303,
+   "formula": "SOH+",
+   "name": "Sulfur Monoxide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "153,8,5"
+ },
+ {
+   "id": 304,
+   "formula": "KOH2+",
+   "name": "Potassium hydroxide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "154,8,5"
+ },
+ {
+   "id": 305,
+   "formula": "H2CO-",
+   "name": "formaldehyde anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "155,8,5"
+ },
+ {
+   "id": 306,
+   "formula": "H2CO+",
+   "name": "formaldehyde cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "156,8,5"
+ },
+ {
+   "id": 307,
+   "formula": "H2CS-",
+   "name": "thioformaldehyde anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "157,8,5"
+ },
+ {
+   "id": 308,
+   "formula": "H2CS+",
+   "name": "thioformaldehyde cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "158,8,5"
+ },
+ {
+   "id": 309,
+   "formula": "H2O2+",
+   "name": "Hydrogen peroxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "159,8,5"
+ },
+ {
+   "id": 310,
+   "formula": "H2S2+",
+   "name": "hydrogen disulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "160,8,5"
+ },
+ {
+   "id": 311,
+   "formula": "CH2OH+",
+   "name": "hydroxymethyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "161,8,5"
+ },
+ {
+   "id": 312,
+   "formula": "CH3O-",
+   "name": "methoxy anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "162,8,5"
+ },
+ {
+   "id": 313,
+   "formula": "CH3O+",
+   "name": "Methoxy cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "163,8,5"
+ },
+ {
+   "id": 314,
+   "formula": "H2CSH+",
+   "name": "Thioformaldehyde, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "164,8,5"
+ },
+ {
+   "id": 315,
+   "formula": "NH2OH+",
+   "name": "Hydroxylamine cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "165,8,5"
+ },
+ {
+   "id": 316,
+   "formula": "H3O2+",
+   "name": "hydrogen peroxide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "166,8,5"
+ },
+ {
+   "id": 317,
+   "formula": "CH3OH-",
+   "name": "Methyl alcohol anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "167,8,5"
+ },
+ {
+   "id": 318,
+   "formula": "CH3OH+",
+   "name": "Methyl alcohol cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "168,8,5"
+ },
+ {
+   "id": 319,
+   "formula": "CH3SH+",
+   "name": "Methanethiol cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "169,8,5"
+ },
+ {
+   "id": 320,
+   "formula": "NH2OH2+",
+   "name": "protonated hydroxylamine",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "170,8,5"
+ },
+ {
+   "id": 321,
+   "formula": "NH3OH+",
+   "name": "N-protonated hydroxylamine",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "171,8,5"
+ },
+ {
+   "id": 322,
+   "formula": "CH3OH2+",
+   "name": "Methanol, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "172,8,5"
+ },
+ {
+   "id": 323,
+   "formula": "CH3SH2+",
+   "name": "protonated methylsulfide",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "173,8,5"
+ },
+ {
+   "id": 324,
+   "formula": "H5O2+",
+   "name": "Dihydroxonium ion",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "174,8,5"
+ },
+ {
+   "id": 325,
+   "formula": "LiCl-",
+   "name": "lithium chloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "175,8,5"
+ },
+ {
+   "id": 326,
+   "formula": "LiCl+",
+   "name": "lithium chloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "176,8,5"
+ },
+ {
+   "id": 327,
+   "formula": "NaF-",
+   "name": "sodium fluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "177,8,5"
+ },
+ {
+   "id": 328,
+   "formula": "NaF+",
+   "name": "sodium fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "178,8,5"
+ },
+ {
+   "id": 329,
+   "formula": "NaCl-",
+   "name": "sodium chloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "179,8,5"
+ },
+ {
+   "id": 330,
+   "formula": "NaCl+",
+   "name": "sodium chloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "180,8,5"
+ },
+ {
+   "id": 331,
+   "formula": "LiBr-",
+   "name": "lithium bromide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "181,8,5"
+ },
+ {
+   "id": 332,
+   "formula": "LiBr+",
+   "name": "lithium bromide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "182,8,5"
+ },
+ {
+   "id": 333,
+   "formula": "NaBr-",
+   "name": "sodium bromide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "183,8,5"
+ },
+ {
+   "id": 334,
+   "formula": "NaBr+",
+   "name": "sodium bromide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "184,8,5"
+ },
+ {
+   "id": 335,
+   "formula": "LiF-",
+   "name": "lithium fluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "185,8,5"
+ },
+ {
+   "id": 336,
+   "formula": "LiF+",
+   "name": "lithium fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "186,8,5"
+ },
+ {
+   "id": 337,
+   "formula": "BeF-",
+   "name": "Beryllium monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "187,8,5"
+ },
+ {
+   "id": 338,
+   "formula": "BeF+",
+   "name": "Beryllium monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "188,8,5"
+ },
+ {
+   "id": 339,
+   "formula": "MgF-",
+   "name": "magnesium fluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "189,8,5"
+ },
+ {
+   "id": 340,
+   "formula": "MgF+",
+   "name": "magnesium fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "190,8,5"
+ },
+ {
+   "id": 341,
+   "formula": "MgCl-",
+   "name": "magnesium monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "191,8,5"
+ },
+ {
+   "id": 342,
+   "formula": "MgCl+",
+   "name": "magnesium monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "192,8,5"
+ },
+ {
+   "id": 343,
+   "formula": "ZnF-",
+   "name": "Zinc monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "193,8,5"
+ },
+ {
+   "id": 344,
+   "formula": "ZnF+",
+   "name": "Zinc monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "194,8,5"
+ },
+ {
+   "id": 345,
+   "formula": "BeCl-",
+   "name": "beryllium monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "195,8,5"
+ },
+ {
+   "id": 346,
+   "formula": "BeCl+",
+   "name": "beryllium monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "196,8,5"
+ },
+ {
+   "id": 347,
+   "formula": "BF-",
+   "name": "Boron monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "197,8,5"
+ },
+ {
+   "id": 348,
+   "formula": "BF+",
+   "name": "Boron monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "198,8,5"
+ },
+ {
+   "id": 349,
+   "formula": "AlF-",
+   "name": "Aluminum monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "199,8,5"
+ },
+ {
+   "id": 350,
+   "formula": "AlF+",
+   "name": "Aluminum monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "200,8,5"
+ },
+ {
+   "id": 351,
+   "formula": "BCl-",
+   "name": "boron monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "201,8,5"
+ },
+ {
+   "id": 352,
+   "formula": "BCl+",
+   "name": "boron monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "202,8,5"
+ },
+ {
+   "id": 353,
+   "formula": "AlCl-",
+   "name": "aluminum monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "203,8,5"
+ },
+ {
+   "id": 354,
+   "formula": "AlCl+",
+   "name": "aluminum monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "204,8,5"
+ },
+ {
+   "id": 355,
+   "formula": "GaF+",
+   "name": "Gallium monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "205,8,5"
+ },
+ {
+   "id": 356,
+   "formula": "GaCl+",
+   "name": "Gallium monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "206,8,5"
+ },
+ {
+   "id": 357,
+   "formula": "CF-",
+   "name": "carbon monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "207,8,5"
+ },
+ {
+   "id": 358,
+   "formula": "CF+",
+   "name": "carbon monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "208,8,5"
+ },
+ {
+   "id": 359,
+   "formula": "CCl-",
+   "name": "carbon monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "209,8,5"
+ },
+ {
+   "id": 360,
+   "formula": "CCl+",
+   "name": "carbon monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "210,8,5"
+ },
+ {
+   "id": 361,
+   "formula": "SiF-",
+   "name": "silicon monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "211,8,5"
+ },
+ {
+   "id": 362,
+   "formula": "SiF+",
+   "name": "silicon monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "212,8,5"
+ },
+ {
+   "id": 363,
+   "formula": "SiCl-",
+   "name": "silicon monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "213,8,5"
+ },
+ {
+   "id": 364,
+   "formula": "SiCl+",
+   "name": "silicon monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "214,8,5"
+ },
+ {
+   "id": 365,
+   "formula": "GeF+",
+   "name": "Germanium monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "215,8,5"
+ },
+ {
+   "id": 366,
+   "formula": "SiBr+",
+   "name": "Silicon monobromide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "216,8,5"
+ },
+ {
+   "id": 367,
+   "formula": "NF-",
+   "name": "nitrogen monofluorine anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "217,8,5"
+ },
+ {
+   "id": 368,
+   "formula": "NF+",
+   "name": "nitrogen monofluoirde cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "218,8,5"
+ },
+ {
+   "id": 369,
+   "formula": "NCl-",
+   "name": "nitrogen monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "219,8,5"
+ },
+ {
+   "id": 370,
+   "formula": "NCl+",
+   "name": "nitrogen monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "220,8,5"
+ },
+ {
+   "id": 371,
+   "formula": "PF-",
+   "name": "phosphorus monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "221,8,5"
+ },
+ {
+   "id": 372,
+   "formula": "PF+",
+   "name": "phosphorus monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "222,8,5"
+ },
+ {
+   "id": 373,
+   "formula": "PCl-",
+   "name": "phosphorus monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "223,8,5"
+ },
+ {
+   "id": 374,
+   "formula": "PCl+",
+   "name": "phosphorus monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "224,8,5"
+ },
+ {
+   "id": 375,
+   "formula": "FO-",
+   "name": "flourine oxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "225,8,5"
+ },
+ {
+   "id": 376,
+   "formula": "FO+",
+   "name": "fluorine monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "226,8,5"
+ },
+ {
+   "id": 377,
+   "formula": "ClO-",
+   "name": "chlorine monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "227,8,5"
+ },
+ {
+   "id": 378,
+   "formula": "ClO+",
+   "name": "chlorine monoxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "228,8,5"
+ },
+ {
+   "id": 379,
+   "formula": "SF-",
+   "name": "sulfur monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "229,8,5"
+ },
+ {
+   "id": 380,
+   "formula": "SF+",
+   "name": "sulfur monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "230,8,5"
+ },
+ {
+   "id": 381,
+   "formula": "SCl-",
+   "name": "sulfur monochloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "231,8,5"
+ },
+ {
+   "id": 382,
+   "formula": "SCl+",
+   "name": "sulfur monochloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "232,8,5"
+ },
+ {
+   "id": 383,
+   "formula": "BrO-",
+   "name": "Bromine monoxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "233,8,5"
+ },
+ {
+   "id": 384,
+   "formula": "F2-",
+   "name": "flourine diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "234,8,5"
+ },
+ {
+   "id": 385,
+   "formula": "F2+",
+   "name": "flourine diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "235,8,5"
+ },
+ {
+   "id": 386,
+   "formula": "ClF-",
+   "name": "clorine monofluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "236,8,5"
+ },
+ {
+   "id": 387,
+   "formula": "ClF+",
+   "name": "clorine monofluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "237,8,5"
+ },
+ {
+   "id": 388,
+   "formula": "Cl2-",
+   "name": "chlorine diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "238,8,5"
+ },
+ {
+   "id": 389,
+   "formula": "Cl2+",
+   "name": "chlorine diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "239,8,5"
+ },
+ {
+   "id": 390,
+   "formula": "BrF-",
+   "name": "bromine fluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "240,8,5"
+ },
+ {
+   "id": 391,
+   "formula": "BrF+",
+   "name": "bromine fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "241,8,5"
+ },
+ {
+   "id": 392,
+   "formula": "BrCl-",
+   "name": "bromine chloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "242,8,5"
+ },
+ {
+   "id": 393,
+   "formula": "BrCl+",
+   "name": "bromine chloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "243,8,5"
+ },
+ {
+   "id": 394,
+   "formula": "Br2-",
+   "name": "bromine diatomic anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "244,8,5"
+ },
+ {
+   "id": 395,
+   "formula": "Br2+",
+   "name": "bromine diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "245,8,5"
+ },
+ {
+   "id": 396,
+   "formula": "I2+",
+   "name": "Iodine diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "246,8,5"
+ },
+ {
+   "id": 397,
+   "formula": "HOCl+",
+   "name": "hypochlorous acid cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "247,8,5"
+ },
+ {
+   "id": 398,
+   "formula": "HOBr+",
+   "name": "Hypobromous acid cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "248,8,5"
+ },
+ {
+   "id": 399,
+   "formula": "F2H+",
+   "name": "Fluorine, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "249,8,5"
+ },
+ {
+   "id": 400,
+   "formula": "FHF-",
+   "name": "FHF-",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "150,9,5"
+ },
+ {
+   "id": 401,
+   "formula": "ClFH+",
+   "name": "Chlorine fluoride, F-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "151,9,5"
+ },
+ {
+   "id": 402,
+   "formula": "FClH+",
+   "name": "Chlorine fluoride, Cl-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "152,9,5"
+ },
+ {
+   "id": 403,
+   "formula": "Cl2H+",
+   "name": "Chlorine, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "153,9,5"
+ },
+ {
+   "id": 404,
+   "formula": "CH3Cl+",
+   "name": "Methyl chloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "154,9,5"
+ },
+ {
+   "id": 405,
+   "formula": "CH3ClH+",
+   "name": "methyl chloride, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "155,9,5"
+ },
+ {
+   "id": 406,
+   "formula": "LiNe+",
+   "name": "Lithium Neon cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "156,9,5"
+ },
+ {
+   "id": 407,
+   "formula": "Ne2+",
+   "name": "Neon diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "157,9,5"
+ },
+ {
+   "id": 408,
+   "formula": "Ar2+",
+   "name": "Argon diatomic cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "158,9,5"
+ },
+ {
+   "id": 409,
+   "formula": "Li3+",
+   "name": "Lithium trimer cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "159,9,5"
+ },
+ {
+   "id": 410,
+   "formula": "C3+",
+   "name": "carbon trimer cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "160,9,5"
+ },
+ {
+   "id": 411,
+   "formula": "C3H3-",
+   "name": "Propargyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "161,9,5"
+ },
+ {
+   "id": 412,
+   "formula": "C3H3+",
+   "name": "cyclopropenyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "162,9,5"
+ },
+ {
+   "id": 413,
+   "formula": "C3H3+",
+   "name": "Propargyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "163,9,5"
+ },
+ {
+   "id": 414,
+   "formula": "C3H5+",
+   "name": "Allyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "164,9,5"
+ },
+ {
+   "id": 415,
+   "formula": "C3H7+",
+   "name": "cyclopropane, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "165,9,5"
+ },
+ {
+   "id": 416,
+   "formula": "C3H7+",
+   "name": "n-propyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "166,9,5"
+ },
+ {
+   "id": 417,
+   "formula": "CH3CHCH3+",
+   "name": "Isopropyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "167,9,5"
+ },
+ {
+   "id": 418,
+   "formula": "N3-",
+   "name": "azide anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "168,9,5"
+ },
+ {
+   "id": 419,
+   "formula": "N3+",
+   "name": "azide cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "169,9,5"
+ },
+ {
+   "id": 420,
+   "formula": "CH3CN-",
+   "name": "acetonitrile anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "170,9,5"
+ },
+ {
+   "id": 421,
+   "formula": "CH3CN+",
+   "name": "Acetonitrile cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "171,9,5"
+ },
+ {
+   "id": 422,
+   "formula": "HNCNH2+",
+   "name": "diiminomethane, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "172,9,5"
+ },
+ {
+   "id": 423,
+   "formula": "NCNH3+",
+   "name": "Cyanamide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "173,9,5"
+ },
+ {
+   "id": 424,
+   "formula": "NH2CNH+",
+   "name": "cyanamide, cn protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "174,9,5"
+ },
+ {
+   "id": 425,
+   "formula": "NH3CN+",
+   "name": "cyanamide, amine protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "175,9,5"
+ },
+ {
+   "id": 426,
+   "formula": "C2H5NH+",
+   "name": "Protonated Aziridine",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "176,9,5"
+ },
+ {
+   "id": 427,
+   "formula": "C2H6N+",
+   "name": "aziridine, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "177,9,5"
+ },
+ {
+   "id": 428,
+   "formula": "(CH3)2NH2+",
+   "name": "dimethylammonium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "178,9,5"
+ },
+ {
+   "id": 429,
+   "formula": "CH3CH2NH3+",
+   "name": "ethylamine, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "179,9,5"
+ },
+ {
+   "id": 430,
+   "formula": "Li2O+",
+   "name": "dilithium oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "180,9,5"
+ },
+ {
+   "id": 431,
+   "formula": "CNO-",
+   "name": "fulminate",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "181,9,5"
+ },
+ {
+   "id": 432,
+   "formula": "NCO-",
+   "name": "cyanate",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "182,9,5"
+ },
+ {
+   "id": 433,
+   "formula": "SCN-",
+   "name": "thiocyanide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "183,9,5"
+ },
+ {
+   "id": 434,
+   "formula": "BO2-",
+   "name": "Boron dioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "184,9,5"
+ },
+ {
+   "id": 435,
+   "formula": "BO2+",
+   "name": "Boron dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "185,9,5"
+ },
+ {
+   "id": 436,
+   "formula": "N2O-",
+   "name": "Nitrous oxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "186,9,5"
+ },
+ {
+   "id": 437,
+   "formula": "N2O+",
+   "name": "Nitrous oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "187,9,5"
+ },
+ {
+   "id": 438,
+   "formula": "CO2-",
+   "name": "Carbon dioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "188,9,5"
+ },
+ {
+   "id": 439,
+   "formula": "CO2+",
+   "name": "Carbon dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "189,9,5"
+ },
+ {
+   "id": 440,
+   "formula": "OCS+",
+   "name": "Carbonyl sulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "190,9,5"
+ },
+ {
+   "id": 441,
+   "formula": "CS2-",
+   "name": "Carbon disulfide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "191,9,5"
+ },
+ {
+   "id": 442,
+   "formula": "CS2+",
+   "name": "Carbon disulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "192,9,5"
+ },
+ {
+   "id": 443,
+   "formula": "NO2-",
+   "name": "Nitrogen dioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "193,9,5"
+ },
+ {
+   "id": 444,
+   "formula": "NO2+",
+   "name": "Nitrogen dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "194,9,5"
+ },
+ {
+   "id": 445,
+   "formula": "PO2-",
+   "name": "Phosphorus dioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "195,9,5"
+ },
+ {
+   "id": 446,
+   "formula": "PO2+",
+   "name": "Phosphorus dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "196,9,5"
+ },
+ {
+   "id": 447,
+   "formula": "O3-",
+   "name": "Ozone anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "197,9,5"
+ },
+ {
+   "id": 448,
+   "formula": "O3+",
+   "name": "Ozone cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "198,9,5"
+ },
+ {
+   "id": 449,
+   "formula": "SO2-",
+   "name": "Sulfur dioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "199,9,5"
+ },
+ {
+   "id": 450,
+   "formula": "SO2+",
+   "name": "Sulfur dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "200,9,5"
+ },
+ {
+   "id": 451,
+   "formula": "S3-",
+   "name": "Sulfur trimer anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "201,9,5"
+ },
+ {
+   "id": 452,
+   "formula": "S3+",
+   "name": "Sulfur trimer cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "202,9,5"
+ },
+ {
+   "id": 453,
+   "formula": "SeO2+",
+   "name": "Selenium dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "203,9,5"
+ },
+ {
+   "id": 454,
+   "formula": "HCO2-",
+   "name": "formate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "204,9,5"
+ },
+ {
+   "id": 455,
+   "formula": "HNNO+",
+   "name": "Nitrous oxide, N-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "205,9,5"
+ },
+ {
+   "id": 456,
+   "formula": "NNOH+",
+   "name": "Nitrous Oxide, O-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "206,9,5"
+ },
+ {
+   "id": 457,
+   "formula": "HOCO+",
+   "name": "Hydrocarboxyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "207,9,5"
+ },
+ {
+   "id": 458,
+   "formula": "HNO2+",
+   "name": "nitrous acid cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "208,9,5"
+ },
+ {
+   "id": 459,
+   "formula": "O3H+",
+   "name": "protonated ozone",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "209,9,5"
+ },
+ {
+   "id": 460,
+   "formula": "SO2H+",
+   "name": "protonated sulfur dioxide",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "210,9,5"
+ },
+ {
+   "id": 461,
+   "formula": "CH2CO+",
+   "name": "Ketene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "211,9,5"
+ },
+ {
+   "id": 462,
+   "formula": "H2COO+",
+   "name": "dioxymethyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "212,9,5"
+ },
+ {
+   "id": 463,
+   "formula": "CH2COH+",
+   "name": "ketene, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "213,9,5"
+ },
+ {
+   "id": 464,
+   "formula": "CH3CO-",
+   "name": "Acetyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "214,9,5"
+ },
+ {
+   "id": 465,
+   "formula": "CH3CO+",
+   "name": "acetyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "215,9,5"
+ },
+ {
+   "id": 466,
+   "formula": "CH3OO-",
+   "name": "methylperoxy anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "216,9,5"
+ },
+ {
+   "id": 467,
+   "formula": "CH3OO+",
+   "name": "methylperoxy cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "217,9,5"
+ },
+ {
+   "id": 468,
+   "formula": "C2H4O+",
+   "name": "ethylene oxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "218,9,5"
+ },
+ {
+   "id": 469,
+   "formula": "CH3CHO+",
+   "name": "acetaldehyde cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "219,9,5"
+ },
+ {
+   "id": 470,
+   "formula": "H2COCH2+",
+   "name": "Methyl, (methyleneoxoniumyl)?-",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "220,9,5"
+ },
+ {
+   "id": 471,
+   "formula": "H2CONH2+",
+   "name": "protonated formamide",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "221,9,5"
+ },
+ {
+   "id": 472,
+   "formula": "C2H4OH+",
+   "name": "ethylene oxide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "222,9,5"
+ },
+ {
+   "id": 473,
+   "formula": "CH3CHOH+",
+   "name": "acetaldehyde, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "223,9,5"
+ },
+ {
+   "id": 474,
+   "formula": "CH3SCH3+",
+   "name": "dimethyl sulfide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "224,9,5"
+ },
+ {
+   "id": 475,
+   "formula": "FCO+",
+   "name": "Carbonyl fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "225,9,5"
+ },
+ {
+   "id": 476,
+   "formula": "CF2-",
+   "name": "Difluoromethylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "226,9,5"
+ },
+ {
+   "id": 477,
+   "formula": "CF2+",
+   "name": "Difluoromethylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "227,9,5"
+ },
+ {
+   "id": 478,
+   "formula": "SiF2+",
+   "name": "Silicon difluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "228,9,5"
+ },
+ {
+   "id": 479,
+   "formula": "CCl2-",
+   "name": "dichloromethylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "229,9,5"
+ },
+ {
+   "id": 480,
+   "formula": "CCl2+",
+   "name": "dichloromethylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "230,9,5"
+ },
+ {
+   "id": 481,
+   "formula": "ClOO+",
+   "name": "chloroperoxy cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "231,9,5"
+ },
+ {
+   "id": 482,
+   "formula": "OClO-",
+   "name": "Chlorine dioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "232,9,5"
+ },
+ {
+   "id": 483,
+   "formula": "OClO+",
+   "name": "Chlorine dioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "233,9,5"
+ },
+ {
+   "id": 484,
+   "formula": "NF2+",
+   "name": "Difluoroamino cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "234,9,5"
+ },
+ {
+   "id": 485,
+   "formula": "SF2-",
+   "name": "sulfur difluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "235,9,5"
+ },
+ {
+   "id": 486,
+   "formula": "SF2+",
+   "name": "sulfur difluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "236,9,5"
+ },
+ {
+   "id": 487,
+   "formula": "F3-",
+   "name": "trifluoride anion",
+   "charge": -1,
+   "compound": false,
+   "type": "ion",
+   "color": "237,9,5"
+ },
+ {
+   "id": 488,
+   "formula": "Cl3-",
+   "name": "trichloride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "238,9,5"
+ },
+ {
+   "id": 489,
+   "formula": "HCCF+",
+   "name": "fluoroacetylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "239,9,5"
+ },
+ {
+   "id": 490,
+   "formula": "HFCO+",
+   "name": "formyl fluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "240,9,5"
+ },
+ {
+   "id": 491,
+   "formula": "CH2CHF+",
+   "name": "fluoroethene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "241,9,5"
+ },
+ {
+   "id": 492,
+   "formula": "C4+",
+   "name": "Carbon tetramer cation",
+   "charge": 1,
+   "compound": false,
+   "type": "ion",
+   "color": "242,9,5"
+ },
+ {
+   "id": 493,
+   "formula": "C4H2+",
+   "name": "diacetlyene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "243,9,5"
+ },
+ {
+   "id": 494,
+   "formula": "C2N2+",
+   "name": "Cyanogen cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "244,9,5"
+ },
+ {
+   "id": 495,
+   "formula": "HCCCN+",
+   "name": "Cyanoacetylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "245,9,5"
+ },
+ {
+   "id": 496,
+   "formula": "C3H3N+",
+   "name": "acrylonitrile cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "246,9,5"
+ },
+ {
+   "id": 497,
+   "formula": "CH3NHN2+",
+   "name": "methyl azide, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "247,9,5"
+ },
+ {
+   "id": 498,
+   "formula": "CH6N3+",
+   "name": "guanidinium",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "248,9,5"
+ },
+ {
+   "id": 499,
+   "formula": "(CH3)3NH+",
+   "name": "protonated trimethyl amine",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "249,9,5"
+ },
+ {
+   "id": 500,
+   "formula": "C3H7NH3+",
+   "name": "n-propylamine, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "150,10,5"
+ },
+ {
+   "id": 501,
+   "formula": "CO3--",
+   "name": "carbonate",
+   "charge": -2,
+   "compound": true,
+   "type": "ion",
+   "color": "151,10,5"
+ },
+ {
+   "id": 502,
+   "formula": "NO3-",
+   "name": "nitrate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "152,10,5"
+ },
+ {
+   "id": 503,
+   "formula": "NO3+",
+   "name": "nitrogen trioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "153,10,5"
+ },
+ {
+   "id": 504,
+   "formula": "SO3-",
+   "name": "Sulfur trioxide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "154,10,5"
+ },
+ {
+   "id": 505,
+   "formula": "SO3+",
+   "name": "Sulfur trioxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "155,10,5"
+ },
+ {
+   "id": 506,
+   "formula": "HCO3-",
+   "name": "bicarbonate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "156,10,5"
+ },
+ {
+   "id": 507,
+   "formula": "C2H2O2+",
+   "name": "Ethanedial cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "157,10,5"
+ },
+ {
+   "id": 508,
+   "formula": "H2NO3+",
+   "name": "Nitric Acid, Protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "158,10,5"
+ },
+ {
+   "id": 509,
+   "formula": "CH3COO-",
+   "name": "acetate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "159,10,5"
+ },
+ {
+   "id": 510,
+   "formula": "H3CO3+",
+   "name": "carbonic acid, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "160,10,5"
+ },
+ {
+   "id": 511,
+   "formula": "NH2CONH2+",
+   "name": "Urea cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "161,10,5"
+ },
+ {
+   "id": 512,
+   "formula": "NH2COOH2+",
+   "name": "Carbamic acid, O-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "162,10,5"
+ },
+ {
+   "id": 513,
+   "formula": "NH3COOH+",
+   "name": "protonated Carbamic acid",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "163,10,5"
+ },
+ {
+   "id": 514,
+   "formula": "CH5N2O+",
+   "name": "urea, N-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "164,10,5"
+ },
+ {
+   "id": 515,
+   "formula": "H2NCOHNH2+",
+   "name": "urea, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "165,10,5"
+ },
+ {
+   "id": 516,
+   "formula": "CH3COCH3-",
+   "name": "acetone anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "166,10,5"
+ },
+ {
+   "id": 517,
+   "formula": "CH3COHCH3+",
+   "name": "acetone, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "167,10,5"
+ },
+ {
+   "id": 518,
+   "formula": "C2Cl2+",
+   "name": "dichloroacetylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "168,10,5"
+ },
+ {
+   "id": 519,
+   "formula": "BF3-",
+   "name": "Borane, trifluoro- anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "169,10,5"
+ },
+ {
+   "id": 520,
+   "formula": "BF3+",
+   "name": "boron trifluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "170,10,5"
+ },
+ {
+   "id": 521,
+   "formula": "ClO3-",
+   "name": "chlorate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "171,10,5"
+ },
+ {
+   "id": 522,
+   "formula": "CF3-",
+   "name": "Trifluoromethyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "172,10,5"
+ },
+ {
+   "id": 523,
+   "formula": "CF3+",
+   "name": "Trifluoromethyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "173,10,5"
+ },
+ {
+   "id": 524,
+   "formula": "SiF3+",
+   "name": "Silicon trifluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "174,10,5"
+ },
+ {
+   "id": 525,
+   "formula": "CCl3-",
+   "name": "Trichloromethyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "175,10,5"
+ },
+ {
+   "id": 526,
+   "formula": "CCl3+",
+   "name": "Trichloromethyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "176,10,5"
+ },
+ {
+   "id": 527,
+   "formula": "SiCl3+",
+   "name": "trichlorosilyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "177,10,5"
+ },
+ {
+   "id": 528,
+   "formula": "NF3-",
+   "name": "Nitrogen trifluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "178,10,5"
+ },
+ {
+   "id": 529,
+   "formula": "NF3+",
+   "name": "Nitrogen trifluoride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "179,10,5"
+ },
+ {
+   "id": 530,
+   "formula": "NF3H+",
+   "name": "protonated nitrogen trifluoride",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "180,10,5"
+ },
+ {
+   "id": 531,
+   "formula": "AsF3H+",
+   "name": "Arsenic trifluoride, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "181,10,5"
+ },
+ {
+   "id": 532,
+   "formula": "CH2ClCH2OH2+",
+   "name": "2-chloroethanol, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "182,10,5"
+ },
+ {
+   "id": 533,
+   "formula": "C5H5-",
+   "name": "cylopentadienyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "183,10,5"
+ },
+ {
+   "id": 534,
+   "formula": "C3H3N2-",
+   "name": "imidizolyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "184,10,5"
+ },
+ {
+   "id": 535,
+   "formula": "C4H4N-",
+   "name": "pyrrolide anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "185,10,5"
+ },
+ {
+   "id": 536,
+   "formula": "C4H6N+",
+   "name": "pyrrole, alpha-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "186,10,5"
+ },
+ {
+   "id": 537,
+   "formula": "C4H6N+",
+   "name": "pyrrole, beta-protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "187,10,5"
+ },
+ {
+   "id": 538,
+   "formula": "C4H6N+",
+   "name": "pyrrole, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "188,10,5"
+ },
+ {
+   "id": 539,
+   "formula": "NC4H12+",
+   "name": "tetramethyl ammonium cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "189,10,5"
+ },
+ {
+   "id": 540,
+   "formula": "C3O2+",
+   "name": "Carbon suboxide cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "190,10,5"
+ },
+ {
+   "id": 541,
+   "formula": "PO4---",
+   "name": "phosphate",
+   "charge": -3,
+   "compound": true,
+   "type": "ion",
+   "color": "191,10,5"
+ },
+ {
+   "id": 542,
+   "formula": "SO4--",
+   "name": "sulfate",
+   "charge": -2,
+   "compound": true,
+   "type": "ion",
+   "color": "192,10,5"
+ },
+ {
+   "id": 543,
+   "formula": "HSO4-",
+   "name": "bisulfate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "193,10,5"
+ },
+ {
+   "id": 544,
+   "formula": "C4H4O+",
+   "name": "Furan cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "194,10,5"
+ },
+ {
+   "id": 545,
+   "formula": "C4H10O+",
+   "name": "1-Butanol cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "195,10,5"
+ },
+ {
+   "id": 546,
+   "formula": "ClO4-",
+   "name": "perchlorate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "196,10,5"
+ },
+ {
+   "id": 547,
+   "formula": "BF4-",
+   "name": "tetrafluoroboron anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "197,10,5"
+ },
+ {
+   "id": 548,
+   "formula": "CCl4+",
+   "name": "Carbon tetrachloride cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "198,10,5"
+ },
+ {
+   "id": 549,
+   "formula": "C2HF3+",
+   "name": "Trifluoroethylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "199,10,5"
+ },
+ {
+   "id": 550,
+   "formula": "C6H5-",
+   "name": "phenyl anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "200,10,5"
+ },
+ {
+   "id": 551,
+   "formula": "C6H6+",
+   "name": "Benzene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "201,10,5"
+ },
+ {
+   "id": 552,
+   "formula": "C6H7+",
+   "name": "benzene, protonated",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "202,10,5"
+ },
+ {
+   "id": 553,
+   "formula": "C5H6N+",
+   "name": "Pyridinium",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "203,10,5"
+ },
+ {
+   "id": 554,
+   "formula": "C2O4--",
+   "name": "oxalate anion",
+   "charge": -2,
+   "compound": true,
+   "type": "ion",
+   "color": "204,10,5"
+ },
+ {
+   "id": 555,
+   "formula": "CF3CN+",
+   "name": "Acetonitrile, trifluoro- cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "205,10,5"
+ },
+ {
+   "id": 556,
+   "formula": "C2F4+",
+   "name": "Tetrafluoroethylene cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "206,10,5"
+ },
+ {
+   "id": 557,
+   "formula": "SiF5-",
+   "name": "silicon pentafluoride anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "207,10,5"
+ },
+ {
+   "id": 558,
+   "formula": "SF5+",
+   "name": "pentafluoro sulfur cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "208,10,5"
+ },
+ {
+   "id": 559,
+   "formula": "C7H7+",
+   "name": "cycloheptatrienyl cation",
+   "charge": 1,
+   "compound": true,
+   "type": "ion",
+   "color": "209,10,5"
+ },
+ {
+   "id": 560,
+   "formula": "CF3COO-",
+   "name": "trifluoro acetate anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "210,10,5"
+ },
+ {
+   "id": 561,
+   "formula": "PF6-",
+   "name": "Hexafluorophosphate ion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "211,10,5"
+ },
+ {
+   "id": 562,
+   "formula": "C6N4-",
+   "name": "tetracyanoethylene anion",
+   "charge": -1,
+   "compound": true,
+   "type": "ion",
+   "color": "212,10,5"
+ },
+ {
+   "id": 563,
+   "formula": "B12H12",
+   "name": "Dodecahydrododecaborate(2-)",
+   "charge": -2,
+   "compound": true,
+   "type": "ion",
+   "color": "213,10,5"
+ },
+ {
+   "id": 564,
+   "formula": "H",
+   "name": "Hydrogen",
+   "charge": 0,
+   "compound": false,
+   "type": "atom",
+   "color": "214,10,5"
+ },
+ {
+   "id": 565,
+   "formula": "He",
+   "name": "Helium",
+   "charge": 1,
+   "compound": false,
+   "type": "atom",
+   "color": "215,10,5"
+ },
+ {
+   "id": 566,
+   "formula": "Li",
+   "name": "Lithium",
+   "charge": 2,
+   "compound": false,
+   "type": "atom",
+   "color": "216,10,5"
+ },
+ {
+   "id": 567,
+   "formula": "Be",
+   "name": "Beryllium",
+   "charge": 3,
+   "compound": false,
+   "type": "atom",
+   "color": "217,10,5"
+ },
+ {
+   "id": 568,
+   "formula": "B",
+   "name": "Boron",
+   "charge": 4,
+   "compound": false,
+   "type": "atom",
+   "color": "218,10,5"
+ },
+ {
+   "id": 569,
+   "formula": "C",
+   "name": "Carbon",
+   "charge": 5,
+   "compound": false,
+   "type": "atom",
+   "color": "219,10,5"
+ },
+ {
+   "id": 570,
+   "formula": "N",
+   "name": "Nitrogen",
+   "charge": 6,
+   "compound": false,
+   "type": "atom",
+   "color": "220,10,5"
+ },
+ {
+   "id": 571,
+   "formula": "O",
+   "name": "Oxygen",
+   "charge": 7,
+   "compound": false,
+   "type": "atom",
+   "color": "221,10,5"
+ },
+ {
+   "id": 572,
+   "formula": "F",
+   "name": "Fluorine",
+   "charge": 8,
+   "compound": false,
+   "type": "atom",
+   "color": "222,10,5"
+ },
+ {
+   "id": 573,
+   "formula": "Ne",
+   "name": "Neon",
+   "charge": 9,
+   "compound": false,
+   "type": "atom",
+   "color": "223,10,5"
+ },
+ {
+   "id": 574,
+   "formula": "Na",
+   "name": "Sodium",
+   "charge": 10,
+   "compound": false,
+   "type": "atom",
+   "color": "224,10,5"
+ },
+ {
+   "id": 575,
+   "formula": "Mg",
+   "name": "Magnesium",
+   "charge": 11,
+   "compound": false,
+   "type": "atom",
+   "color": "225,10,5"
+ },
+ {
+   "id": 576,
+   "formula": "Al",
+   "name": "Aluminum",
+   "charge": 12,
+   "compound": false,
+   "type": "atom",
+   "color": "226,10,5"
+ },
+ {
+   "id": 577,
+   "formula": "Si",
+   "name": "Silicon",
+   "charge": 13,
+   "compound": false,
+   "type": "atom",
+   "color": "227,10,5"
+ },
+ {
+   "id": 578,
+   "formula": "P",
+   "name": "Phosphorus",
+   "charge": 14,
+   "compound": false,
+   "type": "atom",
+   "color": "228,10,5"
+ },
+ {
+   "id": 579,
+   "formula": "S",
+   "name": "Sulfur",
+   "charge": 15,
+   "compound": false,
+   "type": "atom",
+   "color": "229,10,5"
+ },
+ {
+   "id": 580,
+   "formula": "Cl",
+   "name": "Chlorine",
+   "charge": 16,
+   "compound": false,
+   "type": "atom",
+   "color": "230,10,5"
+ },
+ {
+   "id": 581,
+   "formula": "Ar",
+   "name": "Argon",
+   "charge": 17,
+   "compound": false,
+   "type": "atom",
+   "color": "231,10,5"
+ },
+ {
+   "id": 582,
+   "formula": "K",
+   "name": "Potassium",
+   "charge": 18,
+   "compound": false,
+   "type": "atom",
+   "color": "232,10,5"
+ },
+ {
+   "id": 583,
+   "formula": "Ca",
+   "name": "Calcium",
+   "charge": 19,
+   "compound": false,
+   "type": "atom",
+   "color": "233,10,5"
+ },
+ {
+   "id": 584,
+   "formula": "Sc",
+   "name": "Scandium",
+   "charge": 20,
+   "compound": false,
+   "type": "atom",
+   "color": "234,10,5"
+ },
+ {
+   "id": 585,
+   "formula": "Ti",
+   "name": "Titanium",
+   "charge": 21,
+   "compound": false,
+   "type": "atom",
+   "color": "235,10,5"
+ },
+ {
+   "id": 586,
+   "formula": "V",
+   "name": "Vanadium",
+   "charge": 22,
+   "compound": false,
+   "type": "atom",
+   "color": "236,10,5"
+ },
+ {
+   "id": 587,
+   "formula": "Cr",
+   "name": "Chromium",
+   "charge": 23,
+   "compound": false,
+   "type": "atom",
+   "color": "237,10,5"
+ },
+ {
+   "id": 588,
+   "formula": "Mn",
+   "name": "Manganese",
+   "charge": 24,
+   "compound": false,
+   "type": "atom",
+   "color": "238,10,5"
+ },
+ {
+   "id": 589,
+   "formula": "Fe",
+   "name": "Iron",
+   "charge": 25,
+   "compound": false,
+   "type": "atom",
+   "color": "239,10,5"
+ },
+ {
+   "id": 590,
+   "formula": "Co",
+   "name": "Cobalt",
+   "charge": 26,
+   "compound": false,
+   "type": "atom",
+   "color": "240,10,5"
+ },
+ {
+   "id": 591,
+   "formula": "Ni",
+   "name": "Nickel",
+   "charge": 27,
+   "compound": false,
+   "type": "atom",
+   "color": "241,10,5"
+ },
+ {
+   "id": 592,
+   "formula": "Cu",
+   "name": "Copper",
+   "charge": 28,
+   "compound": false,
+   "type": "atom",
+   "color": "242,10,5"
+ },
+ {
+   "id": 593,
+   "formula": "Zn",
+   "name": "Zinc",
+   "charge": 29,
+   "compound": false,
+   "type": "atom",
+   "color": "243,10,5"
+ },
+ {
+   "id": 594,
+   "formula": "Ga",
+   "name": "Gallium",
+   "charge": 30,
+   "compound": false,
+   "type": "atom",
+   "color": "244,10,5"
+ },
+ {
+   "id": 595,
+   "formula": "Ge",
+   "name": "Germanium",
+   "charge": 31,
+   "compound": false,
+   "type": "atom",
+   "color": "245,10,5"
+ },
+ {
+   "id": 596,
+   "formula": "As",
+   "name": "Arsenic",
+   "charge": 32,
+   "compound": false,
+   "type": "atom",
+   "color": "246,10,5"
+ },
+ {
+   "id": 597,
+   "formula": "Se",
+   "name": "Selenium",
+   "charge": 33,
+   "compound": false,
+   "type": "atom",
+   "color": "247,10,5"
+ },
+ {
+   "id": 598,
+   "formula": "Br",
+   "name": "Bromine",
+   "charge": 34,
+   "compound": false,
+   "type": "atom",
+   "color": "248,10,5"
+ },
+ {
+   "id": 599,
+   "formula": "Kr",
+   "name": "Krypton",
+   "charge": 35,
+   "compound": false,
+   "type": "atom",
+   "color": "249,10,5"
+ },
+ {
+   "id": 600,
+   "formula": "Rb",
+   "name": "Rubidium",
+   "charge": 36,
+   "compound": false,
+   "type": "atom",
+   "color": "150,11,5"
+ },
+ {
+   "id": 601,
+   "formula": "Sr",
+   "name": "Strontium",
+   "charge": 37,
+   "compound": false,
+   "type": "atom",
+   "color": "151,11,5"
+ },
+ {
+   "id": 602,
+   "formula": "Y",
+   "name": "Yttrium",
+   "charge": 38,
+   "compound": false,
+   "type": "atom",
+   "color": "152,11,5"
+ },
+ {
+   "id": 603,
+   "formula": "Zr",
+   "name": "Zirconium",
+   "charge": 39,
+   "compound": false,
+   "type": "atom",
+   "color": "153,11,5"
+ },
+ {
+   "id": 604,
+   "formula": "Nb",
+   "name": "Niobium",
+   "charge": 40,
+   "compound": false,
+   "type": "atom",
+   "color": "154,11,5"
+ },
+ {
+   "id": 605,
+   "formula": "Mo",
+   "name": "Molybdenum",
+   "charge": 41,
+   "compound": false,
+   "type": "atom",
+   "color": "155,11,5"
+ },
+ {
+   "id": 606,
+   "formula": "Tc",
+   "name": "Technetium",
+   "charge": 42,
+   "compound": false,
+   "type": "atom",
+   "color": "156,11,5"
+ },
+ {
+   "id": 607,
+   "formula": "Ru",
+   "name": "Ruthenium",
+   "charge": 43,
+   "compound": false,
+   "type": "atom",
+   "color": "157,11,5"
+ },
+ {
+   "id": 608,
+   "formula": "Rh",
+   "name": "Rhodium",
+   "charge": 44,
+   "compound": false,
+   "type": "atom",
+   "color": "158,11,5"
+ },
+ {
+   "id": 609,
+   "formula": "Pd",
+   "name": "Palladium",
+   "charge": 45,
+   "compound": false,
+   "type": "atom",
+   "color": "159,11,5"
+ },
+ {
+   "id": 610,
+   "formula": "Ag",
+   "name": "Silver",
+   "charge": 46,
+   "compound": false,
+   "type": "atom",
+   "color": "160,11,5"
+ },
+ {
+   "id": 611,
+   "formula": "Cd",
+   "name": "Cadmium",
+   "charge": 47,
+   "compound": false,
+   "type": "atom",
+   "color": "161,11,5"
+ },
+ {
+   "id": 612,
+   "formula": "In",
+   "name": "Indium",
+   "charge": 48,
+   "compound": false,
+   "type": "atom",
+   "color": "162,11,5"
+ },
+ {
+   "id": 613,
+   "formula": "Sn",
+   "name": "Tin",
+   "charge": 49,
+   "compound": false,
+   "type": "atom",
+   "color": "163,11,5"
+ },
+ {
+   "id": 614,
+   "formula": "Sb",
+   "name": "Antimony",
+   "charge": 50,
+   "compound": false,
+   "type": "atom",
+   "color": "164,11,5"
+ },
+ {
+   "id": 615,
+   "formula": "Te",
+   "name": "Tellurium",
+   "charge": 51,
+   "compound": false,
+   "type": "atom",
+   "color": "165,11,5"
+ },
+ {
+   "id": 616,
+   "formula": "I",
+   "name": "Iodine",
+   "charge": 52,
+   "compound": false,
+   "type": "atom",
+   "color": "166,11,5"
+ },
+ {
+   "id": 617,
+   "formula": "Xe",
+   "name": "Xenon",
+   "charge": 53,
+   "compound": false,
+   "type": "atom",
+   "color": "167,11,5"
+ },
+ {
+   "id": 618,
+   "formula": "Cs",
+   "name": "Cesium",
+   "charge": 54,
+   "compound": false,
+   "type": "atom",
+   "color": "168,11,5"
+ },
+ {
+   "id": 619,
+   "formula": "Ba",
+   "name": "Barium",
+   "charge": 55,
+   "compound": false,
+   "type": "atom",
+   "color": "169,11,5"
+ },
+ {
+   "id": 620,
+   "formula": "La",
+   "name": "Lanthanum",
+   "charge": 56,
+   "compound": false,
+   "type": "atom",
+   "color": "170,11,5"
+ },
+ {
+   "id": 621,
+   "formula": "Ce",
+   "name": "Cerium",
+   "charge": 57,
+   "compound": false,
+   "type": "atom",
+   "color": "171,11,5"
+ },
+ {
+   "id": 622,
+   "formula": "Pr",
+   "name": "Praseodymium",
+   "charge": 58,
+   "compound": false,
+   "type": "atom",
+   "color": "172,11,5"
+ },
+ {
+   "id": 623,
+   "formula": "Nd",
+   "name": "Neodymium",
+   "charge": 59,
+   "compound": false,
+   "type": "atom",
+   "color": "173,11,5"
+ },
+ {
+   "id": 624,
+   "formula": "Pm",
+   "name": "Promethium",
+   "charge": 60,
+   "compound": false,
+   "type": "atom",
+   "color": "174,11,5"
+ },
+ {
+   "id": 625,
+   "formula": "Sm",
+   "name": "Samarium",
+   "charge": 61,
+   "compound": false,
+   "type": "atom",
+   "color": "175,11,5"
+ },
+ {
+   "id": 626,
+   "formula": "Eu",
+   "name": "Europium",
+   "charge": 62,
+   "compound": false,
+   "type": "atom",
+   "color": "176,11,5"
+ },
+ {
+   "id": 627,
+   "formula": "Gd",
+   "name": "Gadolinium",
+   "charge": 63,
+   "compound": false,
+   "type": "atom",
+   "color": "177,11,5"
+ },
+ {
+   "id": 628,
+   "formula": "Tb",
+   "name": "Terbium",
+   "charge": 64,
+   "compound": false,
+   "type": "atom",
+   "color": "178,11,5"
+ },
+ {
+   "id": 629,
+   "formula": "Dy",
+   "name": "Dysprosium",
+   "charge": 65,
+   "compound": false,
+   "type": "atom",
+   "color": "179,11,5"
+ },
+ {
+   "id": 630,
+   "formula": "Ho",
+   "name": "Holmium",
+   "charge": 66,
+   "compound": false,
+   "type": "atom",
+   "color": "180,11,5"
+ },
+ {
+   "id": 631,
+   "formula": "Er",
+   "name": "Erbium",
+   "charge": 67,
+   "compound": false,
+   "type": "atom",
+   "color": "181,11,5"
+ },
+ {
+   "id": 632,
+   "formula": "Tm",
+   "name": "Thulium",
+   "charge": 68,
+   "compound": false,
+   "type": "atom",
+   "color": "182,11,5"
+ },
+ {
+   "id": 633,
+   "formula": "Yb",
+   "name": "Ytterbium",
+   "charge": 69,
+   "compound": false,
+   "type": "atom",
+   "color": "183,11,5"
+ },
+ {
+   "id": 634,
+   "formula": "Lu",
+   "name": "Lutetium",
+   "charge": 70,
+   "compound": false,
+   "type": "atom",
+   "color": "184,11,5"
+ },
+ {
+   "id": 635,
+   "formula": "Hf",
+   "name": "Hafnium",
+   "charge": 71,
+   "compound": false,
+   "type": "atom",
+   "color": "185,11,5"
+ },
+ {
+   "id": 636,
+   "formula": "Ta",
+   "name": "Tantalum",
+   "charge": 72,
+   "compound": false,
+   "type": "atom",
+   "color": "186,11,5"
+ },
+ {
+   "id": 637,
+   "formula": "W",
+   "name": "Wolfram",
+   "charge": 73,
+   "compound": false,
+   "type": "atom",
+   "color": "187,11,5"
+ },
+ {
+   "id": 638,
+   "formula": "Re",
+   "name": "Rhenium",
+   "charge": 74,
+   "compound": false,
+   "type": "atom",
+   "color": "188,11,5"
+ },
+ {
+   "id": 639,
+   "formula": "Os",
+   "name": "Osmium",
+   "charge": 75,
+   "compound": false,
+   "type": "atom",
+   "color": "189,11,5"
+ },
+ {
+   "id": 640,
+   "formula": "Ir",
+   "name": "Iridium",
+   "charge": 76,
+   "compound": false,
+   "type": "atom",
+   "color": "190,11,5"
+ },
+ {
+   "id": 641,
+   "formula": "Pt",
+   "name": "Platinum",
+   "charge": 77,
+   "compound": false,
+   "type": "atom",
+   "color": "191,11,5"
+ },
+ {
+   "id": 642,
+   "formula": "Au",
+   "name": "Gold",
+   "charge": 78,
+   "compound": false,
+   "type": "atom",
+   "color": "192,11,5"
+ },
+ {
+   "id": 643,
+   "formula": "Hg",
+   "name": "Mercury",
+   "charge": 79,
+   "compound": false,
+   "type": "atom",
+   "color": "193,11,5"
+ },
+ {
+   "id": 644,
+   "formula": "Tl",
+   "name": "Thallium",
+   "charge": 80,
+   "compound": false,
+   "type": "atom",
+   "color": "194,11,5"
+ },
+ {
+   "id": 645,
+   "formula": "Pb",
+   "name": "Lead",
+   "charge": 81,
+   "compound": false,
+   "type": "atom",
+   "color": "195,11,5"
+ },
+ {
+   "id": 646,
+   "formula": "Bi",
+   "name": "Bismuth",
+   "charge": 82,
+   "compound": false,
+   "type": "atom",
+   "color": "196,11,5"
+ },
+ {
+   "id": 647,
+   "formula": "Po",
+   "name": "Polonium",
+   "charge": 83,
+   "compound": false,
+   "type": "atom",
+   "color": "197,11,5"
+ },
+ {
+   "id": 648,
+   "formula": "At",
+   "name": "Astatine",
+   "charge": 84,
+   "compound": false,
+   "type": "atom",
+   "color": "198,11,5"
+ },
+ {
+   "id": 649,
+   "formula": "Rn",
+   "name": "Radon",
+   "charge": 85,
+   "compound": false,
+   "type": "atom",
+   "color": "199,11,5"
+ },
+ {
+   "id": 650,
+   "formula": "Fr",
+   "name": "Francium",
+   "charge": 86,
+   "compound": false,
+   "type": "atom",
+   "color": "200,11,5"
+ },
+ {
+   "id": 651,
+   "formula": "Ra",
+   "name": "Radium",
+   "charge": 87,
+   "compound": false,
+   "type": "atom",
+   "color": "201,11,5"
+ },
+ {
+   "id": 652,
+   "formula": "Ac",
+   "name": "Actinium",
+   "charge": 88,
+   "compound": false,
+   "type": "atom",
+   "color": "202,11,5"
+ },
+ {
+   "id": 653,
+   "formula": "Th",
+   "name": "Thorium",
+   "charge": 89,
+   "compound": false,
+   "type": "atom",
+   "color": "203,11,5"
+ },
+ {
+   "id": 654,
+   "formula": "Pa",
+   "name": "Protactinium",
+   "charge": 90,
+   "compound": false,
+   "type": "atom",
+   "color": "204,11,5"
+ },
+ {
+   "id": 655,
+   "formula": "U",
+   "name": "Uranium",
+   "charge": 91,
+   "compound": false,
+   "type": "atom",
+   "color": "205,11,5"
+ },
+ {
+   "id": 656,
+   "formula": "Np",
+   "name": "Neptunium",
+   "charge": 92,
+   "compound": false,
+   "type": "atom",
+   "color": "206,11,5"
+ },
+ {
+   "id": 657,
+   "formula": "Pu",
+   "name": "Plutonium",
+   "charge": 93,
+   "compound": false,
+   "type": "atom",
+   "color": "207,11,5"
+ },
+ {
+   "id": 658,
+   "formula": "Am",
+   "name": "Americium",
+   "charge": 94,
+   "compound": false,
+   "type": "atom",
+   "color": "208,11,5"
+ },
+ {
+   "id": 659,
+   "formula": "Cm",
+   "name": "Curium",
+   "charge": 95,
+   "compound": false,
+   "type": "atom",
+   "color": "209,11,5"
+ },
+ {
+   "id": 660,
+   "formula": "Bk",
+   "name": "Berkelium",
+   "charge": 96,
+   "compound": false,
+   "type": "atom",
+   "color": "210,11,5"
+ },
+ {
+   "id": 661,
+   "formula": "Cf",
+   "name": "Californium",
+   "charge": 97,
+   "compound": false,
+   "type": "atom",
+   "color": "211,11,5"
+ },
+ {
+   "id": 662,
+   "formula": "Es",
+   "name": "Einsteinium",
+   "charge": 98,
+   "compound": false,
+   "type": "atom",
+   "color": "212,11,5"
+ },
+ {
+   "id": 663,
+   "formula": "Fm",
+   "name": "Fermium",
+   "charge": 99,
+   "compound": false,
+   "type": "atom",
+   "color": "213,11,5"
+ },
+ {
+   "id": 664,
+   "formula": "Md",
+   "name": "Mendelevium",
+   "charge": 100,
+   "compound": false,
+   "type": "atom",
+   "color": "214,11,5"
+ },
+ {
+   "id": 665,
+   "formula": "No",
+   "name": "Nobelium",
+   "charge": 101,
+   "compound": false,
+   "type": "atom",
+   "color": "215,11,5"
+ },
+ {
+   "id": 666,
+   "formula": "Lr",
+   "name": "Lawrencium",
+   "charge": 102,
+   "compound": false,
+   "type": "atom",
+   "color": "216,11,5"
+ },
+ {
+   "id": 667,
+   "formula": "Rf",
+   "name": "Rutherfordium",
+   "charge": 103,
+   "compound": false,
+   "type": "atom",
+   "color": "217,11,5"
+ },
+ {
+   "id": 668,
+   "formula": "Db",
+   "name": "Dubnium",
+   "charge": 104,
+   "compound": false,
+   "type": "atom",
+   "color": "218,11,5"
+ },
+ {
+   "id": 669,
+   "formula": "Sg",
+   "name": "Seaborgium",
+   "charge": 105,
+   "compound": false,
+   "type": "atom",
+   "color": "219,11,5"
+ },
+ {
+   "id": 670,
+   "formula": "Bh",
+   "name": "Bohrium",
+   "charge": 106,
+   "compound": false,
+   "type": "atom",
+   "color": "220,11,5"
+ },
+ {
+   "id": 671,
+   "formula": "Hs",
+   "name": "Hassium",
+   "charge": 107,
+   "compound": false,
+   "type": "atom",
+   "color": "221,11,5"
+ },
+ {
+   "id": 672,
+   "formula": "Mt",
+   "name": "Meitnerium",
+   "charge": 108,
+   "compound": false,
+   "type": "atom",
+   "color": "222,11,5"
+ },
+ {
+   "id": 673,
+   "formula": "Ds ",
+   "name": "Darmstadtium ",
+   "charge": 109,
+   "compound": false,
+   "type": "atom",
+   "color": "223,11,5"
+ },
+ {
+   "id": 674,
+   "formula": "Rg ",
+   "name": "Roentgenium ",
+   "charge": 110,
+   "compound": false,
+   "type": "atom",
+   "color": "224,11,5"
+ },
+ {
+   "id": 675,
+   "formula": "Cn ",
+   "name": "Copernicium ",
+   "charge": 111,
+   "compound": false,
+   "type": "atom",
+   "color": "225,11,5"
+ },
+ {
+   "id": 676,
+   "formula": "Nh",
+   "name": "Nihonium",
+   "charge": 112,
+   "compound": false,
+   "type": "atom",
+   "color": "226,11,5"
+ },
+ {
+   "id": 677,
+   "formula": "Fl",
+   "name": "Flerovium",
+   "charge": 113,
+   "compound": false,
+   "type": "atom",
+   "color": "227,11,5"
+ },
+ {
+   "id": 678,
+   "formula": "Mc",
+   "name": "Moscovium",
+   "charge": 114,
+   "compound": false,
+   "type": "atom",
+   "color": "228,11,5"
+ },
+ {
+   "id": 679,
+   "formula": "Lv",
+   "name": "Livermorium",
+   "charge": 115,
+   "compound": false,
+   "type": "atom",
+   "color": "229,11,5"
+ },
+ {
+   "id": 680,
+   "formula": "Ts",
+   "name": "Tennessine",
+   "charge": 116,
+   "compound": false,
+   "type": "atom",
+   "color": "230,11,5"
+ },
+ {
+   "id": 681,
+   "formula": "Og",
+   "name": "Oganesson",
+   "charge": 117,
+   "compound": false,
+   "type": "atom",
+   "color": "231,11,5"
+ }
+]

@@ -1,0 +1,173 @@
+<html>
+<head>
+  <title>Testt42</title>
+  <script src="matter.js"></script>
+  <script src="matter-attractors.js"></script>
+</head>
+<body>
+<script>
+
+// module aliases
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Body = Matter.Body,
+    World = Matter.World,
+    Constraint = Matter.Constraint,
+    Composite = Matter.Composite,
+    Composites = Matter.Composites,
+    Events = Matter.Events,
+    Vector = Matter.Vector,
+    Bodies = Matter.Bodies;
+
+// create an engine
+var engine = Engine.create();
+engine.world.gravity.y = 0;
+
+
+/*
+// create two boxes and a ground
+particles = []
+for (var i=0; i<200; i++) {
+  x = Math.random()*700+50;
+  y = Math.random()*500+50;
+  var particle = Bodies.circle(x, y, 20, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+  Body.setVelocity(particle, {x: Math.random()*3-1.5, y: Math.random()*3-1.5});
+  particles.push(particle);
+}
+*/
+
+
+function create_h2o_molecule(x, y, options) {
+  p = Vector.create(x, y);
+  v = Vector.create(5, 0);
+  v2 = Vector.rotate(v, 2.3);
+  h1c = Vector.add(p, v);
+  h2c = Vector.add(p, v2);
+  var partO = Bodies.circle(p.x, p.y, 5, options),
+    partH1 = Bodies.circle(h1c.x, h1c.y, 3, options),
+    partH2 = Bodies.circle(h2c.x, h2c.y, 3, options);
+
+  var molecule = Body.create({
+     parts: [partH1, partO, partH2], frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0
+  });
+  return molecule;
+}
+
+particles = []
+for (var i=0; i<100; i++) {
+  x = Math.random()*700+50;
+  y = Math.random()*500+50;
+  var particle = create_h2o_molecule(x, y, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+  Body.setVelocity(particle, {x: Math.random()*3-1.5, y: Math.random()*3-1.5});
+  particles.push(particle);
+}
+World.add(engine.world, particles);
+
+var ball = Bodies.circle(500,100,20, { frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+World.add(engine.world, ball);
+
+
+var ground1 = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+var ground2 = Bodies.rectangle(400, -20, 810, 60, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+var ground3 = Bodies.rectangle(-20, 300, 60, 610, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+var ground4 = Bodies.rectangle(820, 300, 60, 610, { isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0 });
+
+// add all of the bodies to the world
+World.add(engine.world, [ground1, ground2, ground3, ground4]);
+
+// run the engine
+Engine.run(engine);
+
+
+var baseSpeed = 0;
+function adjustE(ball) {
+  if (baseSpeed == 0) baseSpeed = ball.speed;
+  if (ball.speed != 0) {
+    let speedMultiplier = baseSpeed / ball.speed 
+    Body.setVelocity(
+      ball, {
+        x: ball.velocity.x * speedMultiplier,
+        y: ball.velocity.y * speedMultiplier
+      }
+    );
+  }
+}
+
+var prevMillis = 0;
+times = []
+var d = new Date();
+var start_time = d.getTime();
+var frames = 0;
+Events.on(engine, "beforeUpdate", (event) => {
+  frames += 1;
+  var d = new Date();
+  var n = d.getTime();
+  var diff = n - prevMillis;
+  prevMillis = n;
+  times.push(n);
+  if (times.length>20) {
+    average_time = (n-start_time)/frames;
+    console.log(Math.floor(1000/average_time));
+//    console.log(n);
+  }
+  for (var o of event.source.world.bodies) {
+    adjustE(o);
+  }
+  Body.applyForce(ball, ball.position, Vector.create(0, 0.0001));
+});
+
+var custom_render = true;
+if (custom_render) {
+
+//render
+var canvas = document.createElement('canvas'),
+  ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
+
+window.onresize = function(event) {
+  ctx.canvas.width = window.innerWidth;
+  ctx.canvas.height = window.innerHeight;
+};
+
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#ff0';
+  ctx.fillStyle = '#000';
+function render() {
+  Engine.update(engine, 16);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  var bodies = Composite.allBodies(engine.world);
+  ctx.beginPath();
+  for (var i = 0; i < bodies.length; i += 1) {
+    var vertices = bodies[i].vertices;
+    ctx.moveTo(vertices[0].x, vertices[0].y);
+    for (var j = 1; j < 3/*vertices.length*/; j += 1) {
+      ctx.lineTo(vertices[j].x, vertices[j].y);
+    }
+    ctx.lineTo(vertices[0].x, vertices[0].y);
+  }
+  ctx.fill();
+  ctx.stroke();
+  
+  window.requestAnimationFrame(render);
+}
+ window.requestAnimationFrame(render);
+
+} else {
+// create a renderer
+var render = Render.create({
+    element: document.body,
+    engine: engine,
+    options: {
+      wireframes: false
+    }
+});
+// run the renderer
+Render.run(render);
+}
+
+</script>
+</body>
+</html>
