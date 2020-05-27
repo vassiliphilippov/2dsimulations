@@ -10,46 +10,6 @@
 
 var Chemistry = {};
 
-var teststruct = {
-    atom: "S",
-    connections: [
-        {
-            length: 30,
-            angle: 45,
-            atom: "O"
-        },
-        {
-            length: 30,
-            angle: 135,
-            atom: "O",
-            connections: [
-                {
-                    length: 20,
-                    angle: 270,
-                    atom: "H"
-                }
-            ]
-        },
-        {
-            length: 30,
-            angle: 225,
-            atom: "O",
-            connections: [
-                {
-                    length: 20,
-                    angle: 270,
-                    atom: "H"
-                }
-            ]
-        },
-        {
-            length: 30,
-            angle: 315,
-            atom: "O"
-        }
-    ]
-};
-
 (function() {
     //Todo: decide and describe how updating space scale affects already created particles
     //Todo: create particle by formula
@@ -73,7 +33,30 @@ var teststruct = {
         zoneMapColor: null //if the element was created by zomeMap then its color is there
     };
 
+    //Todo: Move initializing of all other plugins here, set gravity to 0
     Chemistry.init = function(engine) {
+        Events.on(engine, "collisionEnd", (event) => {
+            Chemistry._onCollisions(event.pairs);
+        });
+    };
+
+    Chemistry._onCollisions = function(pairs) {
+        for (var pair of pairs) {
+            bodyA = pair.bodyA.parent;
+            bodyB = pair.bodyB.parent;
+            if (bodyA.plugin.chemistry && bodyA.plugin.chemistry.formula && bodyB.plugin.chemistry && bodyB.plugin.chemistry.formula) {
+                let formulaA = bodyA.plugin.chemistry.formula;
+                let formulaB = bodyB.plugin.chemistry.formula;
+                console.log("pair = ", formulaA, formulaB);
+                if (formulaA < formulaB) {
+                    Events.trigger(engine, 'collision_'+formulaA+'_'+formulaB, { particleA: bodyA, particleB: bodyB, pair: pair });
+                    Events.trigger(engine, 'collision', { particleA: bodyA, particleB: bodyB, pair: pair });
+                } else {
+                    Events.trigger(engine, 'collision_'+formulaB+'_'+formulaA, { particleA: bodyB, particleB: bodyA, pair: pair });
+                    Events.trigger(engine, 'collision', { particleA: bodyB, particleB: bodyA, pair: pair });
+                }
+            }
+        }
     };
 
     Chemistry.create = function(formula, x, y, chemistryOptions, options) {

@@ -50,6 +50,7 @@ var Proximity = {};
         }
     };
 
+    //Todo: rename to remove references to Chemistry
     Proximity._distanceBetweenAtoms = function(atomA, atomB) {
         if (!atomA.circleRadius || !atomB.circleRadius) {
             console.log("Error. Atoms without circleRadius property");

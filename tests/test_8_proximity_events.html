@@ -33,16 +33,27 @@ ZoneMap.load("map8.png", function (zoneMap) {
     Matter.Events.on(engine, "comeClose", event => {
         let bodyA = event.bodyA;
         let bodyB = event.bodyB;
-        document.getElementById("lastevent").innerHTML = "Last event: comeClose " + bodyA.label + " - " + bodyB.label + " Level: " + event.level + " Distance " + event.distance;
+        document.getElementById("proximityevent").innerHTML = "Last event: comeClose " + bodyA.label + " - " + bodyB.label + " Level: " + event.level + " Distance " + event.distance;
     });
 
     Matter.Events.on(engine, "goAway", event => {
         let bodyA = event.bodyA;
         let bodyB = event.bodyB;
-        document.getElementById("lastevent").innerHTML = "Last event: goAway " + bodyA.label + " - " + bodyB.label + " Level: " + event.level + " Distance " + event.distance;
+        document.getElementById("proximityevent").innerHTML = "Last event: goAway " + bodyA.label + " - " + bodyB.label + " Level: " + event.level + " Distance " + event.distance;
+    });
+
+    Matter.Events.on(engine, "collision", event => {
+        let particleA = event.particleA;
+        let particleB = event.particleB;
+        document.getElementById("collisionevent").innerHTML = "Last event: collision " + particleA.label + " - " + particleB.label;
+    });
+
+    Matter.Events.on(engine, "collision_H2O_H2O", event => {
+        console.log(event.pair);
     });
 
     Debug.init(engine);
+    Chemistry.init(engine);
     Force.init(engine);
     Temperature.init(engine);
     Proximity.init(engine);
@@ -52,6 +63,11 @@ ZoneMap.load("map8.png", function (zoneMap) {
 });
 
 </script>
-<p id="lastevent"></p>
+<p>
+  Each body can have an array of proximity levels. If another body comes closer than a proximity level a "comeClose" event is triggered for this body and for the engine. 
+  When the another body leaves level zone "goAway" is triggered.
+</p>
+<p id="proximityevent">Proximity event info will be here</p>
+<p id="collisionevent">Collision event info will be here</p>
 </body>
 </html>
