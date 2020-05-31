@@ -9,7 +9,7 @@ var Debug = {};
 (function() {
 
     //Types of forces
-    Debug.frequency = 3*60*60; //Once per 3 minutes (60 FSP * 60 seconds per minute)
+    Debug.frequency = 10*60; //Once per 3 minutes (60 FSP * 60 seconds per minute)
     Debug.counter = 2;
 
     Debug.init = function(engine) {

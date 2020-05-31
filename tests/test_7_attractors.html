@@ -14,6 +14,9 @@
   <script src="../particles.js"></script>
   <script src="../temperature.js"></script>
   <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
 </head>
 <body>
 <script>
@@ -22,21 +25,10 @@ var engine = null;
 var attractor1 = null;
 
 ZoneMap.load("map7.png", function (zoneMap) {
-    engine = Matter.Engine.create();
-    var render = ChemistryRender.create({element: document.body, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
-    Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
-
-    engine.world.gravity.y = 0;
-
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
     attractor1 = new AttractorList(engine).get(0);
     attractor2 = new AttractorList(engine).get(1);
-
-    Debug.init(engine);
-    Force.init(engine);
-    Temperature.init(engine);
-
-    Matter.Engine.run(engine);
-    ChemistryRender.run(render);
+    Chemistry.run(engine, render);
 });
 
 </script>

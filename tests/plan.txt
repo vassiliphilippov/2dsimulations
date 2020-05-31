@@ -1,6 +1,4 @@
-test  8: proximity sensors
-test  9: animation
-test 10: browning motion
-test 11: ions in water, then water disappears and ions use brawning motion for moving
-test 12: solids/crystalls
-test 13: focus of place of 
+Ion exchange reactions
+Focusing on some area
+Place of event and backtracing
+Water evoporation

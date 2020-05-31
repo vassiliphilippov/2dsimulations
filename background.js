@@ -32,8 +32,11 @@ var Background = {};
     };
 
     Background.setBackground = function(world, backgroundImageUrl, width, height, options) {
-        //Todo: add functionality to make background always on the bottom
         //Todo: remove previous backgrounds
-        Matter.World.add(world, Background.createBackground(backgroundImageUrl, width, height, options));
+        let background = Background.createBackground(backgroundImageUrl, width, height, options);
+        Events.trigger(world, 'beforeAdd', { object: background });
+        world.bodies.unshift(background);
+        Matter.Composite.setModified(world, true, true, false);
+        Events.trigger(world, 'afterAdd', { object: background });
     };
 })();

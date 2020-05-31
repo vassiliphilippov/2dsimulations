@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 4: Creating particles manually</title>
+  <title>Test 13: Solids</title>
   <script src="../matter.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
@@ -21,24 +21,32 @@
 <body>
 <script>
 
-ZoneMap.load("map4.png", function (zoneMap) {
-    Chemistry.spaceScale = 0.1;
+//Todo: implement solid colors in zoneMap
+//Todo: implement solid zones in zoneMap
+//Todo: consider implementing solids via softbody
+ZoneMap.load("map13.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.16;
+    Chemistry.timeScale = 6e-14; //real seconds per rendering second
 
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
 
-    Background.setBackground(engine.world, "background4.png", zoneMap.width, zoneMap.height);
+    Background.setBackground(engine.world, "background13.png", zoneMap.width, zoneMap.height);
 
     ZoneMap.spawnSeries(zoneMap, [1, 0, 210], (x, y, width, height) => {
         Matter.World.add(engine.world, Chemistry.create("Na+", x, y));
     });
 
-    ZoneMap.spawnRandom(zoneMap, [0, 200, 210], 100, (x, y) => {
-        Matter.World.add(engine.world, Chemistry.create("H2O", x, y));
+    ZoneMap.spawnLattice(zoneMap, [200, 0, 210], Chemistry.spaceScale*220, Chemistry.spaceScale*220, (x, y) => {
+        var p = Chemistry.create("H2O", x, y);
+        Chemistry.stick(p);
+        Matter.World.add(engine.world, p);
     });
 
-    ZoneMap.spawnLattice(zoneMap, [200, 0, 210], Chemistry.spaceScale*300, Chemistry.spaceScale*300, (x, y) => {
-        Matter.World.add(engine.world, Chemistry.create("Zn", x, y));
-    });
+    new ParticleList(engine).formula("Zn").stick();
+    new ParticleList(engine).setTemperature(293);
+    new ParticleList(engine).formula("Zn").setTemperature(295);
+
+    new BodyList(engine).label("border").hide();
 
     Chemistry.run(engine, render);
 });

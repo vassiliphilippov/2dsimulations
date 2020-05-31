@@ -1,0 +1,73 @@
+<html>
+<head>
+  <title>Test 16: Tin hedgehog</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+</head>
+<body>
+<script>
+
+var engine = null;
+
+ZoneMap.load("map16.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.10;
+    Chemistry.timeScale = 6e-15;
+
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+
+    new ParticleList(engine).setTemperature(297);
+    new ParticleList(engine).formula("Sn+2", "Cl-").setChemistryOptions({brownianMotion: {medium: "water"}});
+    Chemistry.run(engine, render);
+
+    ChemistryRender.lookAt(render, [ZoneMap.getBounds(zoneMap, "230,101,2"), ZoneMap.getBounds(zoneMap, "100,231,2")]);
+
+    scenario = new Scenario(engine, render);
+    scenario.addWait(200);
+    scenario.addAction(() => {
+        new ParticleList(engine).formula("H2O").remove(engine.world);
+    });
+    scenario.addWait(100);
+    scenario.addAction(() => {
+        new ParticleList(engine).formula("Cl-").remove(engine.world);
+    });
+    scenario.addWait(100);
+    scenario.addAction(() => {
+        new BodyList(engine).zoneMapColor("230,101,2","100,231,2").remove(engine.world);
+    });
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 50);
+    scenario.run(() => {
+        Chemistry.timeScale = 2e-14;
+        console.log("Scenario end!");
+        Matter.Events.on(engine, "collision_Sn+2_Zn", event => {
+            pSn = event.particleA;
+            pSn.plugin.chemistry.formula = "Sn";
+            Chemistry.stick(pSn);
+        });
+        Matter.Events.on(engine, "collision_Sn_Sn+2", event => {
+            pSn = event.particleB;
+            pSn.plugin.chemistry.formula = "Sn";
+            Chemistry.stick(pSn);
+        });
+    });
+});
+
+</script>
+<p>
+  Tin hedgehog experiment.
+</p>
+</body>
+</html>

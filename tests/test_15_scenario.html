@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>Test 15: Scenario</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+</head>
+<body>
+<script>
+
+ZoneMap.load("map15.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    Chemistry.run(engine, render);
+
+    let p = new ParticleList(engine).formula("H2O").getFirst();
+
+    scenario = new Scenario(engine, render);
+    scenario.addAnimation(100, (n, progress) => {
+        Matter.Body.setPosition(p, {x: 100+progress*500, y:100});
+    });
+    scenario.addAnimation(100, (n, progress) => {
+        Matter.Body.setPosition(p, {x: 600, y:100+progress*300});
+    });
+    scenario.addAction(() => {
+        Matter.Body.setVelocity(p, {x: -5, y:0});
+    });
+    scenario.addCondition(() => {
+        return p.position.x<100;
+    });
+    scenario.addAction(() => {
+        Matter.Body.setVelocity(p, {x: 5, y: -5});
+    });
+    scenario.add(onend => {
+        Matter.Events.on(engine, "collision_H2O_Zn", function listener(event) {
+            Matter.Events.off(engine, "collision_H2O_Zn", listener);
+            onend();
+        });
+    });
+    scenario.addAction(() => {
+        ZoneMap.spawnLattice(zoneMap, [255,255,255], Chemistry.spaceScale*300, Chemistry.spaceScale*300, (x, y) => {
+            Matter.World.add(engine.world, Chemistry.create("H2O", x, y));
+        })
+    });
+    scenario.addLookAtAnimation(ZoneMap.getBounds(zoneMap, "0,162,232"), 50);
+    scenario.addWait(200);
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4"),ZoneMap.getBounds(zoneMap, "250,230,4")], 50);
+    scenario.run(() => {
+        console.log("Scenario end!");
+    });
+});
+
+</script>
+<p>
+A step-by-step scenario with different types of steps.
+</p>
+</body>
+</html>

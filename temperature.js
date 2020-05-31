@@ -5,19 +5,22 @@
 */
 
 //todo: fix setting temperature to 0, it should stop everything. 
+
 //todo: add option to disable temperature movement
+
+//todo: prevent super fast particles
 var Temperature = {};
 
 (function() {
 
-    Temperature._ramdomEnergyChunk = 0.01;
+    Temperature._ramdomEnergyChunk = 0.1;
     Temperature._maxEneryToTemperatureRatio = 3;
     Temperature.kBoltzmannConstant = 1.38e-23;
     Temperature.pmInMeter = 1e12;
     Temperature.daltonMass = 1.66054e-27;
 
     Temperature.init = function(engine) {
-        Events.on(engine, "afterUpdate", (event) => {
+        Matter.Events.on(engine, "afterUpdate", (event) => {
             Temperature.UpdateAllSpeedsToTheirTemperature(engine, event.source.world.bodies);
        });
     };
@@ -76,8 +79,55 @@ var Temperature = {};
         } else {
             //If speed was 0 then we need to choose a random direction
             let randomAngle = Matter.Common.random(0, 2*Math.PI);
-            Body.setVelocity(p, {x: newSpeed*Math.cos(randomAngle), y: newSpeed*Math.sin(randomAngle)});
+            Matter.Body.setVelocity(p, {x: newSpeed*Math.cos(randomAngle), y: newSpeed*Math.sin(randomAngle)});
         }
+        Temperature._BrownianMotion(p, expectedKineticEnergy);
+    };
+
+    Temperature._BrownianMotion = function(particle, expectedKineticEnergy) {
+        if (particle.plugin.chemistry && particle.plugin.chemistry.brownianMotion) {
+            let probability = Temperature._BrownianMotionProbabilityOfCollision(particle);
+            if (Matter.Common.random(0, 1)<probability) {
+                let randomAngle = Matter.Common.random(0, 2*Math.PI);
+                let forceValue = Temperature._collisionForceByKineticEnergy(expectedKineticEnergy, Temperature._BrownianMotionAtomicMass(particle));
+                Matter.Body.applyForce(particle, particle.position, {x: forceValue*Math.cos(randomAngle), y: forceValue*Math.sin(randomAngle)});    
+            }
+        }
+    };
+
+    Temperature._BrownianMotionProbabilityOfCollision = function(particle) {
+        let medium = particle.plugin.chemistry.brownianMotion.medium;
+        let meanFreePath = 10; //pm, default distance if no settings defines
+
+        if (!medium) {
+            medium = "water"; //Default medium
+        }
+        if (medium=="water") {
+            meanFreePath = 10; //pm
+        }
+        if (medium=="air") {
+            meanFreePath = 100; //pm
+        }
+        if (particle.plugin.chemistry.brownianMotion.meanFreePath) {
+            meanFreePath = particle.plugin.chemistry.brownianMotion.meanFreePath;
+        }
+        let frameDuration = 1; //It seems that one tick is always one second
+        let averageMovementDuringOneFrame = particle.speed * frameDuration / Chemistry.spaceScale;
+        return averageMovementDuringOneFrame/meanFreePath; 
+    };
+
+    Temperature._BrownianMotionAtomicMass = function(particle) {
+        if (particle.plugin.chemistry.brownianMotion.atomicMass) {
+            return particle.plugin.chemistry.brownianMotion.atomicMass;
+        }
+        let medium = particle.plugin.chemistry.brownianMotion.medium;
+        if (medium=="water") {
+            return 18;
+        }
+        if (medium=="air") {
+            return 29;
+        }
+        return 18; //default is atomicMass of water if nothing else is defined
     };
 
     Temperature._kineticEnergy = function(particle) {
@@ -106,5 +156,14 @@ var Temperature = {};
         let worldSpeed = Math.sqrt(2 * kE / worldMass); //in m/s
         let screenSpeed = worldSpeed * Temperature.pmInMeter * Chemistry.timeScale * Chemistry.spaceScale; //in pixels per rendering second
         return screenSpeed;
+    };
+
+    Temperature._collisionForceByKineticEnergy = function(kE, atomicMass) {
+        let worldMass = atomicMass * Temperature.daltonMass; // in kg
+        let worldSpeed = Math.sqrt(2 * kE / worldMass); //in m/s
+        let screenSpeed = worldSpeed * Temperature.pmInMeter * Chemistry.timeScale * Chemistry.spaceScale; //in pixels per rendering second
+        let magicCoefficient = 0.0035975; //I found this coefficient through experiments by finding which force we need to apply to a body with mass of 1 and speed of 1 to stop it
+        let force = magicCoefficient * atomicMass * screenSpeed;
+        return force;
     };
 })();

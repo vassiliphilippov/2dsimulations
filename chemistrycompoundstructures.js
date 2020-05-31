@@ -25,6 +25,32 @@ var chemistryCompoundStructures = {
                 atom: "H"
             }
         ]
-    }
+    },
 
+    "O2" : {
+        atom: "O",
+        connections: [
+            {
+                length: 121,
+                angle: 0,
+                atom: "O"
+            }
+        ]
+    },
+
+    "CO2" : {
+        atom: "C",
+        connections: [
+            {
+                length: 116,
+                angle: 0,
+                atom: "O"
+            },
+            {
+                length: 116,
+                angle: 180,
+                atom: "O"
+            }
+        ]
+    }
 }

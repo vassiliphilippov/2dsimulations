@@ -4,12 +4,19 @@
 * @class BodyList
 */
 
+//Todo: implement closest
+//Todo: Closer
+//Todo: in rect, in zone
+//Todo: outer 
+//Todo: sticked and notsticked
 class BodyList {
     //Todo: replace engine with World
     constructor(engine) {
         this.bodies = [];
-        for (let body of engine.world.bodies) {
-            this.bodies.push(body);
+        if (engine) {
+            for (let body of engine.world.bodies) {
+                this.bodies.push(body);
+            }
         }
     }
 
@@ -45,8 +52,9 @@ class BodyList {
     }
 
     zoneMapColor(color) {
+        let colors = Array.prototype.slice.call(arguments);
         return this.filter(body => {
-            return body.zoneMapColor==color;  
+            return colors.indexOf(body.zoneMapColor)!=-1;  
         });
     }
 
@@ -66,9 +74,73 @@ class BodyList {
         })
     };
 
+    remove(world) {
+        return this.forEach(body => {
+            Matter.Composite.remove(world, body);
+        })
+    };
+
+    log() {
+        return this.forEach(body => {
+            console.log(body);
+        })
+    };
+
+    setOpacity(opacity) {
+        return this.forEach(body => {
+            for (let k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
+                let part = body.parts[k];
+                part.render.opacity = opacity;
+            }
+        })
+    };
+
     first() {
+        return this.firsts(1);
+    };
+
+    firsts(k) {
+        this.bodies.length = Math.min(k, this.bodies.length); 
+        return this;
+    };
+ 
+    slice(start, end) {
+        this.bodies = this.bodies.slice(start, end); 
+        return this;
+    };
+
+    reverse() {
+        this.bodies.reverse(); 
+        return this;
+    };
+
+    shuffle() {
+        this.bodies = Matter.Common.shuffle(this.bodies);
+        return this;
+    };
+
+    random(n) {
+        if (!n) {
+            n = 1;
+        }
+        this.bodies = Matter.Common.shuffle(this.bodies);
+        this.bodies.length = Math.min(n, this.bodies.length); 
+        return this;
+    };
+
+ 
+    //The following methods return a particular element not a list
+    getFirst() {
         if (this.bodies.length>0) {
             return this.bodies[0];
+        } else {
+            null;
+        }
+    };
+
+    getRandom() {
+        if (this.bodies.length>0) {
+            return Matter.Common.choose(this.bodies);
         } else {
             null;
         }
@@ -78,8 +150,13 @@ class BodyList {
         return this.bodies[k];
     };
 
+    //Other methods
     toArray() {
         return this.bodies;
+    };
+
+    length() {
+        return this.bodies.length;
     };
 };
 
@@ -111,8 +188,12 @@ class ParticleList extends BodyList {
     }
 
     formula(formula) {
+        let formulas = Array.from(arguments);
+        if (Array.isArray(formula)) {
+            formulas = formula;
+        }
         return this.filter(p => {
-            return p.plugin.chemistry && (p.plugin.chemistry.formula==formula);  
+            return p.plugin.chemistry && (formulas.includes(p.plugin.chemistry.formula));  
         });
     }
 
@@ -137,6 +218,12 @@ class ParticleList extends BodyList {
         });
     }
 
+    stick() {
+        return this.forEach(p => {
+            Chemistry.stick(p);
+        });
+    }
+
     removeForce(color) {
         return this.forEach(p => {
             if (p.plugin.force && p.plugin.force.forces && p.plugin.force.forces[color]) {
@@ -156,4 +243,33 @@ class ParticleList extends BodyList {
             Force.removeAttraction(p, attractor);
         });
     }
+  
+    atoms() {
+        return new AtomList(this.bodies);
+    }
+};
+
+class AtomList extends BodyList {
+    constructor(particles) {
+        super();
+        let atoms = [];
+        for (let particle of particles) {
+            for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
+                atom = particle.parts[k];
+                atoms.push(atom);
+            }
+        }
+        this.bodies = atoms;
+    }
+
+    formula(formula) {
+        let formulas = Array.from(arguments);
+        if (Array.isArray(formula)) {
+            formulas = formula;
+        }
+        return this.filter(a => {
+            return a.plugin.chemistry && (formulas.includes(a.plugin.chemistry.formula));  
+        });
+    }
+
 };

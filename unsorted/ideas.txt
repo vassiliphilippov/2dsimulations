@@ -1,31 +1,15 @@
-Two pictures: background and coloured map
-
 Add particle “h2o” water [100, 100, 200, 200]
 Add particle “h2o” water zone_water
 Add particles “h2o” water zone_water 20
 Add particles “h2o” water zone_water Infinity
 Add particles [“Na+”, “Cl-“] Crystal zone_salt {chemistry: {behaviour: vibrating_solid}}
 
-Add attractor 100 200 force_gravity charge_color charge_calue
-
-for_all_particles “h2o” {
-}
 
 behaviour 
 
 set_animation_path 
 
 on animation ends
-
-on come close
-
-on collision 
-
-on come far
-
-stop browning motion
-
-Class with list of particles and filtering methods and apply all methods
 
 http://www.convertcsv.com/csv-to-json.htm
 

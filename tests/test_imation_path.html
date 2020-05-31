@@ -35,7 +35,7 @@ ZoneMap.load("map6.png", function (zoneMap) {
 
     //Fix that temperature only works after animation ends
     //Todo: make a separate object/file for animations
-    let a = new AttractorList(engine).zoneMapColor("0,162,3").first();
+    let a = new AttractorList(engine).zoneMapColor("0,162,3").getFirst();
     let attractors = new AttractorList(engine).zoneMapColor("0,100,3").toArray();
     let pathAttractors = [a];
     let prevPosition = a.position;

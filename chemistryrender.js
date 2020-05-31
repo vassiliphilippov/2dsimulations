@@ -8,6 +8,7 @@
 
 var ChemistryRender = {};
 
+//Todo: make option to group some particles into a colored group like Slyusarev's metal cover
 let Engine = Matter.Engine,
     Render = Matter.Render,
     Body = Matter.Body,
@@ -317,7 +318,7 @@ let Engine = Matter.Engine,
             // filter out bodies that are not in view
             for (i = 0; i < allBodies.length; i++) {
                 var body = allBodies[i];
-                if (Bounds.overlaps(body.bounds, render.bounds))
+                if (Matter.Bounds.overlaps(body.bounds, render.bounds))
                     bodies.push(body);
             }
 
@@ -335,7 +336,7 @@ let Engine = Matter.Engine,
                 if (!pointAWorld || !pointBWorld)
                     continue;
 
-                if (Bounds.contains(render.bounds, pointAWorld) || Bounds.contains(render.bounds, pointBWorld))
+                if (Matter.Bounds.contains(render.bounds, pointAWorld) || Matter.Bounds.contains(render.bounds, pointBWorld))
                     constraints.push(constraint);
             }
 
@@ -704,11 +705,14 @@ let Engine = Matter.Engine,
                 
                     c.translate(part.position.x, part.position.y);
                     c.rotate(body.angle);
-                    //Todo: read text color from somewhere and make this code good
-                    //Todo: make text size depending on Chemistry.spaceScale and starting from some scale don't draw at all
+                    //Todo: Make a separate overridable method for particle drawing
+                    //Todo: implement balls and sticks
+                    //Todo: try drawing when picture is bigger than real particle
+                    //Todo: optimize performance
                     c.fillStyle = ChemistryRender._getLabelTextColor(part.render.fillStyle);
                     c.textAlign = "center";
                     c.textBaseline = "middle";
+                    c.font = ChemistryRender._getLabelFont(part.circleRadius);
                     if (singlePartBody) {
                         if (body.plugin.chemistry && body.plugin.chemistry.formula) {
                             c.fillText(ChemistryRender._useSubscript(body.plugin.chemistry.formula), 0, 0);
@@ -725,6 +729,13 @@ let Engine = Matter.Engine,
                 c.globalAlpha = 1;
             }
         }
+    };
+
+    ChemistryRender._getLabelFont = function(radius) {
+       let fontSize = 10;
+       if (radius<10) fontSize = 8;
+       if (radius>15) fontSize = 15;
+       return fontSize + "px Verdana";
     };
 
     ChemistryRender._getLabelTextColor = function(fillColor) {
@@ -749,7 +760,13 @@ let Engine = Matter.Engine,
 
     ChemistryRender._useSubscript = function(s) {
         //Full table: https://stackoverflow.com/questions/17908593/how-to-find-the-unicode-of-the-subscript-alphabet
-        return s.replace("+", "\u207A").replace("-", "\u207B").replace("1", "\u00B9").replace("2", "\u00B2").replace("3", "\u00B3").replace("4", "\u2074");
+        return s.replace("+2", "\u00B2\u207A").
+                 replace("+", "\u207A").
+                 replace("-", "\u207B").
+                 replace("1", "\u00B9").
+                 replace("2", "\u00B2").
+                 replace("3", "\u00B3").
+                 replace("4", "\u2074");
     };
 
     /**

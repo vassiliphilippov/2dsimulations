@@ -21,6 +21,7 @@
 
 var Force = {};
 
+//Todo: rename internal functions to start with _
 (function() {
 
     //Types of forces
@@ -52,18 +53,50 @@ var Force = {};
             if (body!=body2) {
                 let force = Force.calculateForceBetweenBodies(body, body2);
                 if (force) {
-                  totalForce = Matter.Vector.add(totalForce, force);
+                    totalForce = Matter.Vector.add(totalForce, force);
                 }
             }
         }
 
-        if (body.plugin.force.brownianMotion) {
-            let v = body.plugin.force.brownianMotion;
-            let force = {x: Matter.Common.random(-v, v), y: Matter.Common.random(-v, v)};
-            totalForce = Matter.Vector.add(totalForce, force);
+        if (body.plugin.force.sticked) {
+            let sticknessForce = Force._calculateSticknessBodyForce(body);
+            if (sticknessForce) {
+                totalForce = Matter.Vector.add(totalForce, sticknessForce);
+            }
         }
+
         //Todo: add handling of constant forces
         return totalForce;
+    };
+
+    Force._calculateSticknessBodyForce = function(body) {
+        //Todo: optimize performace, replace Vector operations with x,y math
+        const maxForce = 0.01*body.mass;
+        let fixedPosition = body.plugin.force.sticked.stickPosition;
+        let vibrationRadius = body.plugin.force.sticked.vibrationRadius;
+        if (!fixedPosition) {
+            console.log("Error. Sticked particle with underfined stickPosition");
+            return null;
+        }
+        if (!vibrationRadius) {
+            console.log("Error. Sticked particle with underfined vibrationRadius");
+            return null;
+        }
+
+        let d = Matter.Vector.sub(body.position, fixedPosition);
+        let L = Matter.Vector.magnitude(d);
+        let forceMagnitude = maxForce*L*L/(vibrationRadius*vibrationRadius);
+        if (forceMagnitude>maxForce) {
+            forceMagnitude = maxForce;
+        }
+        if (L>vibrationRadius) {
+            //If sticked particle goes far away from its fixed position than we return it to the fixed position and set velocity and force to zero
+            //It is a handling of special situations when particles are thrown far away in one tick because of hard body collisions
+            Matter.Body.setPosition(body, fixedPosition);
+            Matter.Body.setVelocity(body, {x: 0, y:0});
+            return {x: 0, y: 0};
+        }
+        return Matter.Vector.mult(Matter.Vector.neg(Matter.Vector.normalise(d)), forceMagnitude); 
     };
 
     Force.calculateForceBetweenBodies = function(bodyA, bodyB) {
@@ -174,3 +207,4 @@ var Force = {};
         }
     };
 })();
+                

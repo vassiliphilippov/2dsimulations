@@ -208,9 +208,9 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 24,
-   "formula": "Cu+",
+   "formula": "Cu+2",
    "name": "Copper atom cation",
-   "charge": 1,
+   "charge": 2,
    "compound": false,
    "type": "ion",
    "color": "174,5,5"
@@ -289,9 +289,9 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 33,
-   "formula": "Mg+",
+   "formula": "Mg+2",
    "name": "Magnesium atom cation",
-   "charge": 1,
+   "charge": 2,
    "compound": false,
    "type": "ion",
    "color": "183,5,5"
@@ -307,9 +307,9 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 35,
-   "formula": "Ca+",
+   "formula": "Ca+2",
    "name": "Calcium atom cation",
-   "charge": 1,
+   "charge": 2,
    "compound": false,
    "type": "ion",
    "color": "185,5,5"
@@ -4870,7 +4870,7 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 542,
-   "formula": "SO4--",
+   "formula": "SO4-2",
    "name": "sulfate",
    "charge": -2,
    "compound": true,
@@ -6127,5 +6127,14 @@ var ChemistryParticleInfoDatabase = [
    "compound": false,
    "type": "atom",
    "color": "231,11,5"
+ },
+ {
+   "id": 684,
+   "formula": "Sn+2",
+   "name": "Tin atom cation",
+   "charge": 49,
+   "compound": false,
+   "type": "ion",
+   "color": "234,11,5"
  }
 ]

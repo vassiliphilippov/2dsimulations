@@ -24,6 +24,8 @@ var ZoneMap = {};
     };
 
     ZoneMap.isPointColor = function(zonemap, x, y, color) {
+        x = Math.floor(x);
+        y = Math.floor(y);
         let i = (x+y*zonemap.width)*4;
         return zonemap.imageData[i]==color[0] && zonemap.imageData[i+1]==color[1] && zonemap.imageData[i+2]==color[2];
     };
@@ -40,9 +42,11 @@ var ZoneMap = {};
         }
         let rects = zonemap.zones[color];
         for (rect of rects) {
-            for (x=rect.x1; x<rect.x2; x+=dx) {
-                for (y=rect.y1; y<rect.y2; y+=dy) {
-                    onspawn(x, y);
+            for (x=rect.x1+dx/2; x<rect.x2-dx/2; x+=dx) {
+                for (y=rect.y1+dy/2; y<rect.y2-dy/2; y+=dy) {
+                    if (ZoneMap.isPointColor(zonemap, x, y, color)) {
+                        onspawn(x, y);
+                    }
                 }
             }
         }
@@ -74,6 +78,34 @@ var ZoneMap = {};
             let height = rect.y2-rect.y1;
             onspawn(cx, cy, width, height, rect);
         }
+    };
+
+    ZoneMap.getBounds = function(zonemap, color) {
+        if (!ZoneMap.isZoneFound(zonemap, color)) {
+            console.log("Error. getBounds failed, color not found: ", color);
+            console.log(zonemap);
+            return null;
+        }
+        var bounds = {
+            min: { x: Infinity, y: Infinity },
+            max: { x: -Infinity, y: -Infinity }
+        };
+
+        let rects = zonemap.zones[color];
+        for (rect of rects) {
+            if (rect.x1 < bounds.min.x)
+                bounds.min.x = rect.x1;
+
+            if (rect.x2 > bounds.max.x)
+                bounds.max.x = rect.x2;
+
+            if (rect.y1 < bounds.min.y)
+                bounds.min.y = rect.y1;
+
+            if (rect.y2 > bounds.max.y)
+                bounds.max.y = rect.y2;
+        }
+        return bounds;
     };
 
     ZoneMap.getRandomPosition = function(zonemap, color) {
@@ -170,6 +202,8 @@ var ZoneMap = {};
     };
 
     ZoneMap._getPointColor = function(image, x, y) {
+        x = Math.floor(x);
+        y = Math.floor(y);
         let i = (x+y*image.width)*4;
         return [image.data[i], image.data[i+1], image.data[i+2]];
     };

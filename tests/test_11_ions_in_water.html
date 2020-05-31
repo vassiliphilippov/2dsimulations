@@ -1,0 +1,56 @@
+<html>
+<head>
+  <title>Test 11: Ions in water</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+</head>
+<body>
+<script>
+
+var engine = null;
+
+ZoneMap.load("map11.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.30;
+    Chemistry.timeScale = 6e-15;
+
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+
+    new ParticleList(engine).setTemperature(297);
+
+    Chemistry.run(engine, render);
+});
+
+function replaceWaterWithBrownianMotion() {
+    new ParticleList(engine).formula("H2O").remove(engine.world);
+    new ParticleList(engine).setChemistryOptions({brownianMotion: {medium: "water"}});
+};
+
+</script>
+<p>
+  First we spawn water molecules and ions in them. Ions are moving inside the water medium. But we can completelly remove water particles and replace them with brownian motions of the ions.
+</p>
+<p>
+<button onclick="new ParticleList(engine).formula('H2O').setOpacity(0.1);">Semi-hide water</button>
+<button onclick="new ParticleList(engine).formula('H2O').setOpacity(0.01);">Hide water</button>
+<button onclick="new ParticleList(engine).formula('H2O').show().setOpacity(1);">Show water</button>
+<button onclick="new ParticleList(engine).setTemperature(10);">T=10</button>
+<button onclick="new ParticleList(engine).setTemperature(100);">T=100</button>
+<button onclick="new ParticleList(engine).setTemperature(1000);">T=1000</button>
+<button onclick="replaceWaterWithBrownianMotion();">Replace water with brownian motion</button>
+</p>
+</body>
+</html>

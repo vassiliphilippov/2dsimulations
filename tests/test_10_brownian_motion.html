@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>Test 10: Brownian motion</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+</head>
+<body>
+<script>
+
+var engine = null;
+
+ZoneMap.load("map10.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+
+    new ParticleList(engine).setTemperature(297);
+
+    Chemistry.run(engine, render);
+});
+
+function replaceWaterWithBrownianMotion() {
+    new ParticleList(engine).formula("H2O").remove(engine.world);
+    new ParticleList(engine).formula(["Cl-", "Ca+"]).forEach(p=>{console.log(p);});
+    new ParticleList(engine).formula("Cl-", "Ca+").setChemistryOptions({brownianMotion: {medium: "gas"}});
+};
+
+</script>
+<p>
+  If plugin.chemistry.brownianMotion is defined then Temperature module simulates brownian motion of particles following temperature settings.
+  To main parameters are meanFreePath and atomicMass of virtual medium particles. You can either define them or you predefined mediums like "water" or "air".
+  meanFreePath and atomicMass overrides medium.
+</p>
+<p>
+Temperature:
+<button onclick="new ParticleList(engine).setTemperature(10);">T=10</button>
+<button onclick="new ParticleList(engine).setTemperature(100);">T=100</button>
+<button onclick="new ParticleList(engine).setTemperature(1000);">T=1000</button>
+</p>
+<p>
+Brownian motion:
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {}})">On</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: null})">Off</button>
+</p>
+<p>
+Predefined mediums:
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {medium: 'water'}})">Medium: water</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {medium: 'air'}})">Medium: air</button>
+</p>
+<p>
+Custom meanFreePath:
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: null}})">Clear</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: 1}})">1pm</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: 5}})">5pm</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: 10}})">10pm (water)</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: 30}})">30pm</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: 100}})">100pm (Air)</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {meanFreePath: 300}})">300pm</button>
+</p>
+<p>
+Custom atomicMass:
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: null}})">Clear</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 2}})">2 (H2)</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 18}})">18 (Water)</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 29}})">29 (Air)</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 50}})">50</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 100}})">100</button>
+<button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 200}})">200</button>
+</p>
+
+</body>
+</html>

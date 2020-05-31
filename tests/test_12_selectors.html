@@ -1,0 +1,110 @@
+<html>
+<head>
+  <title>Test 12: Selectors</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+</head>
+<body>
+<script>
+
+var engine = null;
+var a = null;
+
+ZoneMap.load("map12.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.30;
+    Chemistry.timeScale = 6e-15;
+
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+
+    a = new AttractorList(engine).getFirst();
+
+    Chemistry.run(engine, render);
+});
+
+function runCommand() {
+    var list = document.getElementById("select_list").value;
+    var filter1 = document.getElementById("select_filter1").value;
+    var filter2 = document.getElementById("select_filter2").value;
+    var action = document.getElementById("select_action").value;
+
+    var s = list;
+    if (filter1!="ALL") {
+        s += ("." + filter1);
+    }
+    if (filter2!="ALL") {
+        s += ("." + filter2);
+    }
+    s += ("." + action);
+    document.getElementById("command").innerHTML = s;
+    eval(s);
+};
+
+</script>
+<p>
+  JQuery-like chaining to select bodies and make some group operations. You can always use custom <b>forEach</b> and <b>filter</b> methods for customer operations and custom filtering.
+</p>
+<p>
+List:
+<select id="select_list">
+  <option>new ParticleList(engine)</option>
+  <option>new BodyList(engine)</option>
+  <option>new AttractorList(engine)</option>
+</select>
+Selector 1:
+<select id="select_filter1">
+  <option>ALL</option>
+  <option>label('border')</option>
+  <option>formula('H2O')</option>
+  <option>formula('Ca+2', 'Cl-')</option>
+  <option>zoneMapColor([185,5,5])</option>
+  <option>reverse()</option>
+  <option>shuffle()</option>
+</select>
+Selector 2:
+<select id="select_filter2">
+  <option>ALL</option>
+  <option>first()</option>
+  <option>firsts(3)</option>
+  <option>slice(2, 5)</option>
+  <option>random(2)</option>
+  <option>closest(300,300)</option>
+</select>
+Action:
+<select id="select_action">
+  <option>hide()</option>
+  <option>show()</option>
+  <option>setOpacity(0.1)</option>
+  <option>setOpacity(1)</option>
+  <option>setTemperature(300)</option>
+  <option>setTemperature(1000)</option>
+  <option>remove(engine.world)</option>
+  <option>setOptions({isStatic: true})</option>
+  <option>setChemistryOptions({brownianMotion: {medium: 'gas'}})</option>
+  <option>setForce('red', 5, Force.GRAVITY)</option>
+  <option>removeForce('red')</option>
+  <option>log()</option>
+  <option>addAttraction(a, 0.01)</option>
+  <option>removeAttraction(a)</option>
+</select>
+<button onclick="runCommand();">Run</button>
+</p>
+<p>
+Command:
+</p>
+<p id="command" style="font-family: monospace;">&nbsp;</p>
+</body>
+</html>
