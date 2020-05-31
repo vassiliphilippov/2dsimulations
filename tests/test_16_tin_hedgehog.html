@@ -54,8 +54,13 @@ ZoneMap.load("map16.png", function (zoneMap) {
         console.log("Scenario end!");
         Matter.Events.on(engine, "collision_Sn+2_Zn", event => {
             pSn = event.particleA;
+            pZn = event.particleB;
             pSn.plugin.chemistry.formula = "Sn";
             Chemistry.stick(pSn);
+            pZn.plugin.chemistry.formula = "Zn+2";
+            pZn.plugin.chemistry.brownianMotion = {medium: "water"};
+            pZn.frictionAir = 0;
+            delete pZn.plugin.force.sticked;
         });
         Matter.Events.on(engine, "collision_Sn_Sn+2", event => {
             pSn = event.particleB;
