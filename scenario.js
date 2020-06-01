@@ -4,6 +4,7 @@
 * @class Scenario
 */
 
+//Todo: make oncollision event
 class Scenario {
     constructor(engine, render) {
         this.engine = engine;
@@ -40,20 +41,18 @@ class Scenario {
     }
 
     addAnimation(frames, onframe) {
-        let animationStepFunction = (onend) => {
+        return this.add((onend) => {
             var tickCounter = 0;
-            var callback =  (event) => {
+            Matter.Events.on(render, "beforeRender", function listener(event) {
                 if (tickCounter<=frames) {
                     onframe(tickCounter, tickCounter/frames);
                 } else {
-                    Matter.Events.off(render, "beforeRender", callback);
+                    Matter.Events.off(render, "beforeRender", listener);
                     onend();
                 }
                 tickCounter += 1;
-            };
-            Matter.Events.on(render, "beforeRender", callback);
-        }
-        return this.add(animationStepFunction);
+            });
+        });
     }
 
     addAction(action) {
@@ -76,6 +75,32 @@ class Scenario {
         return this.add(conditionStepFunction);
     }
 
+    addOnEvent(object, eventNames, eventChecker, action) {
+        return this.add(onend => {
+            Matter.Events.on(object, eventNames, function listener(event) {
+                if (eventChecker && eventChecker(event)) {            
+                    Matter.Events.off(object, eventNames, listener);
+                    action(event);
+                    onend();
+                }
+            });
+        });
+    }
+
+    addOnCollision(collisionString, eventChecker, action) {
+        return this.addOnEvent(this.engine, "collision_"+collisionString, 
+            (event) => {
+                if (eventChecker) {
+                    return eventChecker(event, event.particleA, event.particleB);
+                } else {
+                    return true;
+                }
+            }, 
+            (event) => {
+                action(event, event.particleA, event.particleB);
+            });
+    }
+
     addWait(frames) {
         return this.addAnimation(frames, (n, progress) => {});
     }
@@ -83,11 +108,10 @@ class Scenario {
     addLookAtAnimation(objects, frames) {
         objects = Matter.Common.isArray(objects) ? objects : [objects];
         let initialBounds = null;
-        let bounds = this._getBounds(objects);
+        let bounds = Scenario._getBounds(objects);
         let mv = (x1, x2, a) => (x1 + (x2-x1)*a*a);
 
         return this.addAnimation(frames, (n, progress) => {
-            console.log(progress);
             if (n==0) {
                 initialBounds = Matter.Common.extend({}, this.render.bounds);
             }
@@ -99,7 +123,20 @@ class Scenario {
         });        
     }
 
-    _getBounds(objects) {
+    addRemoveAnimation(frames, world, selector) {
+        let bodyList = null;
+        return this.addAnimation(frames, (n, progress) => {
+            if (n==0) {
+                bodyList = selector();
+            } else if (n<frames) {
+                bodyList.setOpacity(1-progress);
+            } else {
+                bodyList.remove(world);
+            }
+        });        
+    }
+
+    static _getBounds(objects) {
         // find bounds of all objects
         var bounds = {
             min: { x: Infinity, y: Infinity },

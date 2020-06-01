@@ -21,51 +21,166 @@
 <body>
 <script>
 
+
 var engine = null;
+
+function addHighlight(engine, render, position, frames) {
+    let options = {
+        label: "highlighter",
+        isStatic: true, 
+        render: {
+            visible: true, 
+            fillStyle: "yellow",
+            opacity: 0.3
+        },
+        collisionFilter: {
+            mask: 0
+        }
+    }
+
+    let highlighter = Matter.Bodies.circle(position.x, position.y, 40, options);
+    Matter.World.add(engine.world, highlighter);
+
+    let counter = 0;
+    Matter.Events.on(render, "beforeRender", function listener(event) {
+        counter += 1;
+        if (counter>=frames/2) {
+            highlighter.render.opacity = 0.3 * ( 1 - (counter-frames/2) / (frames/2) );
+        }
+        if (counter>=frames) {
+            Matter.Composite.remove(engine.world, highlighter);
+            Matter.Events.off(render, "beforeRender", listener);
+        }
+    });
+}
 
 ZoneMap.load("map16.png", function (zoneMap) {
     Chemistry.spaceScale = 0.10;
     Chemistry.timeScale = 6e-15;
+    const colorZnAtom = "#5E6182";
+    const colorZnIon = "#C1C5F2";
+    const colorSnAtom = "#668080";
+    const colorSnIon = "#A3CCCC";
+    const znZoomBounds = ZoneMap.getBounds(zoneMap, "181,230,29");
+
+    function numberOfCloseZnParticles(p) {
+        let width = p.bounds.max.x - p.bounds.min.x;
+        let height = p.bounds.max.y - p.bounds.min.y; 
+        let extendedBound = {
+            min: {x: p.bounds.min.x-width, y: p.bounds.min.y-height},
+            max: {x: p.bounds.max.x+width, y: p.bounds.max.y+height}
+        };
+        let countZn = new ParticleList(engine).formula("Zn").inBounds(extendedBound).length()-1;    
+        let countSn = new ParticleList(engine).formula("Sn").inBounds(extendedBound).length()-1;    
+        return countZn+countSn*2;
+    }
+
+    function freeZnComporator(a, b) {
+        return numberOfCloseZnParticles(a)-numberOfCloseZnParticles(b);
+    }
 
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
 
     new ParticleList(engine).setTemperature(297);
+    new ParticleList(engine).formula("Sn+2").setColor(colorSnIon);
     new ParticleList(engine).formula("Sn+2", "Cl-").setChemistryOptions({brownianMotion: {medium: "water"}});
-    Chemistry.run(engine, render);
+    let runner = Chemistry.run(engine, render);
 
     ChemistryRender.lookAt(render, [ZoneMap.getBounds(zoneMap, "230,101,2"), ZoneMap.getBounds(zoneMap, "100,231,2")]);
 
     scenario = new Scenario(engine, render);
-    scenario.addWait(200);
-    scenario.addAction(() => {
-        new ParticleList(engine).formula("H2O").remove(engine.world);
+
+    scenario.addWait(150);
+
+    scenario.addRemoveAnimation(20, engine.world, () => {
+        return new ParticleList(engine).formula("H2O");
     });
-    scenario.addWait(100);
-    scenario.addAction(() => {
-        new ParticleList(engine).formula("Cl-").remove(engine.world);
+
+    scenario.addWait(50);
+
+    scenario.addRemoveAnimation(20, engine.world, () => {
+        return new ParticleList(engine).formula("Cl-");
     });
-    scenario.addWait(100);
+
+    scenario.addWait(50);
+
     scenario.addAction(() => {
         new BodyList(engine).zoneMapColor("230,101,2","100,231,2").remove(engine.world);
     });
+
     scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 50);
+
+    scenario.addWait(100);
+
+    scenario.addLookAtAnimation(znZoomBounds, 20);
+
+    scenario.addAction(() => {
+        let attractor = new AttractorList(engine).getFirst();
+        console.log(attractor);
+        new ParticleList(engine).formula("Sn+2").closest(attractor).first().addAttraction(attractor, 0.01);
+    });
+
+    let znToIon = null;
+    scenario.addOnCollision("Sn+2_Zn", (event, pSn, pZn) => {
+        return Matter.Bounds.overlaps(pZn.bounds, znZoomBounds) && Matter.Bounds.overlaps(pSn.bounds, znZoomBounds)
+    }, (event, pSn, pZn) => {
+        znToIon = new ParticleList(engine).visible(render).formula("Zn").sortByNumberOfCloseParticles().first();
+        znToIon.setColor(colorZnIon);
+        ParticleList.create([pSn]).setColor(colorSnAtom);
+        pSn.plugin.chemistry.formula = "Sn";
+        Chemistry.stick(pSn);
+    });
+
+    scenario.addAction(() => {
+        new BodyList(engine).zoneMapColor("230,101,2","100,231,2").remove(engine.world);
+        runner.enabled = false;
+    });
+
+    scenario.addWait(150);
+
+    scenario.addAction(() => {
+        runner.enabled = true;
+        znToIon.setFormula("Zn+2").unstick({medium: "water"});
+    });
+
+    scenario.addWait(50);
+
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 50);
+
+    scenario.addOnCollision("Sn+2_Zn", null, (event, pSn, pZn) => {
+        ParticleList.create([pSn]).setColor(colorSnAtom);
+        pSn.plugin.chemistry.formula = "Sn";
+        Chemistry.stick(pSn);
+        addHighlight(engine, render, pSn.position, 100);
+        runner.enabled = false;
+    });
+
+    scenario.addWait(100);
+
+    scenario.addAction(() => {
+        znToIon = new ParticleList(engine).visible(render).formula("Zn").sortByNumberOfCloseParticles().first();
+        znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
+        addHighlight(engine, render, znToIon.getFirst().position, 100);
+    });
+
+    scenario.addWait(100);
+
     scenario.run(() => {
-        Chemistry.timeScale = 2e-14;
         console.log("Scenario end!");
+        runner.enabled = true;
         Matter.Events.on(engine, "collision_Sn+2_Zn", event => {
-            pSn = event.particleA;
-            pZn = event.particleB;
-            pSn.plugin.chemistry.formula = "Sn";
-            Chemistry.stick(pSn);
-            pZn.plugin.chemistry.formula = "Zn+2";
-            pZn.plugin.chemistry.brownianMotion = {medium: "water"};
-            pZn.frictionAir = 0;
-            delete pZn.plugin.force.sticked;
+            pSn = event.particleB;
+            ParticleList.create([pSn]).setColor(colorSnAtom).setFormula("Sn").stick();
+
+            let znToIon = new ParticleList(engine).formula("Zn").sort(freeZnComporator).first();
+            znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
         });
         Matter.Events.on(engine, "collision_Sn_Sn+2", event => {
             pSn = event.particleB;
-            pSn.plugin.chemistry.formula = "Sn";
-            Chemistry.stick(pSn);
+            ParticleList.create([pSn]).setColor(colorSnAtom).setFormula("Sn").stick();
+
+            let znToIon = new ParticleList(engine).formula("Zn").sort(freeZnComporator).first();
+            znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
         });
     });
 });

@@ -59,13 +59,10 @@ var Chemistry = {};
     };
 
     Chemistry.run = function(engine, render) {
-        var runner = Matter.Runner.create();
         TextureLoader.onAllTextureLoad(engine.world.bodies, () => {
-            Matter.Runner.run(runner, engine);
-//            Matter.Engine.run(engine);
+            Matter.Engine.run(engine);
             ChemistryRender.run(render);
         });
-        return runner;
     };
 
     Chemistry.init = function(engine) {
@@ -253,200 +250,11 @@ var Chemistry = {};
         if (particle.plugin.force && particle.plugin.force.sticked) {
             delete particle.plugin.force.sticked;
         }
-        if (brownianMotionOptions && particle.plugin.chemistry) {
-            particle.plugin.chemistry.brownianMotion = brownianMotionOptions;
+        if (brownianMotion) {
+            if (particle.plugin.chemistry) {
+                particle.plugin.chemistry.brownianMotion = brownianMotionOptions;
         }
     }
 
-    Chemistry._findParticleInfoByColor = function(color) {
-        let rgb = color.split(",");
-        for (info of ChemistryParticleInfoDatabase) {
-            let particleRgb = info.color.split(",");
-            if (rgb[0]==particleRgb[0] && rgb[1]==particleRgb[1]) {
-                return info;
-            }
-        }
-        return null;
-    };
-
-    Chemistry._findParticleInfoByFormula = function(formula) {
-        for (info of ChemistryParticleInfoDatabase) {
-            if (info.formula==formula) {
-                return info;
-            }
-        }
-        return null;
-    };
-
-    Chemistry._getZoneType = function(color) {
-        let rgb = color.split(",");
-        return rgb[2];
-    };
-
-    Chemistry._convertSingleIonFormulaToAtomSymbol = function(formula) {
-        let atomSymbol = formula.replace(/[0-9\+\-]+/g, "");
-        return atomSymbol;
-    };
-
-    Chemistry.createBorder = function(rect, visible) {
-        let x = (rect.x1+rect.x2)/2;
-        let y = (rect.y1+rect.y2)/2;
-        let w = rect.x2-rect.x1;
-        let h = rect.y2-rect.y1;
-        //Todo: recheck these options
-        //Todo: mark border marked as chemistry options in plugin data
-        let options = {
-            label: "border", 
-            isStatic: true, 
-            frictionAir: 0, 
-            friction: 0, 
-            restitution: 1, 
-            frictionStatic: 0, 
-            render: {
-                fillStyle: "green",
-                visible: visible
-            } 
-        };
-        return Matter.Bodies.rectangle(x, y, w, h, options);
-    };
-
-    //Todo: move atractors to Force module
-    Chemistry.createAttractor = function(rect) {
-        let x = (rect.x1+rect.x2)/2;
-        let y = (rect.y1+rect.y2)/2;
-        //Todo: recheck these options
-        //Todo: mark border marked as chemistry options in plugin data
-        let a = Matter.Bodies.circle(x, y, 20, {isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {visible: false, fillStyle: "blue"}, collisionFilter: {mask: 0}});
-        a.label = "attractor";
-        a.plugin.force = {attractor: true, charge: 1, forces: {}};
-        return a;
-    };
-
-    Chemistry.createParticleByParticleInfo = function(particleInfo, x, y, chemistryOptions, options) {
-        if (!particleInfo.compound) {
-            let atomSymbol = Chemistry._convertSingleIonFormulaToAtomSymbol(particleInfo.formula);
-            let struct = {
-                atom: atomSymbol,
-            }
-            return Chemistry.createParticleByStruct(particleInfo.formula, struct, x, y);
-        } else {
-            if (particleInfo.formula in chemistryCompoundStructures) {
-                let struct = chemistryCompoundStructures[particleInfo.formula];
-                return Chemistry.createParticleByStruct(particleInfo.formula, struct, x, y);
-            } else {
-                console.log("Error. Compound \"" + particleInfo.formula + "\" is not found in chemistryCompoundStructures");
-                return null;
-            }
-        }
-    };
-
-    Chemistry.createParticleByStruct = function(formula, struct, x, y, chemistryOptions, options) {
-        //todo: think about passing type and charge
-        if (!options) {
-            options = {}
-        }
-
-        let chemistryDefaults = {
-            particle: true,
-            formula: formula,
-            compound: true,
-            type: "molecule",
-            charge: 0
-        }
-
-        let defaults = {
-            frictionAir: 0, 
-            friction: 0, 
-            restitution: 1, 
-            frictionStatic: 0,
-            label: formula
-        }
-
-        var atoms = Chemistry._createParticleAtoms(struct, x, y, 0);
-
-        let totalAtomicMass = 0;
-        for (atom of atoms) {
-            totalAtomicMass += atom.plugin.chemistry.atomicMass;
-        }
-        chemistryDefaults.atomicMass = totalAtomicMass;
-        //atoms.reduce( (total, atom) => {return total + atom.plugin.chemistry.atomicMass;} );
-
-        let options2 = Matter.Common.extend(defaults, options);
-        //todo: move plugin chemistry options here
-        let options3 = Matter.Common.extend(options2, {parts: atoms});
-        var p = Matter.Body.create(options3);
-        p.plugin.chemistry = Matter.Common.extend(chemistryDefaults, chemistryOptions);
-        return p;
-    };
-
-    Chemistry._createParticleAtoms = function(struct, x, y, angle) {
-        if (!angle) {
-            angle = 0;
-        }
-        let atoms = [];
-        let atom = Chemistry.createAtom(struct["atom"], x, y, struct["chemistryOptions"], struct["options"]);
-        atoms.push(atom);
-        if (struct["connections"]) {
-            for (connection of struct["connections"]) {
-                let l = connection["length"] * Chemistry.spaceScale;
-                let a = (connection["angle"]+angle)*2*Math.PI/360;
-                let dx = Math.cos(a)*l;
-                let dy = Math.sin(a)*l;
-                let atoms2 = Chemistry._createParticleAtoms(connection, x+dx, y+dy, connection["angle"]+angle);
-                atoms.push(...atoms2);
-            }
-        }
-        return atoms;
-    };
-
-
-    Chemistry.createAtom = function(atomSymbol, x, y, chemistryOptions, options) {                   
-        let atomInfo = Chemistry._atomInfoBySymbol(atomSymbol);
-        if (!atomInfo) {
-            console.log("Error. Atom " + atomSymbol + " is not found in the periodic table info");
-            return null;
-        }
-
-        let chemistryDefaults = {
-            particle: true,
-            formula: atomSymbol, 
-            compound: false,
-            type: "atom",
-            charge: 0,
-            atomicMass: atomInfo.mass,
-            atomicRadius: atomInfo.atomicRadius   
-        }
-
-        let atomChemistryOptions = Matter.Common.extend(chemistryDefaults, chemistryOptions);
-
-        let defaults = {
-            frictionAir: 0, 
-            friction: 0, 
-            restitution: 1,                         
-            frictionStatic: 0,
-            label: atomChemistryOptions.formula,
-            render: {
-                fillStyle: "#" + atomRenderingColors[atomSymbol]
-            }
-        }
-
-        let atomOptions = Matter.Common.extend(defaults, options);
-
-        radius = atomChemistryOptions.atomicRadius * Chemistry.spaceScale; //so atom radius can be replaced by chemistryOptions
-
-        let ball = Matter.Bodies.circle(x, y, radius, atomOptions);
-        ball.plugin.chemistry = atomChemistryOptions;
-        Matter.Body.setMass(ball, atomInfo.mass);
-        return ball;
-    };
-
-    Chemistry._atomInfoBySymbol = function(atomSymbol) {
-        for (atomInfo of periodicTable) {
-            if (atomInfo.symbol==atomSymbol) {
-                return atomInfo;
-            }
-        }
-        return null;
-    };
 
 })();

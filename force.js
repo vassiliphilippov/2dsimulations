@@ -101,7 +101,7 @@ var Force = {};
 
     Force.calculateForceBetweenBodies = function(bodyA, bodyB) {
         let totalForce = {x: 0, y: 0};
-        if (!bodyA.plugin.force || !bodyB.plugin.force) return totalForce;
+        if (!bodyA.plugin.force ||!bodyA.plugin.force.forces || !bodyB.plugin.force|| !bodyB.plugin.force.forces) return totalForce;
 
         for (color in bodyA.plugin.force.forces) {
             let chargeA = Force.getCharge(bodyA, color);

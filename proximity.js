@@ -27,7 +27,7 @@ var Proximity = {};
                 let flags = bodyA.plugin.proximity.levelFlags; 
                 for (bodyB of bodies) {
                     if (bodyA==bodyB) continue;
-                    let d = Proximity._distanceBetweenBodies(bodyA, bodyB);
+                    let d = Proximity.distanceBetweenBodies(bodyA, bodyB);
                     for (level of bodyA.plugin.proximity.levels) {
                         if (!(level in flags)) {
                             flags[level] = new Set();
@@ -59,7 +59,7 @@ var Proximity = {};
         return Matter.Vector.magnitude(Matter.Vector.sub(atomA.position, atomB.position)) - atomA.circleRadius - atomB.circleRadius;
     };
 
-    Proximity._distanceBetweenParticles = function(pA, pB) {
+    Proximity.distanceBetweenParticles = function(pA, pB) {
         let minD = Infinity;
         for (let k = pA.parts.length > 1 ? 1 : 0; k < pA.parts.length; k++) {
             let partA = pA.parts[k];
@@ -74,10 +74,30 @@ var Proximity = {};
         return minD;
     };
 
-    Proximity._distanceBetweenBodies = function(bodyA, bodyB) {
+    Proximity.distanceToAtom = function(point, atom) {
+        if (!atom.circleRadius) {
+            console.log("Error. Atom without circleRadius property");
+            return Matter.Vector.magnitude(Matter.Vector.sub(atom.position, point));
+        }
+        return Matter.Vector.magnitude(Matter.Vector.sub(atom.position, point)) - atom.circleRadius;
+    };
+
+    Proximity.distanceToParticle = function(point, particle) {
+        let minD = Infinity;
+        for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
+            let part = particle.parts[k];
+            let d = Proximity.distanceToAtom(point, part);
+            if (d<minD) {
+                minD = d;
+            }
+        }
+        return minD;
+    };
+
+    Proximity.distanceBetweenBodies = function(bodyA, bodyB) {
         //Todo: replace with distance between any circle bodies
         if (bodyA.plugin.chemistry && bodyA.plugin.chemistry.particle && bodyB.plugin.chemistry && bodyB.plugin.chemistry.particle) {
-            return Proximity._distanceBetweenParticles(bodyA, bodyB);
+            return Proximity.distanceBetweenParticles(bodyA, bodyB);
         } else {
              //Todo: Implement distance to other types of bodies like rectangle
              return Matter.Vector.magnitude(Matter.Vector.sub(bodyA.position, bodyB.position));
