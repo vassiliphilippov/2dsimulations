@@ -28,7 +28,6 @@ var Force = {};
     Force.GRAVITY = "gravity";
     Force.ATTRACTION = "attraction";
     Force.ELECTROSTATIC = "electrostatic";
-    Force.CONSTANT = "constant";
 
     Force.init = function(engine) {
         Matter.Events.on(engine, "beforeUpdate", (event) => {
@@ -65,8 +64,28 @@ var Force = {};
             }
         }
 
-        //Todo: add handling of constant forces
+        if (body.plugin.force.constant) {
+            let constantForce = Force._calculateConstantBodyForce(body);
+            if (constantForce) {
+                totalForce = Matter.Vector.add(totalForce, constantForce);
+            }
+        }
+
         return totalForce;
+    };
+
+    Force._calculateConstantBodyForce = function(body) {
+        let direction = body.plugin.force.constant.direction;
+        let magnitude = body.plugin.force.constant.magnitude;
+        if (!direction) {
+            console.log("Error. Constant force with undefined force direction");
+            return null;
+        }
+        if (!magnitude) {
+            console.log("Error. Constant force with undefined force magnitude");
+            return null;
+        }
+        return Matter.Vector.mult(Matter.Vector.normalise(direction), magnitude); 
     };
 
     Force._calculateSticknessBodyForce = function(body) {

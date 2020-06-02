@@ -17,6 +17,7 @@
   <script src="../proximity.js"></script>
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
 </head>
 <body>
 <script>
@@ -35,30 +36,37 @@ ZoneMap.load("map6.png", function (zoneMap) {
   affects Particle B force bit doesn't affect Particle A force.
 </p>
 <p>
-Red:
-<button onclick="new ParticleList(engine).formula('H2').setForce('red', 1, Force.GRAVITY)">H2 - Gravity (+1)</button>
-<button onclick="new ParticleList(engine).formula('H2').setForce('red', 1, Force.ELECTROSTATIC)">H2 - Electrostatic (+1)</button>
-<button onclick="new ParticleList(engine).formula('H2').setForce('red', 0.01, Force.ATTRACTION)">H2 - Attraction (+0.01)</button>
-<button onclick="new ParticleList(engine).formula('H2').removeForce('red')">H2 - Remove force</button>
-&nbsp;&nbsp;&nbsp;
-<button onclick="new ParticleList(engine).formula('H2O').setForce('red', 5, Force.GRAVITY)">H2O - Gravity (+5)</button>
-<button onclick="new ParticleList(engine).formula('H2O').setForce('red', -1, Force.ELECTROSTATIC)">H2O - Electrostatic (-1)</button>
-<button onclick="new ParticleList(engine).formula('H2O').setForce('red', -3, Force.ELECTROSTATIC)">H2O - Electrostatic (-3)</button>
-<button onclick="new ParticleList(engine).formula('H2O').setForce('red', -0.01, Force.ATTRACTION)">H2O - Attraction (+0.01)</button>
-<button onclick="new ParticleList(engine).formula('H2O').removeForce('red')">H2O - Remove force</button>
+Red H2:
+<button onclick="new ParticleList(engine).formula('H2').setForce('red', 1, Force.GRAVITY)">Gravity (+1)</button>
+<button onclick="new ParticleList(engine).formula('H2').setForce('red', 1, Force.ELECTROSTATIC)">Electrostatic (+1)</button>
+<button onclick="new ParticleList(engine).formula('H2').setForce('red', 0.01, Force.ATTRACTION)">Attraction (+0.01)</button>
+<button onclick="new ParticleList(engine).formula('H2').removeForce('red')">Remove force</button>
+<button onclick="new ParticleList(engine).formula('H2').setConstantForce({x: 0, y:1}, 0.001)">Constant down (0.001)</button>
+<button onclick="new ParticleList(engine).formula('H2').setConstantForce({x: 0, y:-1}, 0.001)">Constant up (0.001)</button>
+<button onclick="new ParticleList(engine).formula('H2').removeConstantForce()">Remove constant force</button>
 </p>
 <p>
-Blue:
-<button onclick="new ParticleList(engine).formula('H2').setForce('blue', 1, Force.GRAVITY)">H2 - Gravity (+1)</button>
-<button onclick="new ParticleList(engine).formula('H2').setForce('blue', 1, Force.ELECTROSTATIC)">H2 - Electrostatic (+1)</button>
-<button onclick="new ParticleList(engine).formula('H2').setForce('blue', 0.01, Force.ATTRACTION)">H2 - Attraction (+0.01)</button>
-<button onclick="new ParticleList(engine).formula('H2').removeForce('blue')">H2 - Remove force</button>
-&nbsp;&nbsp;&nbsp;
-<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', 1, Force.GRAVITY)">H2O - Gravity (+1)</button>
-<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -1, Force.ELECTROSTATIC)">H2O - Electrostatic (-1)</button>
-<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -3, Force.ELECTROSTATIC)">H2O - Electrostatic (-3)</button>
-<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -0.01, Force.ATTRACTION)">H2O - Attraction (+0.01)</button>
-<button onclick="new ParticleList(engine).formula('H2O').removeForce('blue')">H2O - Remove force</button>
+Red H2O:
+<button onclick="new ParticleList(engine).formula('H2O').setForce('red', 5, Force.GRAVITY)">Gravity (+5)</button>
+<button onclick="new ParticleList(engine).formula('H2O').setForce('red', -1, Force.ELECTROSTATIC)">Electrostatic (-1)</button>
+<button onclick="new ParticleList(engine).formula('H2O').setForce('red', -3, Force.ELECTROSTATIC)">Electrostatic (-3)</button>
+<button onclick="new ParticleList(engine).formula('H2O').setForce('red', -0.01, Force.ATTRACTION)">Attraction (+0.01)</button>
+<button onclick="new ParticleList(engine).formula('H2O').removeForce('red')">Remove force</button>
+</p>
+<p>
+Blue H2:
+<button onclick="new ParticleList(engine).formula('H2').setForce('blue', 1, Force.GRAVITY)">Gravity (+1)</button>
+<button onclick="new ParticleList(engine).formula('H2').setForce('blue', 1, Force.ELECTROSTATIC)">Electrostatic (+1)</button>
+<button onclick="new ParticleList(engine).formula('H2').setForce('blue', 0.01, Force.ATTRACTION)">Attraction (+0.01)</button>
+<button onclick="new ParticleList(engine).formula('H2').removeForce('blue')">Remove force</button>
+</p>
+<p>
+Blue H2O:
+<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', 1, Force.GRAVITY)">Gravity (+1)</button>
+<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -1, Force.ELECTROSTATIC)">Electrostatic (-1)</button>
+<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -3, Force.ELECTROSTATIC)">Electrostatic (-3)</button>
+<button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -0.01, Force.ATTRACTION)">Attraction (+0.01)</button>
+<button onclick="new ParticleList(engine).formula('H2O').removeForce('blue')">Remove force</button>
 </p>
 </body>
 </html>

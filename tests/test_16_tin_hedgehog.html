@@ -17,42 +17,13 @@
   <script src="../proximity.js"></script>
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
 </head>
 <body>
 <script>
 
 
 var engine = null;
-
-function addHighlight(engine, render, position, frames) {
-    let options = {
-        label: "highlighter",
-        isStatic: true, 
-        render: {
-            visible: true, 
-            fillStyle: "yellow",
-            opacity: 0.3
-        },
-        collisionFilter: {
-            mask: 0
-        }
-    }
-
-    let highlighter = Matter.Bodies.circle(position.x, position.y, 40, options);
-    Matter.World.add(engine.world, highlighter);
-
-    let counter = 0;
-    Matter.Events.on(render, "beforeRender", function listener(event) {
-        counter += 1;
-        if (counter>=frames/2) {
-            highlighter.render.opacity = 0.3 * ( 1 - (counter-frames/2) / (frames/2) );
-        }
-        if (counter>=frames) {
-            Matter.Composite.remove(engine.world, highlighter);
-            Matter.Events.off(render, "beforeRender", listener);
-        }
-    });
-}
 
 ZoneMap.load("map16.png", function (zoneMap) {
     Chemistry.spaceScale = 0.10;
@@ -116,7 +87,6 @@ ZoneMap.load("map16.png", function (zoneMap) {
 
     scenario.addAction(() => {
         let attractor = new AttractorList(engine).getFirst();
-        console.log(attractor);
         new ParticleList(engine).formula("Sn+2").closest(attractor).first().addAttraction(attractor, 0.01);
     });
 
@@ -151,7 +121,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
         ParticleList.create([pSn]).setColor(colorSnAtom);
         pSn.plugin.chemistry.formula = "Sn";
         Chemistry.stick(pSn);
-        addHighlight(engine, render, pSn.position, 100);
+        Animation.highlight(engine, render, pSn.position, 100);
         runner.enabled = false;
     });
 
@@ -160,7 +130,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
     scenario.addAction(() => {
         znToIon = new ParticleList(engine).visible(render).formula("Zn").sortByNumberOfCloseParticles().first();
         znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
-        addHighlight(engine, render, znToIon.getFirst().position, 100);
+        Animation.highlight(engine, render, znToIon.getFirst().position, 100);
     });
 
     scenario.addWait(100);

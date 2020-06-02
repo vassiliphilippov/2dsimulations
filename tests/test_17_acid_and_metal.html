@@ -1,0 +1,128 @@
+<html>
+<head>
+  <title>Test 17: Acid and metal</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+</head>
+<body>
+<script>
+
+//Todo: Convert H and H to H2 particle
+//Todo: Add pause animation
+
+var engine = null;
+
+ZoneMap.load("map17.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.20;
+    Chemistry.timeScale = 6e-15;
+    const colorH2 = "#FF0000";
+    const colorH = "#8E8EFF";
+    const colorHIon = "#484882";
+    const colorMgAtom = "#004000";
+    const colorMgIon = "#008000";
+
+    function freeMgComporator(a, b) {
+        return a.position.y-b.position.y;
+    }
+
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+
+    new ParticleList(engine).setTemperature(297);
+    new ParticleList(engine).formula("H+").setColor(colorHIon).forEach(p => {
+//        Matter.Body.scale(p.parts[1], 2, 2);
+    });
+    new ParticleList(engine).formula("Mg").setColor(colorMgAtom);
+    new ParticleList(engine).formula("H+", "Cl-").setChemistryOptions({brownianMotion: {medium: "water"}});
+
+    //We make H+ ions the same mass as real H3O+ ions
+    new ParticleList(engine).formula("H+").forEach(p=>{
+        Matter.Body.setMass(p, 19);
+        p.plugin.chemistry.atomicMass = 19;
+    });
+
+    let runner = Chemistry.run(engine, render);
+
+    ChemistryRender.lookAt(render, [ZoneMap.getBounds(zoneMap, "230,101,2"), ZoneMap.getBounds(zoneMap, "100,231,2")]);
+
+    scenario = new Scenario(engine, render);
+
+    scenario.addWait(100);
+
+    scenario.addRemoveAnimation(50, engine.world, () => {
+        return new ParticleList(engine).formula("H2O");
+    });
+
+    scenario.addWait(50);
+
+    scenario.addRemoveAnimation(50, engine.world, () => {
+        return new ParticleList(engine).formula("Cl-");
+    });
+
+    scenario.addWait(50);
+
+    scenario.addAction(() => {
+        new BodyList(engine).zoneMapColor("230,101,2","100,231,2").remove(engine.world);
+    });
+
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 20);
+
+    scenario.addWait(100);
+
+    scenario.run(() => {
+        console.log("Scenario end!");
+        let metalCharge = 0;
+        let forceColorCounter = 0;
+        let firstMgIonEvent = true;
+
+        Matter.Events.on(engine, "collision_H+_Mg", event => {
+            pH = event.particleA;
+            ParticleList.create([pH]).setColor(colorH).setFormula("H");
+            new ParticleList(engine).formula("H").setForce("H2", 0.1, Force.ATTRACTION);
+
+            metalCharge += 1;
+            if (metalCharge>=2) {
+                mgToIon = new ParticleList(engine).formula("Mg").sort(freeMgComporator).first();
+                mgToIon.setColor(colorMgIon).setFormula("Mg+2").unstick({medium: "water"}).setConstantForce({x: 0, y:-1}, 0.0001);
+                metalCharge = 0;
+                if (firstMgIonEvent) {
+                    Animation.highlight(engine, render, mgToIon.getFirst().position, 30);
+                    Animation.pause(runner, render, 60);
+                    firstMgIonEvent = false;
+                }
+            }
+        });
+
+        Matter.Events.on(engine, "collision_H_H", event => {
+            pH1 = event.particleA;
+            pH2 = event.particleB;
+            forceColorCounter += 1;
+            let forceColor = "H2-"+forceColorCounter;
+            console.log(forceColor);
+            Animation.highlight(engine, render, pH1.position, 30);
+            ParticleList.create([pH1, pH2]).setColor(colorH2).removeForce("H2").setForce(forceColor, 0.1, Force.ATTRACTION).setFormula("H2").setConstantForce({x: 0, y:-1}, 0.1);
+            console.log(pH1);
+        });
+    });
+});
+
+</script>
+<p>
+  Acid and metal.
+</p>
+</body>
+</html>

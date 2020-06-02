@@ -277,6 +277,31 @@ class ParticleList extends BodyList {
         });
     }
 
+    setConstantForce(direction, magnitude) {
+        return this.forEach(p => {
+            if (!p.plugin.force) {
+                p.plugin.force = {forces: {}}
+            }
+            p.plugin.force.constant = {direction: direction, magnitude: magnitude};
+        });
+    }
+
+    removeForce(color) {
+        return this.forEach(p => {
+            if (p.plugin.force && p.plugin.force.forces && p.plugin.force.forces[color]) {
+                delete p.plugin.force.forces[color];
+            }
+        });
+    }
+
+    removeConstantForce() {
+        return this.forEach(p => {
+            if (p.plugin.force && p.plugin.force.constant) {
+                delete p.plugin.force.constant;
+            }
+        });
+    }
+
     stick() {
         return this.forEach(p => {
             Chemistry.stick(p);
@@ -286,14 +311,6 @@ class ParticleList extends BodyList {
     unstick(brownianMotionOptions) {
         return this.forEach(p => {
             Chemistry.unstick(p, brownianMotionOptions);
-        });
-    }
-
-    removeForce(color) {
-        return this.forEach(p => {
-            if (p.plugin.force && p.plugin.force.forces && p.plugin.force.forces[color]) {
-                delete p.plugin.force.forces[color];
-            }
         });
     }
 
