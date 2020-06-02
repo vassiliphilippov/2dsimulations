@@ -139,7 +139,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
         console.log("Scenario end!");
         runner.enabled = true;
         Matter.Events.on(engine, "collision_Sn+2_Zn", event => {
-            pSn = event.particleB;
+            pSn = event.particleA;
             ParticleList.create([pSn]).setColor(colorSnAtom).setFormula("Sn").stick();
 
             let znToIon = new ParticleList(engine).formula("Zn").sort(freeZnComporator).first();
