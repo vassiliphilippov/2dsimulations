@@ -4,8 +4,6 @@
 * @class Temperature
 */
 
-//todo: fix setting temperature to 0, it should stop everything. 
-
 //todo: add option to disable temperature movement
 
 //todo: prevent super fast particles
@@ -28,7 +26,7 @@ var Temperature = {};
     Temperature.UpdateAllSpeedsToTheirTemperature = function(engine, bodies) {
         var temperatures = {}
         for (let body of bodies) {
-            if (body.plugin.chemistry && body.plugin.chemistry.temperature) {
+            if (body.plugin.chemistry && (body.plugin.chemistry.temperature!==undefined)) {
                 let t = body.plugin.chemistry.temperature;
                 if (!(t in temperatures)) {
                     temperatures[t] = []
