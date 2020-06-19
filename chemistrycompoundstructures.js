@@ -52,5 +52,110 @@ var chemistryCompoundStructures = {
                 atom: "O"
             }
         ]
+    },
+
+    "SO4-2" : {
+        atom: "S",
+        connections: [
+            {
+                length: 150,
+                angle: 0,
+                atom: "O"
+            },
+            {
+                length: 150,
+                angle: 90,
+                atom: "O"
+            },
+            {
+                length: 150,
+                angle: 180,
+                atom: "O"
+            },
+            {
+                length: 150,
+                angle: 270,
+                atom: "O"
+            }
+        ]
+    },
+
+    "Fe(CN)6-4": {
+        atom: "Fe",
+        connections: [
+            {
+                length: 150,
+                angle: 0,
+                atom: "C",
+                connections: [
+                    {
+                        length: 120,
+                        angle: 0,
+                        atom: "N"
+                    }
+                ]
+            },
+            {
+                length: 150,
+                angle: 60,
+                atom: "C",
+                connections: [
+                    {
+                        length: 120,
+                        angle: 0,
+                        atom: "N"
+                    }
+                ]
+
+            },
+            {
+                length: 150,
+                angle: 120,
+                atom: "C",
+                connections: [
+                    {
+                        length: 120,
+                        angle: 0,
+                        atom: "N"
+                    }
+                ]  
+            },
+            {
+                length: 150,
+                angle: 180,
+                atom: "C",
+                connections: [
+                    {
+                        length: 120,
+                        angle: 0,
+                        atom: "N"
+                    }
+                ] 
+            },
+            {
+                length: 150,
+                angle: 240,
+                atom: "C",
+                connections: [
+                    {
+                        length: 120,
+                        angle: 0,
+                        atom: "N"
+                    }
+                ]
+            },
+            {
+                length: 150,
+                angle: 300,
+                atom: "C",
+                connections: [
+                    {
+                        length: 120,
+                        angle: 0,
+                        atom: "N"
+                    }
+                ]
+            }
+        ]
     }
 }

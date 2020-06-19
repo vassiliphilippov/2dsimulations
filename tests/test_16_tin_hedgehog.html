@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../groups.js"></script>
 </head>
 <body>
 <script>
@@ -50,9 +52,11 @@ ZoneMap.load("map16.png", function (zoneMap) {
         return numberOfCloseZnParticles(a)-numberOfCloseZnParticles(b);
     }
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
-
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true, 4);
     new ParticleList(engine).setTemperature(297);
+     
+    Groups.groupOptions("metal", {fillStyle: colorZnAtom, opacity: 0.5});
+    Groups.markGroup(engine.world, "metal", new ParticleList(engine).formula("Zn").toArray());
     new ParticleList(engine).formula("Sn+2").setColor(colorSnIon);
     new ParticleList(engine).formula("Sn+2", "Cl-").setChemistryOptions({brownianMotion: {medium: "water"}});
     let runner = Chemistry.run(engine, render);
@@ -111,6 +115,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
     scenario.addAction(() => {
         runner.enabled = true;
         znToIon.setFormula("Zn+2").unstick({medium: "water"});
+        Groups.markGroup(engine.world, "metal", new ParticleList(engine).formula("Zn", "Sn").toArray());
     });
 
     scenario.addWait(50);
@@ -120,6 +125,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
     scenario.addOnCollision("Sn+2_Zn", null, (event, pSn, pZn) => {
         ParticleList.create([pSn]).setColor(colorSnAtom);
         pSn.plugin.chemistry.formula = "Sn";
+        Groups.markGroup(engine.world, "metal", new ParticleList(engine).formula("Zn", "Sn").toArray());
         Chemistry.stick(pSn);
         Animation.highlight(engine, render, pSn.position, 100);
         runner.enabled = false;
@@ -130,6 +136,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
     scenario.addAction(() => {
         znToIon = new ParticleList(engine).visible(render).formula("Zn").sortByNumberOfCloseParticles().first();
         znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
+        Groups.markGroup(engine.world, "metal", new ParticleList(engine).formula("Zn", "Sn").toArray());
         Animation.highlight(engine, render, znToIon.getFirst().position, 100);
     });
 
@@ -144,6 +151,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
 
             let znToIon = new ParticleList(engine).formula("Zn").sort(freeZnComporator).first();
             znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
+            Groups.markGroup(engine.world, "metal", new ParticleList(engine).formula("Zn", "Sn").toArray());
         });
         Matter.Events.on(engine, "collision_Sn_Sn+2", event => {
             pSn = event.particleB;
@@ -151,6 +159,7 @@ ZoneMap.load("map16.png", function (zoneMap) {
 
             let znToIon = new ParticleList(engine).formula("Zn").sort(freeZnComporator).first();
             znToIon.setColor(colorZnIon).setFormula("Zn+2").unstick({medium: "water"});
+            Groups.markGroup(engine.world, "metal", new ParticleList(engine).formula("Zn", "Sn").toArray());
         });
     });
 });
@@ -159,5 +168,6 @@ ZoneMap.load("map16.png", function (zoneMap) {
 <p>
   Tin hedgehog experiment.
 </p>
+<p><a href="map16.png">Map file</a>.</p>
 </body>
 </html>

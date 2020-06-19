@@ -18,12 +18,13 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
 
-engine = Matter.Engine.create();
-var render = ChemistryRender.create({element: document.body, engine: engine, options: {width: 800, height: 600}});
+[engine, render] = Chemistry.createAndInitEngineAndRender({width: 800, height: 600}, document.body, false, true);
 
 //Create a predefined particle
 World.add(engine.world, Chemistry.create("H2O", 100, 100));
@@ -110,14 +111,12 @@ let methanolStructure2 = {
 
 World.add(engine.world, Chemistry.createParticleByStruct("CH3OH", methanolStructure2, 600, 200));
 
-engine.world.gravity.y = 0;
-Matter.Engine.run(engine);
-ChemistryRender.run(render);
-
+Chemistry.run(engine, render);
 </script>
 <p>
 There is no natural way of mapping 3D compound particle structure to 2D. There is a <a href="../chemistrycompoundstructures.js">JSON file with the main structures</a>. 
 Such predefined particles can be created by formula. The rest can be created by describing 2D structure in JSON, where you can replace default options for each atom if needed.</a>
 </p>
+<p><a href="map5.png">Map file</a>.</p>
 </body>
 </html>

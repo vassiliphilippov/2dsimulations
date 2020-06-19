@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -25,7 +27,7 @@
 ZoneMap.load("map4.png", function (zoneMap) {
     Chemistry.spaceScale = 0.1;
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     Background.setBackground(engine.world, "background4.png", zoneMap.width, zoneMap.height);
 
@@ -45,5 +47,9 @@ ZoneMap.load("map4.png", function (zoneMap) {
 });
 
 </script>
+<p>
+  Background is placed behind all other elements.
+</p>
+<p><a href="map4.png">Map file</a>.</p>
 </body>
 </html>

@@ -5,9 +5,7 @@
 */
 
 //Todo: implement closest
-//Todo: Closer
 //Todo: outer 
-//Todo: sticked and notsticked
 class BodyList {
     //Todo: replace engine with World
     constructor(engine) {
@@ -245,12 +243,6 @@ class ParticleList extends BodyList {
         return this.setChemistryOptions({formula: formula});
     }
 
-    stick() {
-        return this.forEach(p => {
-            Chemistry.stick(p);
-        });
-    }
-
     setChemistryOptions(chemistryOptions) {
         let options = {plugin: {chemistry: chemistryOptions}};
         return this.setOptions(options);
@@ -311,6 +303,18 @@ class ParticleList extends BodyList {
     unstick(brownianMotionOptions) {
         return this.forEach(p => {
             Chemistry.unstick(p, brownianMotionOptions);
+        });
+    }
+
+    sticked() {
+        return this.filter(p => {
+            return p.plugin.force && p.plugin.force.sticked;  
+        });
+    }
+
+    unsticked() {
+        return this.filter(p => {
+            return !p.plugin.force || !p.plugin.force.sticked;  
         });
     }
 

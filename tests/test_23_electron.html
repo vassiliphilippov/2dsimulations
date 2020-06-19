@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 1: ZoneMap</title>
+  <title>Test 23: Electron</title>
   <script src="../matter.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
@@ -20,20 +20,22 @@
   <script src="../animation.js"></script>
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
+  <script src="../history.js"></script>
 </head>
 <body>
 <script>
 
-ZoneMap.load("map1.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
-    Chemistry.run(engine, render);
+ZoneMap.load("map23.png", function (zoneMap) {
+    [engine1, render1] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+//    new ParticleList(engine1).setTemperature(290);
+
+    Chemistry.run(engine1, render1);
+
 });
 
 </script>
 <p>
-The initial configuration is described in the <a href="map1.png">zonemap file</a>. There are <a href="../chemistryparticles.json">predefined colors</a> 
-for each type of particle. So creating a new particle is as adding a new zone to the zonemap image file.
+Electrons, ions without electrons and ions with additional electrons.
 </p>
-<p><a href="map1.png">Map file</a>.</p>
 </body>
 </html>

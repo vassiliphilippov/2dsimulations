@@ -18,12 +18,14 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
 
 ZoneMap.load("map15.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     Chemistry.run(engine, render);
 
     let p = new ParticleList(engine).formula("H2O").getFirst();
@@ -67,5 +69,6 @@ ZoneMap.load("map15.png", function (zoneMap) {
 <p>
 A step-by-step scenario with different types of steps.
 </p>
+<p><a href="map15.png">Map file</a>.</p>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 1: ZoneMap</title>
+  <title>Test 21: Two egines running simultaneously</title>
   <script src="../matter.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
@@ -24,16 +24,22 @@
 <body>
 <script>
 
-ZoneMap.load("map1.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
-    Chemistry.run(engine, render);
+let randomSeed = {};
+
+ZoneMap.load("map21.png", function (zoneMap) {
+    [engine1, render1] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+    [engine2, render2] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+    new ParticleList(engine1).setTemperature(290);
+    new ParticleList(engine2).setTemperature(290);
+    Chemistry.run(engine1, render1);
+    Chemistry.run(engine2, render2);
+
 });
 
 </script>
 <p>
-The initial configuration is described in the <a href="map1.png">zonemap file</a>. There are <a href="../chemistryparticles.json">predefined colors</a> 
-for each type of particle. So creating a new particle is as adding a new zone to the zonemap image file.
+Two engines running simultaneously with the same initial configuration.
 </p>
-<p><a href="map1.png">Map file</a>.</p>
+<p><a href="map21.png">Map file</a>.</p>
 </body>
 </html>

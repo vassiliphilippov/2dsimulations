@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -28,7 +30,7 @@ ZoneMap.load("map11.png", function (zoneMap) {
     Chemistry.spaceScale = 0.30;
     Chemistry.timeScale = 6e-15;
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     new ParticleList(engine).setTemperature(297);
 
@@ -53,5 +55,6 @@ function replaceWaterWithBrownianMotion() {
 <button onclick="new ParticleList(engine).setTemperature(1000);">T=1000</button>
 <button onclick="replaceWaterWithBrownianMotion();">Replace water with brownian motion</button>
 </p>
+<p><a href="map11.png">Map file</a>.</p>
 </body>
 </html>

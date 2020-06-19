@@ -23,6 +23,8 @@ var Chemistry = {};
         particle: 5,
         stickedParticle: 6,
         latticeOfParticles: 7,
+        latticeWithPrimitiveCell: 8,
+        primitiveCell: 9
     };
 
     //Todo: move to comments
@@ -35,15 +37,29 @@ var Chemistry = {};
         charge: 0,
         atomicMass: 1, //in AMU
         atomicRadius: 53, //in pm, only for non-compounds
-        temperature: null, //in Kelvins, could be null then temperature is not enfourced   
+        temperature: null, //in Kelvins, could be null then temperature is not enforced   
         sticked: {
             position: {x: 100, y: 100},
             vibrationRadius: 20
         } //if not null them the particle is sticked
     };
 
-    Chemistry.createAndInitEngineAndRender = function(zoneMap, element, createMappedParticles) {
+    Chemistry.createAndInitEngineAndRender = function(zoneMap, element, createMappedParticles, handleMouse, randomSeed) {
         let engine = Matter.Engine.create();
+
+        if (randomSeed) {
+            Matter.Common._seed = randomSeed;
+            engine.world._seed = randomSeed;
+        } else {
+            Matter.Common._seed = 0;
+            engine.world._seed = 0;
+        }
+
+        Matter.Events.on(engine, "beforeUpdate", (event) => {
+            //Restore random seed for this engine from save
+            Matter.Common._seed = engine.world._seed;
+        });
+
         var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
         if (createMappedParticles) {
             Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
@@ -54,15 +70,45 @@ var Chemistry = {};
         Force.init(engine);
         Temperature.init(engine);
         Proximity.init(engine);
+        Groups.init(engine, render);
         Chemistry.init(engine);
+
+        if (handleMouse) {
+            Chemistry.addMouseHandling(engine, render);
+        }
+
+        Matter.Events.on(engine, "afterUpdate", (event) => {
+            //Save random seed for this engine to allow several engines to run simultaneously in fully deterministic mode
+            engine.world._seed = Matter.Common._seed;
+        });
+
         return [engine, render];        
+    };
+
+    Chemistry.addMouseHandling = function(engine, render) {
+        // add mouse control
+        var mouse = Matter.Mouse.create(render.canvas),
+            mouseConstraint = Matter.MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    render: {
+                        visible: false
+                    }
+                }
+            });
+
+        World.add(engine.world, mouseConstraint);
+
+        // keep the mouse in sync with rendering
+        render.mouse = mouse;
     };
 
     Chemistry.run = function(engine, render) {
         var runner = Matter.Runner.create();
+        runner.isFixed = true; //We want to have a predictable reproducable behaviour
         TextureLoader.onAllTextureLoad(engine.world.bodies, () => {
             Matter.Runner.run(runner, engine);
-//            Matter.Engine.run(engine);
             ChemistryRender.run(render);
         });
         return runner;
@@ -108,6 +154,7 @@ var Chemistry = {};
         bodies.push(...Chemistry.createMappedAttractors(zoneMap));
         bodies.push(...Chemistry.createWaterMediumParticles(zoneMap));
         bodies.push(...Chemistry.createMappedParticles(zoneMap));
+        bodies.push(...Chemistry.createPrimitiveCellLattices(zoneMap, bodies));
         return bodies;
     };
 
@@ -162,22 +209,54 @@ var Chemistry = {};
         return waterMolecules;
     };
 
-    Chemistry.createWaterMediumParticles = function(zoneMap) {
-        const waterMediumDx = 240; //in pm
-        const waterMediumDy = 200; //in pm
-        let waterMolecules = [];
+    Chemistry.cloneParticle = function(p, dx, dy) {
+        let pClone = Chemistry.create(p.plugin.chemistry.formula, p.position.x+dx, p.position.y+dy);
+        if (p.plugin.force && p.plugin.force.sticked) {
+            Chemistry.stick(pClone);
+        }
+        return pClone;
+    };
+
+    Chemistry.createPrimitiveCellLattices = function(zoneMap, bodies) {
+        let rects = [];
+        let primitiveCellRects = [];
         for (color in zoneMap.zones) {
             let zoneType = Chemistry._getZoneType(color)
-            if (zoneType==Chemistry.zoneTypes.waterMedium) {
-                let rgb = color.split(",");
-                ZoneMap.spawnLattice(zoneMap, rgb, waterMediumDx*Chemistry.spaceScale, waterMediumDy*Chemistry.spaceScale, (x, y) => {
-                    let p = Chemistry.create("H2O", x, y);
-                    p.zoneMapColor = color;
-                    waterMolecules.push(p);
-                });
+            if (zoneType==Chemistry.zoneTypes.latticeWithPrimitiveCell) {
+                rects.push(...zoneMap.zones[color]);
+            }
+            if (zoneType==Chemistry.zoneTypes.primitiveCell) {
+                primitiveCellRects.push(...zoneMap.zones[color]);
             }
         }
-        return waterMolecules;
+
+        let particles = [];
+
+        for (rect of rects) {
+            for (cellRect of primitiveCellRects) {
+                if (Matter.Bounds.overlaps(rect, cellRect)) {
+                    let cellWidth = cellRect.max.x-cellRect.min.x;
+                    let cellHeight = cellRect.max.y-cellRect.min.y;
+                    let cellParticles = [];
+                    for (p of bodies) {
+                        if (Matter.Bounds.overlaps(p.bounds, cellRect)) {
+                            cellParticles.push(p);
+                        }
+                    }
+                    for (var dx=0; dx<rect.max.x-rect.min.x-cellWidth; dx+=cellWidth) {
+                        for (var dy=0; dy<rect.max.y-rect.min.y-cellHeight; dy+=cellHeight) {
+                            if (dx==0 && dy==0) continue; //Those particles are in created for the primitive cell
+                            for (p of cellParticles) {
+                                pClone = Chemistry.cloneParticle(p, dx, dy);
+                                particles.push(pClone);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return particles;
     };
 
     Chemistry.createMappedParticles = function(zoneMap) {
@@ -194,8 +273,8 @@ var Chemistry = {};
                         particles.push(...Chemistry._createLatticeOfParticles(zoneMap, color, particleInfo));
                     } else {
                         for (rect of zoneMap.zones[color]) {
-                            let x = (rect.x1+rect.x2)/2;
-                            let y = (rect.y1+rect.y2)/2;
+                            let x = (rect.min.x+rect.max.x)/2;
+                            let y = (rect.min.y+rect.max.y)/2;
                             let p = Chemistry.createParticleByParticleInfo(particleInfo, x, y);
                             if (p) {
                                 p.zoneMapColor = color;
@@ -289,10 +368,10 @@ var Chemistry = {};
     };
 
     Chemistry.createBorder = function(rect, visible) {
-        let x = (rect.x1+rect.x2)/2;
-        let y = (rect.y1+rect.y2)/2;
-        let w = rect.x2-rect.x1;
-        let h = rect.y2-rect.y1;
+        let x = (rect.min.x+rect.max.x)/2;
+        let y = (rect.min.y+rect.max.y)/2;
+        let w = rect.max.x-rect.min.x;
+        let h = rect.max.y-rect.min.y;
         //Todo: recheck these options
         //Todo: mark border marked as chemistry options in plugin data
         let options = {
@@ -312,8 +391,8 @@ var Chemistry = {};
 
     //Todo: move atractors to Force module
     Chemistry.createAttractor = function(rect) {
-        let x = (rect.x1+rect.x2)/2;
-        let y = (rect.y1+rect.y2)/2;
+        let x = (rect.min.x + rect.max.x)/2;
+        let y = (rect.min.y + rect.max.y)/2;
         //Todo: recheck these options
         //Todo: mark border marked as chemistry options in plugin data
         let a = Matter.Bodies.circle(x, y, 20, {isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {visible: false, fillStyle: "blue"}, collisionFilter: {mask: 0}});

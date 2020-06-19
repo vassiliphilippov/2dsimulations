@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -26,7 +28,7 @@ var engine = null;
 var attractor1 = null;
 
 ZoneMap.load("map7.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     attractor1 = new AttractorList(engine).get(0);
     attractor2 = new AttractorList(engine).get(1);
     Chemistry.run(engine, render);
@@ -60,5 +62,6 @@ H20:
 <button onclick="new ParticleList(engine).formula('H2O').setTemperature(300)">T=300</button>
 <button onclick="new ParticleList(engine).formula('H2O').setTemperature(1000)">T=1000</button>
 </p>
+<p><a href="map7.png">Map file</a>.</p>
 </body>
 </html>

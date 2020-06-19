@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 1: ZoneMap</title>
+  <title>Test 18: Electron gas</title>
   <script src="../matter.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
@@ -18,22 +18,31 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
-  <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
+  <script src="../groups.js"></script>
 </head>
 <body>
 <script>
 
-ZoneMap.load("map1.png", function (zoneMap) {
+ZoneMap.load("map18.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.10;
+    Chemistry.timeScale = 6e-15;
+
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
-    Chemistry.run(engine, render);
+    Background.setBackground(engine.world, "background18.png", zoneMap.width, zoneMap.height);
+    new ParticleList(engine).setTemperature(450);
+    Groups.groupOptions("Zn", {opacity: 0.5});
+    Groups.groupOptions("Mg", {fillStyle:"#00FF00", opacity: 0.2, offset: 5});
+    Groups.markGroup(engine.world, "Zn", new ParticleList(engine).formula("Zn").toArray());
+    Groups.markGroup(engine.world, "Mg", new ParticleList(engine).formula("Mg").toArray());
+
+    let runner = Chemistry.run(engine, render);
 });
 
 </script>
 <p>
-The initial configuration is described in the <a href="map1.png">zonemap file</a>. There are <a href="../chemistryparticles.json">predefined colors</a> 
-for each type of particle. So creating a new particle is as adding a new zone to the zonemap image file.
+  Several particles can be grouped together in a highlighted group. It could be useful to show electron gas.
 </p>
-<p><a href="map1.png">Map file</a>.</p>
+<p><a href="map18.png">Map file</a>.</p>
 </body>
 </html>

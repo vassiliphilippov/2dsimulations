@@ -42,8 +42,8 @@ var ZoneMap = {};
         }
         let rects = zonemap.zones[color];
         for (rect of rects) {
-            for (x=rect.x1+dx/2; x<rect.x2-dx/2; x+=dx) {
-                for (y=rect.y1+dy/2; y<rect.y2-dy/2; y+=dy) {
+            for (x=rect.min.x+dx/2; x<rect.max.x-dx/2; x+=dx) {
+                for (y=rect.min.y+dy/2; y<rect.max.y-dy/2; y+=dy) {
                     if (ZoneMap.isPointColor(zonemap, x, y, color)) {
                         onspawn(x, y);
                     }
@@ -72,10 +72,10 @@ var ZoneMap = {};
         }
         let rects = zonemap.zones[color];
         for (rect of rects) {
-            let cx = (rect.x1+rect.x2)/2;
-            let cy = (rect.y1+rect.y2)/2;
-            let width = rect.x2-rect.x1;
-            let height = rect.y2-rect.y1;
+            let cx = (rect.min.x+rect.max.x)/2;
+            let cy = (rect.min.y+rect.max.y)/2;
+            let width = rect.max.x-rect.min.x;
+            let height = rect.max.y-rect.min.y;
             onspawn(cx, cy, width, height, rect);
         }
     };
@@ -93,17 +93,17 @@ var ZoneMap = {};
 
         let rects = zonemap.zones[color];
         for (rect of rects) {
-            if (rect.x1 < bounds.min.x)
-                bounds.min.x = rect.x1;
+            if (rect.min.x < bounds.min.x)
+                bounds.min.x = rect.min.x;
 
-            if (rect.x2 > bounds.max.x)
-                bounds.max.x = rect.x2;
+            if (rect.max.x > bounds.max.x)
+                bounds.max.x = rect.max.x;
 
-            if (rect.y1 < bounds.min.y)
-                bounds.min.y = rect.y1;
+            if (rect.min.y < bounds.min.y)
+                bounds.min.y = rect.min.y;
 
-            if (rect.y2 > bounds.max.y)
-                bounds.max.y = rect.y2;
+            if (rect.max.y > bounds.max.y)
+                bounds.max.y = rect.max.y;
         }
         return bounds;
     };
@@ -117,15 +117,15 @@ var ZoneMap = {};
         let rects = zonemap.zones[color];
         let totalArea = 0;
         for (rect of rects) {
-            let area = (rect.x2-rect.x1)*(rect.y2-rect.y1);
+            let area = (rect.max.x-rect.min.x)*(rect.max.y-rect.min.y);
             totalArea += area;
         }
         let randIndex = Matter.Common.random(0, totalArea);
         for (rect of rects) {
-            let area = (rect.x2-rect.x1)*(rect.y2-rect.y1);
+            let area = (rect.max.x-rect.min.x)*(rect.max.y-rect.min.y);
             if (randIndex<=area) {
-                let x = Math.floor(Matter.Common.random(rect.x1, rect.x2));
-                let y = Math.floor(Matter.Common.random(rect.y1, rect.y2));
+                let x = Math.floor(Matter.Common.random(rect.min.x, rect.max.x));
+                let y = Math.floor(Matter.Common.random(rect.min.y, rect.max.y));
                 if (ZoneMap.isPointColor(zonemap, x, y, color)) {
                     return {x: x, y: y};
                 } else {
@@ -198,7 +198,7 @@ var ZoneMap = {};
             indexesToCheck.push((x) + (y+1)*width);
             indexesToCheck.push((x) + (y-1)*width);
         } 
-        return {x1:minX, y1:minY, x2:maxX, y2:maxY};
+        return {min: {x:minX, y:minY}, max: {x:maxX, y:maxY}};
     };
 
     ZoneMap._getPointColor = function(image, x, y) {

@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 1: ZoneMap</title>
+  <title>Test 9: Animation path</title>
   <script src="../matter.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
@@ -24,16 +24,33 @@
 <body>
 <script>
 
-ZoneMap.load("map1.png", function (zoneMap) {
+ZoneMap.load("map9.png", function (zoneMap) {
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     Chemistry.run(engine, render);
+    Background.setBackground(engine.world, "background9.png", zoneMap.width, zoneMap.height);
+
+    ZoneMap.spawnRandom(zoneMap, [255,255,255], 100, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.create("H2O", x, y));
+    });
+
+    new ParticleList(engine).setTemperature(293);
+
+    let pathAttractors = Animation.getAnimationAttractorList(engine, "0,162,3", "0,100,3");
+
+    new ParticleList(engine).formula("Na+").forEach(p => {
+        Animation.startAnimation(p, pathAttractors, 0.5, () => {
+            console.log("Animation is finished", p);
+        });
+    });
 });
 
 </script>
 <p>
-The initial configuration is described in the <a href="map1.png">zonemap file</a>. There are <a href="../chemistryparticles.json">predefined colors</a> 
-for each type of particle. So creating a new particle is as adding a new zone to the zonemap image file.
+  Physical animation via a list of atractors. <b>Animation.getAnimationAttractorList</b> function finds all attractors and sorts them from the closest to the start point.
 </p>
-<p><a href="map1.png">Map file</a>.</p>
+<p>
+  <button onclick="new AttractorList(engine).show();">Show attractors</button>
+</p>
+<p><a href="map9.png">Map file</a>.</p>
 </body>
 </html>

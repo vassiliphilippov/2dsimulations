@@ -1,2 +1,25 @@
+DONE seeded random
+DONE Slysarev Cover
+DONE run several engines, worlds and renders simultaneously
+
+animation path refactoring
+rearranhge tests and rename them to samples , divide into tech demoes and reactions
+make forces Chemistry time adjusted
+test Ionexchange
+fix too fast rotations in temperature module
+ions with holes
+Convert H+H to H2
+generalize conversion
+resetting
+
+Test mettal as one compund body
+Test solids via constraints not forces
+Try constraints in molecule body
+https://melscience.com/GB-en/experiments/diffusion-v2_reefs/
 Place of event and backtracing
 Water evoporation
+https://melscience.com/GB-en/experiments/transmutation/
+https://melscience.com/GB-en/experiments/rocket-science-v2_rocket/
+H2CO->CO2
+
+

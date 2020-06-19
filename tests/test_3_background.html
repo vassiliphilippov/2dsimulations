@@ -18,12 +18,14 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
 
 ZoneMap.load("map3.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     Background.setBackground(engine.world, "background3.png", zoneMap.width, zoneMap.height);
     new ParticleList(engine).setTemperature(297);
@@ -32,5 +34,6 @@ ZoneMap.load("map3.png", function (zoneMap) {
 });
 
 </script>
+<p><a href="map3.png">Map file</a>.</p>
 </body>
 </html>

@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../groups.js"></script>
 </head>
 <body>
 <script>
@@ -40,7 +42,11 @@ ZoneMap.load("map17.png", function (zoneMap) {
         return a.position.y-b.position.y;
     }
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+
+//    Groups.groupOptions("H2", {fillStyle: colorH2, opacity: 0.5, offset: 10});
+    Groups.groupOptions("Mg", {fillStyle: colorMgAtom, opacity: 0.5});
+    Groups.markGroup(engine.world, "Mg", new ParticleList(engine).formula("Mg").toArray());
 
     new ParticleList(engine).setTemperature(297);
     new ParticleList(engine).formula("H+").setColor(colorHIon).forEach(p => {
@@ -98,6 +104,7 @@ ZoneMap.load("map17.png", function (zoneMap) {
             if (metalCharge>=2) {
                 mgToIon = new ParticleList(engine).formula("Mg").sort(freeMgComporator).first();
                 mgToIon.setColor(colorMgIon).setFormula("Mg+2").unstick({medium: "water"}).setConstantForce({x: 0, y:-1}, 0.0001);
+                Groups.markGroup(engine.world, "Mg", new ParticleList(engine).formula("Mg").toArray());
                 metalCharge = 0;
                 if (firstMgIonEvent) {
                     Animation.highlight(engine, render, mgToIon.getFirst().position, 30);
@@ -115,7 +122,7 @@ ZoneMap.load("map17.png", function (zoneMap) {
             console.log(forceColor);
             Animation.highlight(engine, render, pH1.position, 30);
             ParticleList.create([pH1, pH2]).setColor(colorH2).removeForce("H2").setForce(forceColor, 0.1, Force.ATTRACTION).setFormula("H2").setConstantForce({x: 0, y:-1}, 0.1);
-            console.log(pH1);
+//            Groups.markGroup(engine.world, "H2", new ParticleList(engine).formula("H2").toArray());
         });
     });
 });
@@ -124,5 +131,6 @@ ZoneMap.load("map17.png", function (zoneMap) {
 <p>
   Acid and metal.
 </p>
+<p><a href="map17.png">Map file</a>.</p>
 </body>
 </html>

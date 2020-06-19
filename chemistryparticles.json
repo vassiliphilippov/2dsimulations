@@ -5079,7 +5079,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 565,
    "formula": "He",
    "name": "Helium",
-   "charge": 1,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "215,10,5"
@@ -5088,7 +5088,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 566,
    "formula": "Li",
    "name": "Lithium",
-   "charge": 2,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "216,10,5"
@@ -5097,7 +5097,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 567,
    "formula": "Be",
    "name": "Beryllium",
-   "charge": 3,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "217,10,5"
@@ -5106,7 +5106,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 568,
    "formula": "B",
    "name": "Boron",
-   "charge": 4,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "218,10,5"
@@ -5115,7 +5115,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 569,
    "formula": "C",
    "name": "Carbon",
-   "charge": 5,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "219,10,5"
@@ -5124,7 +5124,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 570,
    "formula": "N",
    "name": "Nitrogen",
-   "charge": 6,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "220,10,5"
@@ -5133,7 +5133,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 571,
    "formula": "O",
    "name": "Oxygen",
-   "charge": 7,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "221,10,5"
@@ -5142,7 +5142,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 572,
    "formula": "F",
    "name": "Fluorine",
-   "charge": 8,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "222,10,5"
@@ -5151,7 +5151,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 573,
    "formula": "Ne",
    "name": "Neon",
-   "charge": 9,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "223,10,5"
@@ -5160,7 +5160,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 574,
    "formula": "Na",
    "name": "Sodium",
-   "charge": 10,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "224,10,5"
@@ -5169,7 +5169,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 575,
    "formula": "Mg",
    "name": "Magnesium",
-   "charge": 11,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "225,10,5"
@@ -5178,7 +5178,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 576,
    "formula": "Al",
    "name": "Aluminum",
-   "charge": 12,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "226,10,5"
@@ -5187,7 +5187,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 577,
    "formula": "Si",
    "name": "Silicon",
-   "charge": 13,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "227,10,5"
@@ -5196,7 +5196,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 578,
    "formula": "P",
    "name": "Phosphorus",
-   "charge": 14,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "228,10,5"
@@ -5205,7 +5205,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 579,
    "formula": "S",
    "name": "Sulfur",
-   "charge": 15,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "229,10,5"
@@ -5214,7 +5214,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 580,
    "formula": "Cl",
    "name": "Chlorine",
-   "charge": 16,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "230,10,5"
@@ -5223,7 +5223,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 581,
    "formula": "Ar",
    "name": "Argon",
-   "charge": 17,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "231,10,5"
@@ -5232,7 +5232,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 582,
    "formula": "K",
    "name": "Potassium",
-   "charge": 18,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "232,10,5"
@@ -5241,7 +5241,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 583,
    "formula": "Ca",
    "name": "Calcium",
-   "charge": 19,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "233,10,5"
@@ -5250,7 +5250,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 584,
    "formula": "Sc",
    "name": "Scandium",
-   "charge": 20,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "234,10,5"
@@ -5259,7 +5259,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 585,
    "formula": "Ti",
    "name": "Titanium",
-   "charge": 21,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "235,10,5"
@@ -5268,7 +5268,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 586,
    "formula": "V",
    "name": "Vanadium",
-   "charge": 22,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "236,10,5"
@@ -5277,7 +5277,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 587,
    "formula": "Cr",
    "name": "Chromium",
-   "charge": 23,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "237,10,5"
@@ -5286,7 +5286,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 588,
    "formula": "Mn",
    "name": "Manganese",
-   "charge": 24,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "238,10,5"
@@ -5295,7 +5295,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 589,
    "formula": "Fe",
    "name": "Iron",
-   "charge": 25,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "239,10,5"
@@ -5304,7 +5304,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 590,
    "formula": "Co",
    "name": "Cobalt",
-   "charge": 26,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "240,10,5"
@@ -5313,7 +5313,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 591,
    "formula": "Ni",
    "name": "Nickel",
-   "charge": 27,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "241,10,5"
@@ -5322,7 +5322,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 592,
    "formula": "Cu",
    "name": "Copper",
-   "charge": 28,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "242,10,5"
@@ -5331,7 +5331,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 593,
    "formula": "Zn",
    "name": "Zinc",
-   "charge": 29,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "243,10,5"
@@ -5340,7 +5340,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 594,
    "formula": "Ga",
    "name": "Gallium",
-   "charge": 30,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "244,10,5"
@@ -5349,7 +5349,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 595,
    "formula": "Ge",
    "name": "Germanium",
-   "charge": 31,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "245,10,5"
@@ -5358,7 +5358,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 596,
    "formula": "As",
    "name": "Arsenic",
-   "charge": 32,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "246,10,5"
@@ -5367,7 +5367,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 597,
    "formula": "Se",
    "name": "Selenium",
-   "charge": 33,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "247,10,5"
@@ -5376,7 +5376,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 598,
    "formula": "Br",
    "name": "Bromine",
-   "charge": 34,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "248,10,5"
@@ -5385,7 +5385,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 599,
    "formula": "Kr",
    "name": "Krypton",
-   "charge": 35,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "249,10,5"
@@ -5394,7 +5394,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 600,
    "formula": "Rb",
    "name": "Rubidium",
-   "charge": 36,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "150,11,5"
@@ -5403,7 +5403,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 601,
    "formula": "Sr",
    "name": "Strontium",
-   "charge": 37,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "151,11,5"
@@ -5412,7 +5412,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 602,
    "formula": "Y",
    "name": "Yttrium",
-   "charge": 38,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "152,11,5"
@@ -5421,7 +5421,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 603,
    "formula": "Zr",
    "name": "Zirconium",
-   "charge": 39,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "153,11,5"
@@ -5430,7 +5430,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 604,
    "formula": "Nb",
    "name": "Niobium",
-   "charge": 40,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "154,11,5"
@@ -5439,7 +5439,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 605,
    "formula": "Mo",
    "name": "Molybdenum",
-   "charge": 41,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "155,11,5"
@@ -5448,7 +5448,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 606,
    "formula": "Tc",
    "name": "Technetium",
-   "charge": 42,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "156,11,5"
@@ -5457,7 +5457,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 607,
    "formula": "Ru",
    "name": "Ruthenium",
-   "charge": 43,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "157,11,5"
@@ -5466,7 +5466,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 608,
    "formula": "Rh",
    "name": "Rhodium",
-   "charge": 44,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "158,11,5"
@@ -5475,7 +5475,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 609,
    "formula": "Pd",
    "name": "Palladium",
-   "charge": 45,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "159,11,5"
@@ -5484,7 +5484,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 610,
    "formula": "Ag",
    "name": "Silver",
-   "charge": 46,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "160,11,5"
@@ -5493,7 +5493,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 611,
    "formula": "Cd",
    "name": "Cadmium",
-   "charge": 47,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "161,11,5"
@@ -5502,7 +5502,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 612,
    "formula": "In",
    "name": "Indium",
-   "charge": 48,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "162,11,5"
@@ -5511,7 +5511,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 613,
    "formula": "Sn",
    "name": "Tin",
-   "charge": 49,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "163,11,5"
@@ -5520,7 +5520,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 614,
    "formula": "Sb",
    "name": "Antimony",
-   "charge": 50,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "164,11,5"
@@ -5529,7 +5529,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 615,
    "formula": "Te",
    "name": "Tellurium",
-   "charge": 51,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "165,11,5"
@@ -5538,7 +5538,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 616,
    "formula": "I",
    "name": "Iodine",
-   "charge": 52,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "166,11,5"
@@ -5547,7 +5547,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 617,
    "formula": "Xe",
    "name": "Xenon",
-   "charge": 53,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "167,11,5"
@@ -5556,7 +5556,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 618,
    "formula": "Cs",
    "name": "Cesium",
-   "charge": 54,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "168,11,5"
@@ -5565,7 +5565,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 619,
    "formula": "Ba",
    "name": "Barium",
-   "charge": 55,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "169,11,5"
@@ -5574,7 +5574,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 620,
    "formula": "La",
    "name": "Lanthanum",
-   "charge": 56,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "170,11,5"
@@ -5583,7 +5583,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 621,
    "formula": "Ce",
    "name": "Cerium",
-   "charge": 57,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "171,11,5"
@@ -5592,7 +5592,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 622,
    "formula": "Pr",
    "name": "Praseodymium",
-   "charge": 58,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "172,11,5"
@@ -5601,7 +5601,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 623,
    "formula": "Nd",
    "name": "Neodymium",
-   "charge": 59,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "173,11,5"
@@ -5610,7 +5610,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 624,
    "formula": "Pm",
    "name": "Promethium",
-   "charge": 60,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "174,11,5"
@@ -5619,7 +5619,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 625,
    "formula": "Sm",
    "name": "Samarium",
-   "charge": 61,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "175,11,5"
@@ -5628,7 +5628,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 626,
    "formula": "Eu",
    "name": "Europium",
-   "charge": 62,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "176,11,5"
@@ -5637,7 +5637,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 627,
    "formula": "Gd",
    "name": "Gadolinium",
-   "charge": 63,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "177,11,5"
@@ -5646,7 +5646,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 628,
    "formula": "Tb",
    "name": "Terbium",
-   "charge": 64,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "178,11,5"
@@ -5655,7 +5655,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 629,
    "formula": "Dy",
    "name": "Dysprosium",
-   "charge": 65,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "179,11,5"
@@ -5664,7 +5664,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 630,
    "formula": "Ho",
    "name": "Holmium",
-   "charge": 66,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "180,11,5"
@@ -5673,7 +5673,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 631,
    "formula": "Er",
    "name": "Erbium",
-   "charge": 67,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "181,11,5"
@@ -5682,7 +5682,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 632,
    "formula": "Tm",
    "name": "Thulium",
-   "charge": 68,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "182,11,5"
@@ -5691,7 +5691,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 633,
    "formula": "Yb",
    "name": "Ytterbium",
-   "charge": 69,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "183,11,5"
@@ -5700,7 +5700,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 634,
    "formula": "Lu",
    "name": "Lutetium",
-   "charge": 70,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "184,11,5"
@@ -5709,7 +5709,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 635,
    "formula": "Hf",
    "name": "Hafnium",
-   "charge": 71,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "185,11,5"
@@ -5718,7 +5718,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 636,
    "formula": "Ta",
    "name": "Tantalum",
-   "charge": 72,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "186,11,5"
@@ -5727,7 +5727,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 637,
    "formula": "W",
    "name": "Wolfram",
-   "charge": 73,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "187,11,5"
@@ -5736,7 +5736,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 638,
    "formula": "Re",
    "name": "Rhenium",
-   "charge": 74,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "188,11,5"
@@ -5745,7 +5745,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 639,
    "formula": "Os",
    "name": "Osmium",
-   "charge": 75,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "189,11,5"
@@ -5754,7 +5754,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 640,
    "formula": "Ir",
    "name": "Iridium",
-   "charge": 76,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "190,11,5"
@@ -5763,7 +5763,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 641,
    "formula": "Pt",
    "name": "Platinum",
-   "charge": 77,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "191,11,5"
@@ -5772,7 +5772,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 642,
    "formula": "Au",
    "name": "Gold",
-   "charge": 78,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "192,11,5"
@@ -5781,7 +5781,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 643,
    "formula": "Hg",
    "name": "Mercury",
-   "charge": 79,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "193,11,5"
@@ -5790,7 +5790,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 644,
    "formula": "Tl",
    "name": "Thallium",
-   "charge": 80,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "194,11,5"
@@ -5799,7 +5799,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 645,
    "formula": "Pb",
    "name": "Lead",
-   "charge": 81,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "195,11,5"
@@ -5808,7 +5808,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 646,
    "formula": "Bi",
    "name": "Bismuth",
-   "charge": 82,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "196,11,5"
@@ -5817,7 +5817,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 647,
    "formula": "Po",
    "name": "Polonium",
-   "charge": 83,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "197,11,5"
@@ -5826,7 +5826,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 648,
    "formula": "At",
    "name": "Astatine",
-   "charge": 84,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "198,11,5"
@@ -5835,7 +5835,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 649,
    "formula": "Rn",
    "name": "Radon",
-   "charge": 85,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "199,11,5"
@@ -5844,7 +5844,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 650,
    "formula": "Fr",
    "name": "Francium",
-   "charge": 86,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "200,11,5"
@@ -5853,7 +5853,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 651,
    "formula": "Ra",
    "name": "Radium",
-   "charge": 87,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "201,11,5"
@@ -5862,7 +5862,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 652,
    "formula": "Ac",
    "name": "Actinium",
-   "charge": 88,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "202,11,5"
@@ -5871,7 +5871,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 653,
    "formula": "Th",
    "name": "Thorium",
-   "charge": 89,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "203,11,5"
@@ -5880,7 +5880,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 654,
    "formula": "Pa",
    "name": "Protactinium",
-   "charge": 90,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "204,11,5"
@@ -5889,7 +5889,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 655,
    "formula": "U",
    "name": "Uranium",
-   "charge": 91,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "205,11,5"
@@ -5898,7 +5898,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 656,
    "formula": "Np",
    "name": "Neptunium",
-   "charge": 92,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "206,11,5"
@@ -5907,7 +5907,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 657,
    "formula": "Pu",
    "name": "Plutonium",
-   "charge": 93,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "207,11,5"
@@ -5916,7 +5916,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 658,
    "formula": "Am",
    "name": "Americium",
-   "charge": 94,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "208,11,5"
@@ -5925,7 +5925,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 659,
    "formula": "Cm",
    "name": "Curium",
-   "charge": 95,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "209,11,5"
@@ -5934,7 +5934,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 660,
    "formula": "Bk",
    "name": "Berkelium",
-   "charge": 96,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "210,11,5"
@@ -5943,7 +5943,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 661,
    "formula": "Cf",
    "name": "Californium",
-   "charge": 97,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "211,11,5"
@@ -5952,7 +5952,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 662,
    "formula": "Es",
    "name": "Einsteinium",
-   "charge": 98,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "212,11,5"
@@ -5961,7 +5961,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 663,
    "formula": "Fm",
    "name": "Fermium",
-   "charge": 99,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "213,11,5"
@@ -5970,7 +5970,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 664,
    "formula": "Md",
    "name": "Mendelevium",
-   "charge": 100,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "214,11,5"
@@ -5979,7 +5979,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 665,
    "formula": "No",
    "name": "Nobelium",
-   "charge": 101,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "215,11,5"
@@ -5988,7 +5988,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 666,
    "formula": "Lr",
    "name": "Lawrencium",
-   "charge": 102,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "216,11,5"
@@ -5997,7 +5997,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 667,
    "formula": "Rf",
    "name": "Rutherfordium",
-   "charge": 103,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "217,11,5"
@@ -6006,7 +6006,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 668,
    "formula": "Db",
    "name": "Dubnium",
-   "charge": 104,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "218,11,5"
@@ -6015,7 +6015,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 669,
    "formula": "Sg",
    "name": "Seaborgium",
-   "charge": 105,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "219,11,5"
@@ -6024,7 +6024,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 670,
    "formula": "Bh",
    "name": "Bohrium",
-   "charge": 106,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "220,11,5"
@@ -6033,7 +6033,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 671,
    "formula": "Hs",
    "name": "Hassium",
-   "charge": 107,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "221,11,5"
@@ -6042,7 +6042,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 672,
    "formula": "Mt",
    "name": "Meitnerium",
-   "charge": 108,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "222,11,5"
@@ -6051,7 +6051,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 673,
    "formula": "Ds ",
    "name": "Darmstadtium ",
-   "charge": 109,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "223,11,5"
@@ -6060,7 +6060,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 674,
    "formula": "Rg ",
    "name": "Roentgenium ",
-   "charge": 110,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "224,11,5"
@@ -6069,7 +6069,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 675,
    "formula": "Cn ",
    "name": "Copernicium ",
-   "charge": 111,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "225,11,5"
@@ -6078,7 +6078,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 676,
    "formula": "Nh",
    "name": "Nihonium",
-   "charge": 112,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "226,11,5"
@@ -6087,7 +6087,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 677,
    "formula": "Fl",
    "name": "Flerovium",
-   "charge": 113,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "227,11,5"
@@ -6096,7 +6096,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 678,
    "formula": "Mc",
    "name": "Moscovium",
-   "charge": 114,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "228,11,5"
@@ -6105,7 +6105,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 679,
    "formula": "Lv",
    "name": "Livermorium",
-   "charge": 115,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "229,11,5"
@@ -6114,7 +6114,7 @@ var ChemistryParticleInfoDatabase = [
    "id": 680,
    "formula": "Ts",
    "name": "Tennessine",
-   "charge": 116,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "230,11,5"
@@ -6123,16 +6123,34 @@ var ChemistryParticleInfoDatabase = [
    "id": 681,
    "formula": "Og",
    "name": "Oganesson",
-   "charge": 117,
+   "charge": 0,
    "compound": false,
    "type": "atom",
    "color": "231,11,5"
  },
  {
+   "id": 682,
+   "formula": "Fe(CN)6-3",
+   "name": "Ferricyanide cation",
+   "charge": -3,
+   "compound": true,
+   "type": "ion",
+   "color": "232,11,5"
+ },
+ {
+   "id": 683,
+   "formula": "Fe(CN)6-4",
+   "name": "Ferrocyanide cation",
+   "charge": -4,
+   "compound": true,
+   "type": "ion",
+   "color": "233,11,5"
+ },
+ {
    "id": 684,
    "formula": "Sn+2",
    "name": "Tin atom cation",
-   "charge": 49,
+   "charge": -2,
    "compound": false,
    "type": "ion",
    "color": "234,11,5"

@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -29,7 +31,7 @@ ZoneMap.load("map13.png", function (zoneMap) {
     Chemistry.spaceScale = 0.16;
     Chemistry.timeScale = 6e-14; //real seconds per rendering second
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     Background.setBackground(engine.world, "background13.png", zoneMap.width, zoneMap.height);
 
@@ -53,5 +55,9 @@ ZoneMap.load("map13.png", function (zoneMap) {
 });
 
 </script>
+<p>
+  You can stick some particles and they will vibrate near their sticked places. 
+</p>
+<p><a href="map12.png">Map file</a>.</p>
 </body>
 </html>

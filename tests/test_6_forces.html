@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -25,7 +27,7 @@
 var engine = null;
 
 ZoneMap.load("map6.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     Chemistry.run(engine, render);
 });
 
@@ -68,5 +70,6 @@ Blue H2O:
 <button onclick="new ParticleList(engine).formula('H2O').setForce('blue', -0.01, Force.ATTRACTION)">Attraction (+0.01)</button>
 <button onclick="new ParticleList(engine).formula('H2O').removeForce('blue')">Remove force</button>
 </p>
+<p><a href="map6.png">Map file</a>.</p>
 </body>
 </html>

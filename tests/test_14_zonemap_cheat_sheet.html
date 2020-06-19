@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body style="background-color: #D0D0FF">
 <script>
@@ -27,13 +29,13 @@ var engine = null;
 ZoneMap.load("colors.png", function (zoneMap) {
     Chemistry.spaceScale = 0.15;
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     Chemistry.run(engine, render);
 });
 
 </script>
 <p>
-A cheat sheet map file with different particles and different options.
+A cheat sheet map file with different particles and different options. <a href="colors.png">Map file</a>.
 </p>
 <img src="colors.png">
 <p>

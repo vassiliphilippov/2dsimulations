@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -25,7 +27,7 @@
 var engine = null;
 
 ZoneMap.load("map10.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     new ParticleList(engine).setTemperature(297);
 
@@ -80,6 +82,6 @@ Custom atomicMass:
 <button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 100}})">100</button>
 <button onclick="new ParticleList(engine).setChemistryOptions({brownianMotion: {atomicMass: 200}})">200</button>
 </p>
-
+<p><a href="map10.png">Map file</a>.</p>
 </body>
 </html>

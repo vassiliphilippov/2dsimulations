@@ -1,0 +1,121 @@
+<html>
+<head>
+  <title>Test 19: Ion exchange reaction</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../groups.js"></script>
+</head>
+<body>
+<script>
+
+function freeLeftComporator(a, b) {
+    return a.position.x-b.position.x;
+}
+
+function freeRightComporator(a, b) {
+    return b.position.x-a.position.x;
+}
+
+
+ZoneMap.load("map19.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.10;
+    Chemistry.timeScale = 2e-14;
+    let elementaryChargeForce = 6;
+    Groups.groupOptions("Zn", {opacity: 0.5});
+
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+
+    new ParticleList(engine).setTemperature(293);
+    new ParticleList(engine).formula("Cu+2").setForce('red', 2*elementaryChargeForce, Force.ELECTROSTATIC);
+    new ParticleList(engine).formula("Fe(CN)6-4").setForce('red', -4*elementaryChargeForce, Force.ELECTROSTATIC);
+
+
+    let runner = Chemistry.run(engine, render);
+
+    scenario = new Scenario(engine, render);
+
+    for (var i=0; i<9; i++) {
+        scenario.addWait(50);
+
+        scenario.addAction(() => {
+            new ParticleList(engine).formula("Fe(CN)6-4").sticked().sort(freeLeftComporator).first().unstick({medium: "water"});
+            new ParticleList(engine).formula("K+").sticked().sort(freeLeftComporator).firsts(4).unstick({medium: "water"});
+            new ParticleList(engine).formula("Cu+2").sticked().sort(freeRightComporator).firsts(2).unstick({medium: "water"});
+            new ParticleList(engine).formula("SO4-2").sticked().sort(freeRightComporator).firsts(2).unstick({medium: "water"});
+        });
+    }
+
+    scenario.addRemoveAnimation(20, engine.world, () => {
+        return new ParticleList(engine).formula("K+", "SO4-2");
+    });
+
+    var forceColorCounter = 0;
+    scenario.run(() => {
+        console.log("Scenario end!");
+
+        Matter.Events.on(engine, "collision_Cu+2_Fe(CN)6-4", event => {
+            plCu = ParticleList.create([event.particleA]);
+            plFeCN = ParticleList.create([event.particleB]);
+            plCu.setFormula("Cu").removeForce('red');
+            plFeCN.setFormula("Fe(CN)6-2").setForce('red', -2, Force.ELECTROSTATIC);
+            forceColorCounter += 1;
+            let forceColor = "IonAttraction-"+forceColorCounter;
+            ParticleList.create([event.particleA, event.particleB]).setForce(forceColor, 0.5, Force.ATTRACTION);
+            console.log(event);
+/*
+            forceColorCounter += 1;
+            let forceColor = "H2-"+forceColorCounter;
+            console.log(forceColor);
+            Animation.highlight(engine, render, pH1.position, 30);
+            ParticleList.create([pH1, pH2]).setColor(colorH2).removeForce("H2").setForce(forceColor, 0.1, Force.ATTRACTION).setFormula("H2").setConstantForce({x: 0, y:-1}, 0.1);
+*/
+        });
+
+        Matter.Events.on(engine, "collision_Cu+2_Fe(CN)6-2", event => {
+            plCu = ParticleList.create([event.particleA]);
+            plFeCN = ParticleList.create([event.particleB]);
+            plCu.setFormula("Cu").removeForce('red');
+            plFeCN.setFormula("Fe(CN)6").removeForce('red');
+            forceColorCounter += 1;
+            let forceColor = "IonAttraction-"+forceColorCounter;
+            new ParticleList(engine).formula("Fe(CN)6", "Cu").setTemperature(0);
+            Groups.markGroup(engine.world, "Zn", new ParticleList(engine).formula("Fe(CN)6", "Cu").toArray());
+            ParticleList.create([event.particleA, event.particleB]).setForce(forceColor, 0.2, Force.ATTRACTION).setForce("blue", 0.5, Force.ATTRACTION);//setConstantForce({x: 0, y:1}, 0.3);
+            console.log(event);
+/*
+            forceColorCounter += 1;
+            let forceColor = "H2-"+forceColorCounter;
+            console.log(forceColor);
+            Animation.highlight(engine, render, pH1.position, 30);
+            ParticleList.create([pH1, pH2]).setColor(colorH2).removeForce("H2").setForce(forceColor, 0.1, Force.ATTRACTION).setFormula("H2").setConstantForce({x: 0, y:-1}, 0.1);
+*/
+        });
+    });
+
+
+
+});
+
+</script>
+<p>
+  Ion exchange reaction. <font color="red">Still under development...</font>
+</p>
+<p><a href="map19.png">Map file</a>.</p>
+</body>
+</html>

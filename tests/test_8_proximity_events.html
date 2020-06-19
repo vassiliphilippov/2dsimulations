@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -25,7 +27,7 @@
 var engine = null;
 
 ZoneMap.load("map8.png", function (zoneMap) {
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     new ParticleList(engine).setTemperature(50);
     new ParticleList(engine).setOptions({plugin: {proximity: {levels: [10, 50]}}});
@@ -62,5 +64,6 @@ ZoneMap.load("map8.png", function (zoneMap) {
 </p>
 <p id="proximityevent">Proximity event info will be here</p>
 <p id="collisionevent">Collision event info will be here</p>
+<p><a href="map8.png">Map file</a>.</p>
 </body>
 </html>

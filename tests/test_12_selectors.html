@@ -18,6 +18,8 @@
   <script src="../textureloader.js"></script>
   <script src="../scenario.js"></script>
   <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
 </head>
 <body>
 <script>
@@ -29,7 +31,7 @@ ZoneMap.load("map12.png", function (zoneMap) {
     Chemistry.spaceScale = 0.30;
     Chemistry.timeScale = 6e-15;
 
-    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
     a = new AttractorList(engine).getFirst();
 
@@ -56,7 +58,7 @@ function runCommand() {
 
 </script>
 <p>
-  JQuery-like chaining to select bodies and make some group operations. You can always use custom <b>forEach</b> and <b>filter</b> methods for customer operations and custom filtering.
+  JQuery-like chaining to select bodies and make some group operations. You can always use custom <b>forEach</b> and <b>filter</b> methods for custom operations and custom filtering.
 </p>
 <p>
 List:
@@ -114,5 +116,6 @@ Action:
 Command:
 </p>
 <p id="command" style="font-family: monospace;">&nbsp;</p>
+<p><a href="map12.png">Map file</a>.</p>
 </body>
 </html>

@@ -245,12 +245,12 @@ let Engine = Matter.Engine,
 
         // update mouse
         if (render.mouse) {
-            Mouse.setScale(render.mouse, {
+            Matter.Mouse.setScale(render.mouse, {
                 x: (render.bounds.max.x - render.bounds.min.x) / render.canvas.width,
                 y: (render.bounds.max.y - render.bounds.min.y) / render.canvas.height
             });
 
-            Mouse.setOffset(render.mouse, render.bounds.min);
+            Matter.Mouse.setOffset(render.mouse, render.bounds.min);
         }
     };
 
@@ -285,6 +285,7 @@ let Engine = Matter.Engine,
      * @param {render} render
      */
     ChemistryRender.world = function(render) {
+//        Profiler.begin("render");
         var engine = render.engine,
             world = engine.world,
             canvas = render.canvas,
@@ -330,8 +331,8 @@ let Engine = Matter.Engine,
                     pointAWorld = constraint.pointA,
                     pointBWorld = constraint.pointB;
 
-                if (bodyA) pointAWorld = Vector.add(bodyA.position, constraint.pointA);
-                if (bodyB) pointBWorld = Vector.add(bodyB.position, constraint.pointB);
+                if (bodyA) pointAWorld = Matter.Vector.add(bodyA.position, constraint.pointA);
+                if (bodyB) pointBWorld = Matter.Vector.add(bodyB.position, constraint.pointB);
 
                 if (!pointAWorld || !pointBWorld)
                     continue;
@@ -345,12 +346,12 @@ let Engine = Matter.Engine,
 
             // update mouse
             if (render.mouse) {
-                Mouse.setScale(render.mouse, {
+                Matter.Mouse.setScale(render.mouse, {
                     x: (render.bounds.max.x - render.bounds.min.x) / render.canvas.width,
                     y: (render.bounds.max.y - render.bounds.min.y) / render.canvas.height
                 });
 
-                Mouse.setOffset(render.mouse, render.bounds.min);
+                Matter.Mouse.setOffset(render.mouse, render.bounds.min);
             }
         } else {
             constraints = allConstraints;
@@ -359,8 +360,15 @@ let Engine = Matter.Engine,
 
         if (!options.wireframes || (engine.enableSleeping && options.showSleeping)) {
             // fully featured rendering of bodies
-            ChemistryRender.bodies(render, bodies, context);
+//            Profiler.begin("background");
+            ChemistryRender.bodies(render, ChemistryRender.selectBackgroundBodies(bodies), context);
+//            Profiler.end();
+            Events.trigger(render, 'afterBackgroundRender', event);
+//            Profiler.begin("bodies");
+            ChemistryRender.bodies(render, ChemistryRender.selectNonBackgroundBodies(bodies), context);
+//            Profiler.end();
         } else {
+            Events.trigger(render, 'afterBackgroundRender', event);
             if (options.showConvexHulls)
                 ChemistryRender.bodyConvexHulls(render, bodies, context);
 
@@ -409,6 +417,27 @@ let Engine = Matter.Engine,
         }
 
         Events.trigger(render, 'afterRender', event);
+//        Profiler.end();
+    };
+
+    ChemistryRender.selectBackgroundBodies = function(bodies) {
+        let selected = [];
+        for (body of bodies) {
+            if (body.plugin && body.plugin.background && body.plugin.background.isBackground) {
+                selected.push(body);
+            }
+        }
+        return selected;
+    };
+
+    ChemistryRender.selectNonBackgroundBodies = function(bodies) {
+        let selected = [];
+        for (body of bodies) {
+            if (!body.plugin || !body.plugin.background || !body.plugin.background.isBackground) {
+                selected.push(body);
+            }
+        }
+        return selected;
     };
 
     /**
@@ -499,7 +528,7 @@ let Engine = Matter.Engine,
                 end;
 
             if (bodyA) {
-                start = Vector.add(bodyA.position, constraint.pointA);
+                start = Matter.Vector.add(bodyA.position, constraint.pointA);
             } else {
                 start = constraint.pointA;
             }
@@ -510,7 +539,7 @@ let Engine = Matter.Engine,
                 c.closePath();
             } else {
                 if (bodyB) {
-                    end = Vector.add(bodyB.position, constraint.pointB);
+                    end = Matter.Vector.add(bodyB.position, constraint.pointB);
                 } else {
                     end = constraint.pointB;
                 }
@@ -519,8 +548,8 @@ let Engine = Matter.Engine,
                 c.moveTo(start.x, start.y);
 
                 if (constraint.render.type === 'spring') {
-                    var delta = Vector.sub(end, start),
-                        normal = Vector.perp(Vector.normalise(delta)),
+                    var delta = Matter.Vector.sub(end, start),
+                        normal = Matter.Vector.perp(Vector.normalise(delta)),
                         coils = Math.ceil(Matter.Common.clamp(constraint.length / 5, 12, 20)),
                         offset;
 
