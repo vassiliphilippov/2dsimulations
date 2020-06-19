@@ -1,21 +1,20 @@
-DONE seeded random
-DONE Slysarev Cover
-DONE run several engines, worlds and renders simultaneously
+spinning temperature
+add attractors to colors.png
+add path to colors.png
+remove H size in tin hedgehog experiment
+H + H = H2
+Chemistry create parameters to named hash
+hinish history
 
-animation path refactoring
 rearranhge tests and rename them to samples , divide into tech demoes and reactions
 make forces Chemistry time adjusted
 test Ionexchange
-fix too fast rotations in temperature module
 ions with holes
-Convert H+H to H2
-generalize conversion
-resetting
+generalize conversion (like H+H to H2)
 
 Test mettal as one compund body
 Test solids via constraints not forces
 Try constraints in molecule body
-https://melscience.com/GB-en/experiments/diffusion-v2_reefs/
 Place of event and backtracing
 Water evoporation
 https://melscience.com/GB-en/experiments/transmutation/
