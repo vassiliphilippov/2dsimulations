@@ -763,6 +763,8 @@ let Engine = Matter.Engine,
     ChemistryRender._getLabelFont = function(radius) {
        let fontSize = 10;
        if (radius<10) fontSize = 8;
+       if (radius<8) fontSize = 6;
+       if (radius<7) fontSize = 5;
        if (radius>15) fontSize = 15;
        return fontSize + "px Verdana";
     };

@@ -40,20 +40,26 @@ var Temperature = {};
     };
 
     Temperature._UpdateAllSpeedsToGivenTemperature = function(engine, particles, temperature) {
-        //We update only speed not rotation and hope that average rotation energy will update automatically through many collisions
+        //We update only speed not rotation speed independently
         if (particles.length==0) return;
         let totalKineticEnergy = 0;
+        let totalRotationEnergy = 0;
         for (const p of particles) {
-            let kE = Temperature._kineticEnergy(p);
-            totalKineticEnergy += kE;
+            totalKineticEnergy += Temperature._kineticEnergy(p);
+            totalRotationEnergy += Temperature._rotationEnergy(p);
         }
         let averageKineticEnergy = totalKineticEnergy/particles.length;
+        let averageRotationEnergy = totalRotationEnergy/particles.length;
 
         let expectedKineticEnergy = Temperature.kBoltzmannConstant * temperature;
+        let expectedRotationEnergy = Temperature.kBoltzmannConstant * temperature * 1/3;
+
         let kineticEnergyMultiplier = expectedKineticEnergy/averageKineticEnergy;
-        //todo: replace all let and var with const where appropriate
+        let rotationEnergyMultiplier = expectedRotationEnergy/averageRotationEnergy;
+
         for (const p of particles) {
             Temperature._UpdateParticleSpeed(p, expectedKineticEnergy, kineticEnergyMultiplier);
+            Temperature._UpdateParticleAngularSpeed(p, expectedRotationEnergy, rotationEnergyMultiplier);
         }
     };
 
@@ -80,6 +86,33 @@ var Temperature = {};
             Matter.Body.setVelocity(p, {x: newSpeed*Math.cos(randomAngle), y: newSpeed*Math.sin(randomAngle)});
         }
         Temperature._BrownianMotion(p, expectedKineticEnergy);
+    };
+
+    Temperature._UpdateParticleAngularSpeed = function(p, expectedRotationEnergy, globalRotationEnergyMultiplier) {
+        let kE = Temperature._rotationEnergy(p);
+        let randomRotationEnergyAddition = Matter.Common.random(-expectedRotationEnergy*Temperature._ramdomEnergyChunk, expectedRotationEnergy*Temperature._ramdomEnergyChunk);
+        let newKE = randomRotationEnergyAddition;
+        if (isFinite(globalRotationEnergyMultiplier)) {
+            newKE += kE*globalRotationEnergyMultiplier;
+        }
+        if (newKE<0) {
+            newKE = expectedRotationEnergy*Temperature._ramdomEnergyChunk;
+        }
+        if (newKE>expectedRotationEnergy*Temperature._maxEneryToTemperatureRatio) {
+            newKE = expectedRotationEnergy*Temperature._maxEneryToTemperatureRatio;
+        }
+        if (expectedRotationEnergy==0) {
+            newKE = 0;
+        }
+        let newAngularSpeed = Temperature._angularSpeedByRotationEnergy(p, newKE);
+        if (p.angularSpeed!=0) {
+            let newAngularVelocity = p.angularVelocity * newAngularSpeed / p.angularSpeed;
+            Body.setAngularVelocity(p, newAngularVelocity);
+        } else {
+            //If speed was 0 then we need to choose a random direction of rotation
+            let randomDirection = (Math.floor(Matter.Common.random(0, 2))-0.5)*2;
+            Matter.Body.setAngularVelocity(p, newAngularSpeed*randomDirection);
+        }
     };
 
     Temperature._BrownianMotion = function(particle, expectedKineticEnergy) {
@@ -154,6 +187,45 @@ var Temperature = {};
         let worldSpeed = Math.sqrt(2 * kE / worldMass); //in m/s
         let screenSpeed = worldSpeed * Temperature.pmInMeter * Chemistry.timeScale * Chemistry.spaceScale; //in pixels per rendering second
         return screenSpeed;
+    };
+
+    Temperature._angularSpeedByRotationEnergy = function(particle, kE) {
+        if (!particle.plugin.chemistry && !particle.plugin.chemistry.atomicMass) {
+            Debug.log("Error. atomicMass property is not defined for particle ", particle);
+            return 0;
+        }
+
+        //Todo: terrible performance, a lot of optimizations possible (but may be not needed)
+        if (kE==0) {
+            return 0;
+        } else {
+            let screenSpeed = Temperature._speedByKineticEnergy(particle, kE);
+            let screenKineticEnergy = particle.mass * (screenSpeed**2)/2;
+            let screenAngularSpeed = Math.sqrt(screenKineticEnergy*2 / particle.inertia);
+            return screenAngularSpeed;
+        }
+    };
+
+    Temperature._rotationEnergy = function(particle) {
+        if (!particle.plugin.chemistry && !particle.plugin.chemistry.atomicMass) {
+            Debug.log("Error. atomMass property is not defined for particle ", particle);
+            return 0;
+        }
+
+        if (!particle.angularSpeed) {
+            return 0;
+        } else {
+            let screenKineticEnergy = particle.mass * (particle.speed**2)/2;
+            let screenRotationEnergy = particle.inertia * (particle.angularSpeed**2)/2;
+            return screenRotationEnergy * Temperature._kineticEnergy(particle) / screenKineticEnergy;
+/*            let worldAngluarSpeed = particle.angularSpeed * Chemistry.timeScale; // in 1/s
+            let worldMass = particle.plugin.chemistry.atomicMass * Temperature.daltonMass; // in kg
+            let worldInertia = worldMass * particle.inertia / particle.mass * (Temperature.pmInMeter * Chemistry.spaceScale)**2;
+            let e = worldInertia * worldAngluarSpeed * worldAngluarSpeed / 2;
+            Debug.log("e=", e);
+            return e;
+*/
+        }
     };
 
     Temperature._collisionForceByKineticEnergy = function(kE, atomicMass) {

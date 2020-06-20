@@ -1,4 +1,3 @@
-spinning temperature
 add attractors to colors.png
 add path to colors.png
 remove H size in tin hedgehog experiment
