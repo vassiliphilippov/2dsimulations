@@ -1,9 +1,22 @@
+Performace:
+- Engine update
+   - All events
+     - Temperature
+     - Forces
+     - 
+- Rendering
+
+Make electron cover over the elements and semi-transparent  
+H + H = H2
+finish history
+Water evoporation
 add attractors to colors.png
 add path to colors.png
 remove H size in tin hedgehog experiment
-H + H = H2
 Chemistry create parameters to named hash
-hinish history
+Replace dots in maps with dots from colors.png with text on them
+add more ions to colors.png
+make borders thicker, so particles don't come through them
 
 rearranhge tests and rename them to samples , divide into tech demoes and reactions
 make forces Chemistry time adjusted
@@ -15,7 +28,6 @@ Test mettal as one compund body
 Test solids via constraints not forces
 Try constraints in molecule body
 Place of event and backtracing
-Water evoporation
 https://melscience.com/GB-en/experiments/transmutation/
 https://melscience.com/GB-en/experiments/rocket-science-v2_rocket/
 H2CO->CO2

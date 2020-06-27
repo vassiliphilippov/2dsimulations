@@ -28,7 +28,7 @@ var Groups = {};
         Groups._clipperOffsetter = new ClipperLib.ClipperOffset();
         Groups._clipperOffsetter.MiterLimit = 2;
         Groups._clipperOffsetter.ArcTolerance = 0.25;
-        Matter.Events.on(render, "afterBackgroundRender", (event) => {
+        Matter.Events.on(render, "afterParticlesRender", (event) => {
             Groups._drawGroups(engine, render);
        });
     };

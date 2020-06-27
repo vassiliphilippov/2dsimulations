@@ -1,0 +1,172 @@
+<html>
+<head>
+  <title>Test 24: Transformation</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../history.js"></script>
+</head>
+<body>
+<script>
+
+let pH = null;
+let pOH = null;
+let pH2O = null;
+
+function particleRadius(p) {
+    let maxL = 0;
+    for (let k = p.parts.length > 1 ? 1 : 0; k < 2/*//Todo: p.parts.length*/; k++) {
+        let part = p.parts[k];
+        let l = Matter.Vector.magnitude(Matter.Vector.sub(part.position, p.position));
+        if (part.circleRadius) {
+            l += part.circleRadius;
+        }
+        if (l>maxL) {
+            maxL = l;
+        }
+    }
+    return maxL;
+}
+
+function solveQuadraticEquation(a, b, c) {
+    console.log("abc=", a, b, c);
+    var result1 = (-1 * b + Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
+    var result2 = (-1 * b - Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
+    console.log("s2=", result1 , result2);
+    return Math.min(result1, result2);
+}
+
+function collisionEstimation(p1, p2) {
+    //Move to the system where the first particle is standing still in 0, 0                                                                       
+    //p are , v - velocity
+    let p = Matter.Vector.sub(p2.position, p1.position); //coordinates of the second particle in this system
+    let v = Matter.Vector.sub(p2.velocity, p1.velocity); //velocity of the second particle in this system
+    let n = Matter.Vector.normalise(Matter.Vector.perp(v)); //normalized perpendicular to v
+    let dist = Math.abs(Matter.Vector.dot(p, n)); //shortest distance between the particles
+
+    console.log("dist=", dist);
+    let R = particleRadius(p1)+particleRadius(p2);
+    if (dist < R) {
+        //|p + t*v| = R;
+        //(p.x + t*v.x)^2 + (p.y + t*v.y)^2 = R^2;
+        //t^2 * (v.x^2+v.y^2) + t * 2 * (v.x*p.x + v.y*p.y) + p.x^2+p.y^2-R^2 = 0;
+        //a*t^2 + b*t + c = 0;
+        let a = Matter.Vector.magnitudeSquared(v);
+        let b = 2 * Matter.Vector.dot(v, p);
+        let c = Matter.Vector.magnitudeSquared(p)-R*R;
+        let t = solveQuadraticEquation(a, b, c);
+        console.log("t=", t);
+        let pp1 = Matter.Vector.add(p1.position, Matter.Vector.mult(p1.velocity, t));
+        let pp2 = Matter.Vector.add(p2.position, Matter.Vector.mult(p2.velocity, t));
+        console.log("pp1=", pp1);
+        console.log("pp2=", pp2);
+        console.log("pp1-pp2 dist = ", Matter.Vector.magnitude(Matter.Vector.sub(pp1,pp2)));
+
+        let angle1 = p1.angle + p1.angularVelocity * t;
+        let angle2 = p2.angle + p2.angularVelocity * t;
+        console.log("angle1=", angle1);
+        console.log("angle2=", angle2);
+        //Collision expected
+        return true;
+    } else {
+        //Collision not expected
+        return false;
+    }
+}
+
+ZoneMap.load("map24.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
+
+    pH = new ParticleList(engine).formula("H+").getFirst();
+    pOH = new ParticleList(engine).formula("OH-").getFirst();
+    Matter.Body.setVelocity(pH, {x: 1, y:0});
+    Matter.Body.setVelocity(pOH, {x: -1, y:0});
+    Matter.Body.setAngularVelocity(pOH, 0.03);
+    
+    new ParticleList(engine).formula("H+","OH-").setOptions({plugin: {proximity: {levels: [200]}}});
+
+    Matter.Events.on(engine, "comeClose", event => {
+        let bodyA = event.bodyA;
+        let bodyB = event.bodyB;
+        if (bodyA.plugin.chemistry && bodyA.plugin.chemistry.formula=="H+" && bodyB.plugin.chemistry && bodyB.plugin.chemistry.formula=="OH-") {
+            console.log("Last event: comeClose " + bodyA.label + " - " + bodyB.label + " Level: " + event.level + " Distance " + event.distance);
+            if (collisionEstimation(bodyA, bodyB)) {
+                console.log("Collision expected");
+                pH2O = Chemistry.create("H2O", pOH.position.x, pOH.position.y);
+                Matter.World.add(engine.world, pH2O);
+                pH2O.collisionFilter = {mask: 0};
+                new ParticleList(engine).formula("H2O").setOpacity(0.3);
+//                pH.frictionAir = 0.3;
+            } else {
+                console.log("Collision NOT expected");
+            }
+        }
+    });
+
+    Matter.Events.on(engine, "goAway", event => {
+        let bodyA = event.bodyA;
+        let bodyB = event.bodyB;
+        if (bodyA.plugin.chemistry && bodyA.plugin.chemistry.formula=="H+" && bodyB.plugin.chemistry && bodyB.plugin.chemistry.formula=="OH-") {
+            console.log("Last event: comeClose " + bodyA.label + " - " + bodyB.label + " Level: " + event.level + " Distance " + event.distance);
+            if (pH2O) {
+                Matter.Composite.remove(engine.world, pH2O);
+                pH2O = null;
+            }
+        }
+    });
+
+//    new ParticleList(engine).setTemperature(190);
+
+    Matter.Events.on(engine, "afterUpdate", (event) => {
+        if (pH2O) {
+            Matter.Body.setPosition(pH2O, pOH.position); 
+            Matter.Body.setAngle(pH2O, pOH.angle); 
+        }
+    });
+    
+    Matter.Events.on(engine, "beforeUpdate", (event) => {
+        if (pH2O) {
+//            console.log(pH2O.parts[3].label);
+            let p = pH2O.parts[3].position;
+            let diff = Matter.Vector.sub(p, pH.position);
+            let n = Matter.Vector.normalise(diff);
+            let force = Matter.Vector.mult(n, 0.002);
+//            Matter.Body.applyForce(pH, pH.position, force);    
+//            Matter.Body.applyForce(pH2O, pH2O.parts[3].position, Matter.Vector.neg(force));    
+        }
+    });
+    
+    Matter.Events.on(engine, "collision_H+_OH-", event => {
+        console.log("event.particleA.angle=", event.particleA.angle);
+        console.log("event.particleB.angle=", event.particleB.angle);
+        console.log("event.particleA.position=", event.particleA.position);
+        console.log("event.particleB.position=", event.particleB.position);
+    });
+
+
+    Chemistry.run(engine, render);
+
+});
+
+</script>
+<p>
+Transformation of one particles into another.
+</p>
+</body>
+</html>

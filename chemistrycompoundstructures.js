@@ -16,6 +16,17 @@ var chemistryCompoundStructures = {
         ]
     },
 
+    "OH-" : {
+        atom: "O",
+        connections: [
+            {
+                length: 95.84,
+                angle: 0,
+                atom: "H"
+            }
+        ]
+    },
+
     "H2" : {
         atom: "H",
         connections: [

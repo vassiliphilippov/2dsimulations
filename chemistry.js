@@ -60,7 +60,7 @@ var Chemistry = {};
             Matter.Common._seed = engine.world._seed;
         });
 
-        var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
+        var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height, rotateAtomLabels: true}});
         if (createMappedParticles) {
             Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
         }
@@ -395,6 +395,7 @@ var Chemistry = {};
         let y = (rect.min.y + rect.max.y)/2;
         //Todo: recheck these options
         //Todo: mark border marked as chemistry options in plugin data
+        //Todo: change options like in createBorder
         let a = Matter.Bodies.circle(x, y, 20, {isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {visible: false, fillStyle: "blue"}, collisionFilter: {mask: 0}});
         a.label = "attractor";
         a.plugin.force = {attractor: true, charge: 1, forces: {}};

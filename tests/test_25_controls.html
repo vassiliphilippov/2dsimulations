@@ -1,0 +1,59 @@
+<html>
+<head>
+  <title>Test 25: Controls</title>
+  <script src="../matter.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../history.js"></script>
+</head>
+<body>
+<script>
+
+ZoneMap.load("map25.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+
+        let options = {
+            label: "control play", 
+            isStatic: true, 
+            frictionAir: 0, 
+            friction: 0, 
+            restitution: 1, 
+            frictionStatic: 0, 
+            render: {
+                fillStyle: "green",
+                opacity: 0.5,
+                visible: true
+            },
+            collisionFilter: {mask: 0}
+        };
+    let control = Matter.Bodies.rectangle(200, 200, 30, 30, options);
+    Matter.World.add(engine.world, control);
+    
+    
+
+    Chemistry.run(engine, render);
+
+});
+
+</script>
+<p>
+Transformation of one particles into another.
+</p>
+</body>
+</html>

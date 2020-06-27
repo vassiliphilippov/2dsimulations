@@ -411,6 +411,8 @@ let Engine = Matter.Engine,
         if (options.showDebug)
             ChemistryRender.debug(render, context);
 
+        Events.trigger(render, 'afterParticlesRender', event);
+
         if (options.hasBounds) {
             // revert view transforms
             ChemistryRender.endViewTransform(render);
@@ -632,6 +634,128 @@ let Engine = Matter.Engine,
         }
     };
 
+    ChemistryRender.drawAtom = function(render, atom, radius, particle, singleAtomParticle, context) {
+        //Todo: implement balls and sticks
+        //Todo: try drawing when picture is bigger than real particle
+        //Todo: optimize performance
+
+        let c = context;
+        let engine = render.engine;
+        let options = render.options;
+
+        if (options.showSleeping && particle.isSleeping) {
+            c.globalAlpha = 0.5 * atom.render.opacity;
+        } else if (atom.render.opacity !== 1) {
+            c.globalAlpha = atom.render.opacity;
+        }
+
+        if (atom.render.sprite && atom.render.sprite.texture && !options.wireframes) {
+            // part sprite
+            var sprite = atom.render.sprite,
+                texture = _getTexture(render, sprite.texture);
+
+            c.translate(atom.position.x, atom.position.y);
+            c.rotate(atom.angle);
+
+            c.drawImage(
+                texture,
+                texture.width * -sprite.xOffset * sprite.xScale,
+                texture.height * -sprite.yOffset * sprite.yScale,
+                texture.width * sprite.xScale,
+                texture.height * sprite.yScale
+            );
+
+            // revert translation, hopefully faster than save / restore
+            c.rotate(-atom.angle);
+            c.translate(-atom.position.x, -atom.position.y);
+        } else {
+            if (!options.wireframes) {
+                //Draw main filled circle
+                c.beginPath();
+                c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
+                c.fillStyle = atom.render.fillStyle;
+                c.fill();
+
+                let edgeWidth = 2;
+                if (atom.render.lineWidth) {
+                    edgeWidth = atom.render.lineWidth;
+                }
+
+                //Drawing flare
+                c.beginPath();
+                c.arc(atom.position.x+(radius-edgeWidth/2)/(2*Math.SQRT2), atom.position.y-(radius-edgeWidth/2)/(2*Math.SQRT2), (radius-edgeWidth/2)/2, 0, 2 * Math.PI);
+                c.fillStyle = ChemistryRender._getFlareColor(atom.render.fillStyle);
+                c.fill();                
+
+                //Draw edge
+                c.lineWidth = edgeWidth;
+                c.beginPath();
+                c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
+                if (atom.render.lineWidth) {
+                    c.strokeStyle = atom.render.strokeStyle;
+                } else {
+                    c.strokeStyle = ChemistryRender._getEdgeColor(atom.render.fillStyle);
+                }
+                c.stroke();
+
+
+            } else {
+                c.beginPath();
+                c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
+                c.lineWidth = 1;
+                c.strokeStyle = '#bbb';
+                c.stroke();
+            }
+                
+            c.translate(atom.position.x, atom.position.y);
+            if (options.rotateAtomLabels) {
+                c.rotate(particle.angle);
+            }
+
+            c.textAlign = "center";
+            c.textBaseline = "middle";
+            c.font = ChemistryRender._getLabelFont(radius);
+            c.fillStyle = ChemistryRender._getLabelTextColor(atom.render.fillStyle);
+
+            let labelText = ChemistryRender._useSubscript(atom.plugin.chemistry.formula);
+            if (singleAtomParticle) {
+                labelText = ChemistryRender._useSubscript(particle.plugin.chemistry.formula);
+            }
+
+            if (atom.plugin.chemistry && atom.plugin.chemistry.formula) {
+                c.fillText(labelText, 0, 0);
+            };
+
+            // revert translation, hopefully faster than save / restore
+            if (options.rotateAtomLabels) {
+                c.rotate(-particle.angle);
+            }
+            c.translate(-atom.position.x, -atom.position.y);
+        }
+        c.globalAlpha = 1;
+    };
+
+    ChemistryRender.drawParticle = function(render, particle, context) {
+        let c = context;
+        let engine = render.engine;
+        let options = render.options;
+
+        let singleAtomParticle = (particle.parts.length == 2);
+
+        for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
+            part = particle.parts[k];
+
+            if (!part.render.visible)
+                continue;
+
+            if (part.circleRadius) {
+                ChemistryRender.drawAtom(render, part, part.circleRadius, particle, singleAtomParticle, context);
+            } else {
+                console.log("Error. Molecule part that is not a proper atom (has no circleRadius property).");
+            }
+        }
+    };
+
     /**
      * Description
      * @private
@@ -655,6 +779,11 @@ let Engine = Matter.Engine,
 
             if (!body.render.visible)
                 continue;
+
+            if (body.plugin.chemistry && body.plugin.chemistry.particle) {
+                ChemistryRender.drawParticle(render, body, context);
+                continue;
+            }
 
             // handle compound parts
             let singlePartBody = (body.parts.length == 2);
@@ -787,6 +916,128 @@ let Engine = Matter.Engine,
         } else {
             return "#FFFFFF";   
         };
+    };
+
+    /**
+     * Converts an RGB color value to HSL. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+     * Assumes r, g, and b are contained in the set [0, 255] and
+     * returns h, s, and l in the set [0, 1].
+     *
+     * @param   {number}  r       The red color value
+     * @param   {number}  g       The green color value
+     * @param   {number}  b       The blue color value
+     * @return  {Array}           The HSL representation
+     */
+    ChemistryRender._rgbToHsl = function(r, g, b) {
+        r /= 255, g /= 255, b /= 255;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max == min){
+            h = s = 0; // achromatic
+        } else {
+            let d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+
+        return [h, s, l];
+    }
+
+    /**
+     * Converts an HSL color value to RGB. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+     * Assumes h, s, and l are contained in the set [0, 1] and
+     * returns r, g, and b in the set [0, 255].
+     *
+     * @param   {number}  h       The hue
+     * @param   {number}  s       The saturation
+     * @param   {number}  l       The lightness
+     * @return  {Array}           The RGB representation
+     */
+    ChemistryRender._hslToRgb = function(h, s, l) {
+        var r, g, b;
+
+        if (s == 0) {
+            r = g = b = l; // achromatic
+        } else {
+            let hue2rgb = function hue2rgb(p, q, t){
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            }
+
+            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            let p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+
+        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+    ChemistryRender._rgbToHex = function(r,g,b) {
+        r = r.toString(16);
+        g = g.toString(16);
+        b = b.toString(16);
+
+        if (r.length == 1)
+            r = "0" + r;
+        if (g.length == 1)
+            g = "0" + g;
+        if (b.length == 1)
+            b = "0" + b;
+
+      return "#" + r + g + b;
+    }
+
+    ChemistryRender._HexToRgb = function(hex) {
+        if (hex.substring(0,1) == '#') {
+            hex = hex.substring(1);                           
+        }
+
+        // Grab each pair (channel) of hex values and parse them to ints using hexadecimal decoding 
+        let r = parseInt(hex.substring(0,2),16);
+        let g = parseInt(hex.substring(2,4),16);
+        let b = parseInt(hex.substring(4),16);
+
+        return [r, g, b]
+    }
+
+    ChemistryRender._getEdgeColor = function(fillColor) {
+        [r, g, b] = ChemistryRender._HexToRgb(fillColor);
+        r = Math.floor(r*0.7);
+        g = Math.floor(g*0.7);
+        b = Math.floor(b*0.7);
+
+/*        [h, s, l] = ChemistryRender._rgbToHsl(r, g, b);
+        l *= 0.7;
+        [r, g, b] = ChemistryRender._hslToRgb(h, s, l);
+*/        
+        return ChemistryRender._rgbToHex(r, g, b);
+    };
+
+    ChemistryRender._getFlareColor = function(fillColor) {
+        [r, g, b] = ChemistryRender._HexToRgb(fillColor);
+        r = Math.floor(255-(255-r)*0.7);
+        g = Math.floor(255-(255-g)*0.7);
+        b = Math.floor(255-(255-b)*0.7);
+/*        [h, s, l] = ChemistryRender._rgbToHsl(r, g, b);
+        s *= 0.5;
+        l = 1-(1-l)*0.7;
+        [r, g, b] = ChemistryRender._hslToRgb(h, s, l);
+*/        
+        return ChemistryRender._rgbToHex(r, g, b);
     };
 
     ChemistryRender._useSubscript = function(s) {
