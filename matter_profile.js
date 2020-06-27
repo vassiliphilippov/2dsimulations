@@ -4931,6 +4931,7 @@ var Body = _dereq_('../body/Body');
      * @param {number} [correction=1]
      */
     Engine.update = function(engine, delta, correction) {
+        Profiler.begin("Engine.update");
         delta = delta || 1000 / 60;
         correction = correction || 1;
 
@@ -4948,7 +4949,9 @@ var Body = _dereq_('../body/Body');
             timestamp: timing.timestamp
         };
 
+        Profiler.begin("beforeUpdate");
         Events.trigger(engine, 'beforeUpdate', event);
+        Profiler.end();
 
         // get lists of all bodies and constraints, no matter what composites they are in
         var allBodies = Composite.allBodies(world),
@@ -5039,8 +5042,11 @@ var Body = _dereq_('../body/Body');
         // clear force buffers
         Engine._bodiesClearForces(allBodies);
 
+        Profiler.begin("afterUpdate");
         Events.trigger(engine, 'afterUpdate', event);
+        Profiler.end();
 
+        Profiler.end();
         return engine;
     };
     
@@ -6161,13 +6167,11 @@ var Common = _dereq_('./Common');
         }
 
         (function render(time){
-            Profiler.begin("run");
             runner.frameRequestId = _requestAnimationFrame(render);
 
             if (time && runner.enabled) {
                 Runner.tick(runner, engine, time);
             }
-            Profiler.end();
         })();
 
         return runner;
@@ -6184,7 +6188,6 @@ var Common = _dereq_('./Common');
      * @param {number} time
      */
     Runner.tick = function(runner, engine, time) {
-        Profiler.begin("run tick");
         var timing = engine.timing,
             correction = 1,
             delta;
@@ -6269,7 +6272,6 @@ var Common = _dereq_('./Common');
 
         Events.trigger(runner, 'afterTick', event);
         Events.trigger(engine, 'afterTick', event); // @deprecated
-        Profiler.end();
     };
 
     /**

@@ -285,7 +285,7 @@ let Engine = Matter.Engine,
      * @param {render} render
      */
     ChemistryRender.world = function(render) {
-//        Profiler.begin("render");
+        Profiler.begin("ChemistryRender.world");
         var engine = render.engine,
             world = engine.world,
             canvas = render.canvas,
@@ -419,7 +419,7 @@ let Engine = Matter.Engine,
         }
 
         Events.trigger(render, 'afterRender', event);
-//        Profiler.end();
+        Profiler.end();
     };
 
     ChemistryRender.selectBackgroundBodies = function(bodies) {
@@ -635,6 +635,7 @@ let Engine = Matter.Engine,
     };
 
     ChemistryRender.drawAtom = function(render, atom, radius, particle, singleAtomParticle, context) {
+        Profiler.begin("drawAtom");
         //Todo: implement balls and sticks
         //Todo: try drawing when picture is bigger than real particle
         //Todo: optimize performance
@@ -670,6 +671,7 @@ let Engine = Matter.Engine,
             c.translate(-atom.position.x, -atom.position.y);
         } else {
             if (!options.wireframes) {
+                Profiler.begin("draw shapes");
                 //Draw main filled circle
                 c.beginPath();
                 c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
@@ -697,8 +699,7 @@ let Engine = Matter.Engine,
                     c.strokeStyle = ChemistryRender._getEdgeColor(atom.render.fillStyle);
                 }
                 c.stroke();
-
-
+                Profiler.end();
             } else {
                 c.beginPath();
                 c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
@@ -707,6 +708,7 @@ let Engine = Matter.Engine,
                 c.stroke();
             }
                 
+            Profiler.begin("draw text");
             c.translate(atom.position.x, atom.position.y);
             if (options.rotateAtomLabels) {
                 c.rotate(particle.angle);
@@ -731,8 +733,10 @@ let Engine = Matter.Engine,
                 c.rotate(-particle.angle);
             }
             c.translate(-atom.position.x, -atom.position.y);
+            Profiler.end();
         }
         c.globalAlpha = 1;
+        Profiler.end();
     };
 
     ChemistryRender.drawParticle = function(render, particle, context) {
@@ -1014,16 +1018,12 @@ let Engine = Matter.Engine,
         return [r, g, b]
     }
 
+    //Todo: cash colors
     ChemistryRender._getEdgeColor = function(fillColor) {
         [r, g, b] = ChemistryRender._HexToRgb(fillColor);
         r = Math.floor(r*0.7);
         g = Math.floor(g*0.7);
         b = Math.floor(b*0.7);
-
-/*        [h, s, l] = ChemistryRender._rgbToHsl(r, g, b);
-        l *= 0.7;
-        [r, g, b] = ChemistryRender._hslToRgb(h, s, l);
-*/        
         return ChemistryRender._rgbToHex(r, g, b);
     };
 
@@ -1032,11 +1032,6 @@ let Engine = Matter.Engine,
         r = Math.floor(255-(255-r)*0.7);
         g = Math.floor(255-(255-g)*0.7);
         b = Math.floor(255-(255-b)*0.7);
-/*        [h, s, l] = ChemistryRender._rgbToHsl(r, g, b);
-        s *= 0.5;
-        l = 1-(1-l)*0.7;
-        [r, g, b] = ChemistryRender._hslToRgb(h, s, l);
-*/        
         return ChemistryRender._rgbToHex(r, g, b);
     };
 

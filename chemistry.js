@@ -67,6 +67,7 @@ var Chemistry = {};
 
         engine.world.gravity.y = 0;                                        
         Debug.init(engine);
+        Profiler.init();
         Force.init(engine);
         Temperature.init(engine);
         Proximity.init(engine);

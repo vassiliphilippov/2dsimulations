@@ -2,6 +2,7 @@
 <head>
   <title>Test 20: Profiler</title>
   <script src="../matter_profile.js"></script>
+  <script src="../profiler.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
   <script src="../background.js"></script>
@@ -20,44 +21,11 @@
   <script src="../animation.js"></script>
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
-  <script src="../profiler.js"></script>
 </head>
 <body>
+<pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics()">Output profile informationt</button></p>
+
 <script>
-
-function mysin(x) {
-    Profiler.begin("mysin");
-    let a = 0;
-    for (var i=0; i<1000; i++) {
-        a += Math.sin(x);
-    }
-    Profiler.end();
-    return a;
-}
-
-var engine = null;
-Profiler.init();
-
-Profiler.begin("global");
-
-Profiler.begin("first for");
-let a = 0;
-for (var i=0; i<100; i++) {
-   a += mysin(i);
-}
-Profiler.end();
-
-Profiler.begin("second for");
-a = 0;
-for (var i=0; i<100; i++) {
-   a += mysin(i);
-}
-Profiler.end();
-
-Profiler.end();
-
-console.log(Profiler.getStatistics())
-
 ZoneMap.load("map20.png", function (zoneMap) {
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true);
 
@@ -67,15 +35,5 @@ ZoneMap.load("map20.png", function (zoneMap) {
 });
 
 </script>
-<p>
-<button onclick="new ParticleList(engine).setTemperature(0);">T = 0</button>
-<button onclick="new ParticleList(engine).setTemperature(10);">T = 10</button>
-<button onclick="new ParticleList(engine).setTemperature(100);">T = 100</button>
-<button onclick="new ParticleList(engine).setTemperature(297);">T = 297 (Room Temp)</button>
-<button onclick="new ParticleList(engine).setTemperature(1000);">T = 1000</button>
-</p>
-<p>
-  <button onclick="console.log(Profiler.getStatistics())">Profile</button>
-</p>
 </body>
 </html>

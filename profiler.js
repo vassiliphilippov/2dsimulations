@@ -9,10 +9,14 @@ var Profiler = {};
 (function() {
     Profiler._stack = null;
     Profiler.blocks = null;
+    Profiler._indent = "    ";
+    Profiler._newLine = "\n";
+    Profiler._otherBlockName = "_other";
+    Profiler._msSuffix = "ms";
 
     Profiler.init = function() {
         Profiler._stack = [];
-        Profiler.blocks = {};
+        Profiler.blocks = {blocks: {}};
     };
 
     Profiler.begin = function(str) {
@@ -30,14 +34,15 @@ var Profiler = {};
 
         let block = Profiler.blocks;
         for (let parent of Profiler._stack) {
-            if (!(parent.str in block)) {
-                block[parent.str] = {
+            if (!(parent.str in block.blocks)) {
+                block.blocks[parent.str] = {
                     counter: 0,
                     totalTime: 0,
-                    averageTime: 0                    
+                    averageTime: 0,
+                    blocks: {}
                 };
             }
-            block = block[parent.str];
+            block = block.blocks[parent.str];
         }
 
         let pritem = Profiler._stack.pop();
@@ -48,19 +53,35 @@ var Profiler = {};
         block.averageTime = block.totalTime / block.counter;
     };
 
-    Profiler.getStatistics = function(block) {
+    Profiler.getStatistics = function(clearStatistics) {
+        let s = "";
+        let topBlock = Profiler.blocks;
+        for (blockName in topBlock.blocks) {
+            s += Profiler.getStatisticsRec(topBlock.blocks[blockName], blockName, "", topBlock.blocks[blockName].counter);
+        }
 
-        if (!block) {
-            block = Profiler.blocks;
+        if (clearStatistics) {
+            Profiler._stack = [];
+            Profiler.blocks = {blocks: {}};
         }
-/*        let result = {};
-        for (let item in block) {
-            console.log(item);
-            result[item] = {"_": block[item].averageTime};
+
+        return s;        
+    }
+
+    Profiler.getStatisticsRec = function(block, blockName, indent, globalCounter) {
+        let s = "";
+        s += indent + blockName + ": " + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
+        let totalSubblocksTime = 0;
+        let anySubblocks = false;
+        for (blockName in block.blocks) {
+            s += Profiler.getStatisticsRec(block.blocks[blockName], blockName, indent+Profiler._indent, globalCounter);
+            totalSubblocksTime += block.blocks[blockName].totalTime;
+            anySubblocks = true;
         }
-*/
-        return block;
-        
+        if (anySubblocks) {
+            s += indent + Profiler._indent + Profiler._otherBlockName + ": " + ((block.totalTime-totalSubblocksTime)/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
+        }
+        return s;
     }
 })();
 

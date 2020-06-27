@@ -1,7 +1,8 @@
 <html>
 <head>
   <title>Test 4: Creating particles manually</title>
-  <script src="../matter.js"></script>
+  <script src="../matter_profile.js"></script>
+  <script src="../profiler.js"></script>
   <script src="../force.js"></script>
   <script src="../zonemap.js"></script>
   <script src="../background.js"></script>
@@ -22,6 +23,7 @@
   <script src="../clipper.js"></script>
 </head>
 <body>
+<pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
 <script>
 
 ZoneMap.load("map4.png", function (zoneMap) {
