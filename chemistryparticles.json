@@ -6154,5 +6154,14 @@ var ChemistryParticleInfoDatabase = [
    "compound": false,
    "type": "ion",
    "color": "234,11,5"
+ },
+ {
+   "id": 685,
+   "formula": "OH",
+   "name": "Hydroxyl radical",
+   "charge": 0,
+   "compound": true,
+   "type": "molecule",
+   "color": "235,11,5"
  }
 ]

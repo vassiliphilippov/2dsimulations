@@ -6,6 +6,7 @@
 
 var Transformation = {};
 
+//Todo: implement decomposition, when there is no particleB
 (function() {
 
     Transformation.possibleTransformations = [];

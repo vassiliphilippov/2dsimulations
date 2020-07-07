@@ -29,7 +29,7 @@
 
 Transformation.possibleTransformations = [
     {
-        A: "OH-",
+        A: "OH",
         A_angle: 104,
         B: "H2",
         B_angle: -180,
@@ -42,7 +42,7 @@ Transformation.possibleTransformations = [
     },
 
     {
-        A: "OH-",
+        A: "OH",
         A_angles: [94, 114],
         B: "H2",
         B_angles: [-190, -170],
@@ -62,7 +62,7 @@ Transformation.possibleTransformations = [
         ResA: "O",
         ResA_position: {rel: "A", v: {x: 74, y: 0}},
         ResA_angle: {rel: "A", angle: 0},
-        ResB: "OH-",
+        ResB: "OH",
         ResB_position: {rel: "A", v: {x: -77, y: 0}},
         ResB_angle: {rel: "A", angle: 180}
     },
@@ -72,7 +72,7 @@ Transformation.possibleTransformations = [
         A_angle: -180,
         B: "H2",
         B_angle: 180,
-        ResA: "OH-",
+        ResA: "OH",
         ResA_position: {rel: "A", v: {x: -8, y: 0}},
         ResA_angle: {rel: "A", angle: -180},
         ResB: "H",
@@ -85,7 +85,7 @@ Transformation.possibleTransformations = [
         A_angle: -180,
         B: "H",
         B_angle: -180,
-        ResA: "OH-",
+        ResA: "OH",
         ResA_position: {rel: "A", v: {x: -9, y: 0}},
         ResA_angle: {rel: "A", angle: -180}
     }
@@ -113,7 +113,9 @@ ZoneMap.load("map16.png", function (zoneMap) {
 
 </script>
 <p>
-Transformation of one particles into others during chemical reactions.
+Transformation of one particles into others during chemical reactions. 
+You need to define <b>Transformation.possibleTransformations</b> to enumerate all possible transformations in this reaction.
+Use the <a href="tool_1_transformation_generator.html">Transformation generator tool</a> to visually edit the transformation in this format.
 </p>
 <p><a href="map16.png">Map file</a>.</p>
 </body>
