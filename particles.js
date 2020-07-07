@@ -252,6 +252,14 @@ class ParticleList extends BodyList {
         return this.setChemistryOptions({temperature: t});
     }
 
+    removeTemperature() {
+        return this.forEach(p => {
+            if (p.plugin.chemistry && p.plugin.chemistry.temperature) {
+                delete p.plugin.chemistry.temperature;
+            };
+        })
+    }
+
     setColor(color) {
         this.atoms().setColor(color);
         return this;

@@ -1,0 +1,153 @@
+<html>
+<head>
+  <title>Example 4: Hydrogen burning</title>
+  <script src="../matter_profile.js"></script>
+  <script src="../profiler.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
+</head>
+<body>
+<pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
+<script>
+
+Transformation.possibleTransformations = [
+    {
+        A: "OH-",
+        A_angle: 104,
+        B: "H2",
+        B_angle: -180,
+        ResA: "H2O",
+        ResA_position: {rel: "A", v: {x: -3, y: 7}},
+        ResA_angle: {rel: "A", angle: -3},
+        ResB: "H",
+        ResB_position: {rel: "B", v: {x: 36, y: -2}},
+        ResB_angle: {rel: "B", angle: 0}
+    },
+
+    {
+        A: "OH-",
+        A_angles: [94, 114],
+        B: "H2",
+        B_angles: [-190, -170],
+        ResA: "H2O",
+        ResA_position: {rel: "A", v: {x: 4, y: -2}},
+        ResA_angle: {rel: "A", angle: 0},
+        ResB: "H",
+        ResB_position: {rel: "B", v: {x: 34, y: 0}},
+        ResB_angle: {rel: "B", angle: 0}
+    },
+
+    {
+        A: "O2",
+        A_angle: -180,
+        B: "H",
+        B_angle: -180,
+        ResA: "O",
+        ResA_position: {rel: "A", v: {x: 74, y: 0}},
+        ResA_angle: {rel: "A", angle: 0},
+        ResB: "OH-",
+        ResB_position: {rel: "A", v: {x: -77, y: 0}},
+        ResB_angle: {rel: "A", angle: 180}
+    },
+
+    {
+        A: "O",
+        A_angle: -180,
+        B: "H2",
+        B_angle: 180,
+        ResA: "OH-",
+        ResA_position: {rel: "A", v: {x: -8, y: 0}},
+        ResA_angle: {rel: "A", angle: -180},
+        ResB: "H",
+        ResB_position: {rel: "B", v: {x: 35, y: 0}},
+        ResB_angle: {rel: "B", angle: 0}
+    },
+
+    {
+        A: "O",
+        A_angle: -180,
+        B: "H",
+        B_angle: -180,
+        ResA: "OH-",
+        ResA_position: {rel: "A", v: {x: -9, y: 0}},
+        ResA_angle: {rel: "A", angle: -180}
+    },
+
+    {
+        A: "OH-",
+        A_angle: 104,
+        B: "H",
+        B_angle: -180,
+        ResA: "H2O",
+        ResA_position: {rel: "A", v: {x: 1, y: 5}},
+        ResA_angle: {rel: "A", angle: 0}
+    } 
+
+]; 
+
+Chemistry.spaceScale = 0.25;
+Chemistry.timeScale = 3e-15;
+
+var addRadical = null;
+
+ZoneMap.load("ex_map4.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+
+    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 50, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.create("H2", x, y));
+    });
+
+    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 25, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.create("O2", x, y));
+    });
+
+    let deltaT = 4000 / (new ParticleList(engine).length());
+    let T = 1400;
+    new ParticleList(engine).setTemperature(T).formula(["H2", "O2"]).setOpacity(0.3);
+
+    Matter.Events.on(engine, "afterTransformation", (event) => {
+        T += deltaT;
+        new ParticleList(engine).setTemperature(T);
+        let center = {x: (event.bodyA.position.x+event.bodyB.position.x)/2, y: (event.bodyA.position.y+event.bodyB.position.y)/2};
+        Animation.highlight(engine, render, center, 50);
+    });
+
+    addRadical = function() {
+        ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 1, (x, y) => {
+            Animation.highlight(engine, render, {x: x, y: y}, 50);
+            Matter.World.add(engine.world, Chemistry.create("H", x, y));
+        });
+        new ParticleList(engine).setTemperature(T);
+    }
+                                                 
+    Chemistry.run(engine, render);
+});
+
+
+</script>
+<p>
+Hydrogen burning.
+</p>
+<p>
+  <button onclick="addRadical();">Add a radical to start the reaction</button>
+</p>
+<p><a href="ex_map4.png">Map file</a>.</p>
+</body>
+</html>

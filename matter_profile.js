@@ -4949,11 +4949,12 @@ var Body = _dereq_('../body/Body');
             timestamp: timing.timestamp
         };
 
-        Profiler.begin("beforeUpdate");
+        Profiler.begin("e:beforeUpdate");
         Events.trigger(engine, 'beforeUpdate', event);
         Profiler.end();
 
         // get lists of all bodies and constraints, no matter what composites they are in
+        Profiler.begin("getting lists");
         var allBodies = Composite.allBodies(world),
             allConstraints = Composite.allConstraints(world);
 
@@ -4961,21 +4962,29 @@ var Body = _dereq_('../body/Body');
         // if sleeping enabled, call the sleeping controller
         if (engine.enableSleeping)
             Sleeping.update(allBodies, timing.timeScale);
+        Profiler.end();
 
         // applies gravity to all bodies
+        Profiler.begin("_bodiesApplyGravity");
         Engine._bodiesApplyGravity(allBodies, world.gravity);
+        Profiler.end();
 
         // update all body position and rotation by integration
+        Profiler.begin("_bodiesUpdate");
         Engine._bodiesUpdate(allBodies, delta, timing.timeScale, correction, world.bounds);
+        Profiler.end();
 
         // update all constraints (first pass)
+        Profiler.begin("solve constraints (first pass)");
         Constraint.preSolveAll(allBodies);
         for (i = 0; i < engine.constraintIterations; i++) {
             Constraint.solveAll(allConstraints, timing.timeScale);
         }
         Constraint.postSolveAll(allBodies);
+        Profiler.end();
 
         // broadphase pass: find potential collision pairs
+        Profiler.begin("broadphase pass");
         if (broadphase.controller) {
             // if world is dirty, we must flush the whole grid
             if (world.isModified)
@@ -4988,61 +4997,82 @@ var Body = _dereq_('../body/Body');
             // if no broadphase set, we just pass all bodies
             broadphasePairs = allBodies;
         }
+        Profiler.end();
 
         // clear all composite modified flags
+        Profiler.begin("clear all composite modified flags");
         if (world.isModified) {
             Composite.setModified(world, false, false, true);
         }
+        Profiler.end();
 
         // narrowphase pass: find actual collisions, then create or update collision pairs
+        Profiler.begin("narrowphase pass");
         var collisions = broadphase.detector(broadphasePairs, engine);
+        Profiler.end();
 
         // update collision pairs
+        Profiler.begin("update collision pairs");
         var pairs = engine.pairs,
             timestamp = timing.timestamp;
         Pairs.update(pairs, collisions, timestamp);
         Pairs.removeOld(pairs, timestamp);
+        Profiler.end();
 
         // wake up bodies involved in collisions
+        Profiler.begin("wake up bodies involved in collisions");
         if (engine.enableSleeping)
             Sleeping.afterCollisions(pairs.list, timing.timeScale);
+        Profiler.end();
 
         // trigger collision events
+        Profiler.begin("e:collisionStart");
         if (pairs.collisionStart.length > 0)
             Events.trigger(engine, 'collisionStart', { pairs: pairs.collisionStart });
+        Profiler.end();
 
         // iteratively resolve position between collisions
+        Profiler.begin("resolve position");
         Resolver.preSolvePosition(pairs.list);
         for (i = 0; i < engine.positionIterations; i++) {
             Resolver.solvePosition(pairs.list, timing.timeScale);
         }
         Resolver.postSolvePosition(allBodies);
+        Profiler.end();
 
         // update all constraints (second pass)
+        Profiler.begin("solve constraints (first pass)");
         Constraint.preSolveAll(allBodies);
         for (i = 0; i < engine.constraintIterations; i++) {
             Constraint.solveAll(allConstraints, timing.timeScale);
         }
         Constraint.postSolveAll(allBodies);
+        Profiler.end();
 
         // iteratively resolve velocity between collisions
+        Profiler.begin("resolve velocity");
         Resolver.preSolveVelocity(pairs.list);
         for (i = 0; i < engine.velocityIterations; i++) {
             Resolver.solveVelocity(pairs.list, timing.timeScale);
         }
+        Profiler.end();
 
         // trigger collision events
+        Profiler.begin("e:collisionActive, e:collisionEnd");
         if (pairs.collisionActive.length > 0)
             Events.trigger(engine, 'collisionActive', { pairs: pairs.collisionActive });
 
         if (pairs.collisionEnd.length > 0)
             Events.trigger(engine, 'collisionEnd', { pairs: pairs.collisionEnd });
+        Profiler.end();
 
 
         // clear force buffers
+        Profiler.begin("clear force");
         Engine._bodiesClearForces(allBodies);
+        Profiler.end();
 
-        Profiler.begin("afterUpdate");
+        Profiler.begin("e:afterUpdate");
         Events.trigger(engine, 'afterUpdate', event);
         Profiler.end();
 
@@ -8649,6 +8679,7 @@ var Mouse = _dereq_('../core/Mouse');
      * @param {render} render
      */
     Render.world = function(render) {
+        Profiler.begin("Render.world");
         var engine = render.engine,
             world = engine.world,
             canvas = render.canvas,
@@ -8773,6 +8804,7 @@ var Mouse = _dereq_('../core/Mouse');
         }
 
         Events.trigger(render, 'afterRender', event);
+        Profiler.end();
     };
 
     /**
@@ -8955,6 +8987,7 @@ var Mouse = _dereq_('../core/Mouse');
      * @param {RenderingContext} context
      */
     Render.bodies = function(render, bodies, context) {
+        Profiler.begin("Render.bodies");
         var c = context,
             engine = render.engine,
             options = render.options,
@@ -9047,6 +9080,7 @@ var Mouse = _dereq_('../core/Mouse');
                 c.globalAlpha = 1;
             }
         }
+        Profiler.end();
     };
 
     /**

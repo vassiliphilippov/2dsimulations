@@ -1,0 +1,304 @@
+<html>
+<head>
+  <title>Tool 1: Transformation generator</title>
+  <script src="../matter_profile.js"></script>
+  <script src="../profiler.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
+  <style>
+      canvas {margin-bottom: 10px}
+  </style>
+</head>
+<body>
+<script>
+
+Chemistry.spaceScale = 0.5;
+var engine = null;
+var render = null;
+var engine2 = null;
+var render2 = null;
+var runner2 = null;
+var pA = null;
+var pB = null;
+var pAngleMarkerA = null;
+var pAngleMarkerB = null;
+var pResA = null;
+var pResB = null;
+var resultMode = false;
+resArelTo = null;
+resArelParticle = null;
+resBrelTo = null;
+resBrelParticle = null;
+
+function adjustAngleToMarker(p, pMarker) {
+    let angle = Matter.Vector.angle(p.position, pMarker.position);
+    Matter.Body.setAngle(p, angle);
+};
+
+function generateTransformationText() {
+    let s = "    {\n";
+    if (pA) {
+        s += "        A: \"" + pA.plugin.chemistry.formula + "\"";
+        if (pB) {
+            let angle = Matter.Vector.angle(pA.position, pB.position);
+            s += ",\n        A_angle: " + Math.floor((angle-pA.angle)*180/Math.PI);
+        }
+    }
+    if (pB) {
+        s += ",\n        B: \"" + pB.plugin.chemistry.formula + "\"";
+        if (pA) {
+            let angle = Matter.Vector.angle(pB.position, pA.position);
+            s += ",\n        B_angle: " + Math.floor((angle-pB.angle)*180/Math.PI);
+        }
+    }
+    if (pResA) {
+        s += ",\n        ResA: \"" + pResA.plugin.chemistry.formula + "\"";
+        let angle = Transformation.getNormalizedAngle(pResA.angle - resArelParticle.angle);
+        let displacement = Matter.Vector.sub(pResA.position, resArelParticle.position);
+        let v = Matter.Vector.rotate(Chemistry.screenVectorToSpace(displacement), -resArelParticle.angle)
+        s += ",\n        ResA_position: {rel: \"" + resArelTo + "\", v: {x: " + Math.floor(v.x) + ", y: " + Math.floor(v.y) + "}}";
+        s += ",\n        ResA_angle: {rel: \"" + resArelTo + "\", angle: " + Math.floor(angle*180/Math.PI) + "}";
+    }
+    if (pResB) {
+        s += ",\n        ResB: \"" + pResB.plugin.chemistry.formula + "\"";
+        let angle = Transformation.getNormalizedAngle(pResB.angle - resBrelParticle.angle);
+        let displacement = Matter.Vector.sub(pResB.position, resBrelParticle.position);
+        let v = Matter.Vector.rotate(Chemistry.screenVectorToSpace(displacement), -resBrelParticle.angle)
+        s += ",\n        ResB_position: {rel: \"" + resBrelTo + "\", v: {x: " + Math.floor(v.x) + ", y: " + Math.floor(v.y) + "}}";
+        s += ",\n        ResB_angle: {rel: \"" + resBrelTo + "\", angle: " + Math.floor(angle*180/Math.PI) + "}";
+    }
+    s += "\n    }\n";
+    return s;
+};
+
+ZoneMap.load("tool_map1.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+    [engine2, render2] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+    Transformation.init(engine);
+    //Todo: move transformation init to Chemistry.init
+    Transformation.init(engine2);
+
+    pAngleMarkerA = Matter.Bodies.circle(30, zoneMap.height/2, 10, {label: "angleMarkerA", render: {fillStyle: "#0000FF"}});
+    pAngleMarkerB = Matter.Bodies.circle(1000-30, zoneMap.height/2, 10, {label: "angleMarkerB", render: {fillStyle: "#FF00FF"}});
+    Matter.World.add(engine.world, pAngleMarkerA);
+    Matter.World.add(engine.world, pAngleMarkerB);
+
+    Matter.Events.on(render, "afterParticleDraw", (event) => {
+        let context = event.context;
+        let particle = event.particle;
+        context.beginPath();
+        context.arc(particle.position.x, particle.position.y, 3, 0, 2 * Math.PI);
+        context.fillStyle = "#00FF00";
+        context.fill();                
+
+        context.beginPath();
+        context.moveTo(particle.position.x, particle.position.y);
+        context.lineTo(particle.position.x+Math.cos(particle.angle)*20, particle.position.y+Math.sin(particle.angle)*20);
+        context.stroke();
+    });
+
+    Matter.Events.on(engine, "afterUpdate", (event) => {
+        new BodyList(engine).forEach(p => {
+            Matter.Body.setVelocity(p, {x: 0, y: 0});
+            Matter.Body.setAngularVelocity(p, 0);
+        });
+
+        if (pA && !resultMode) adjustAngleToMarker(pA, pAngleMarkerA);
+        if (pB && !resultMode) adjustAngleToMarker(pB, pAngleMarkerB);
+        if (pResA) adjustAngleToMarker(pResA, pAngleMarkerA);
+        if (pResB) adjustAngleToMarker(pResB, pAngleMarkerB);
+       
+        let txt = generateTransformationText();
+        if (document.getElementById("idtransformation").innerHTML!=txt) {
+            document.getElementById("idtransformation").innerHTML = txt;
+        }
+    });
+
+    Chemistry.run(engine, render);  
+    runner2 = Chemistry.run(engine2, render2);  
+
+    Matter.Events.on(engine2, "afterTransformation", (event) => {
+        runner2.enabled = false;
+        let tA = event.bodyA;
+        let tB = event.bodyB;
+        let tResA = event.result[0];
+        let tResB = event.result[1];
+        console.log("pA=", tA);
+        console.log("pB=", tB);
+        console.log("pResB=", tResA);
+        console.log("pResB=", tResB);
+        console.log("pA:", tA.position.x, tA.position.y, tA.angle*180/Math.PI);
+        console.log("pB:", tB.position.x, tB.position.y, tB.angle*180/Math.PI);
+        console.log("pResA:", tResA.position.x, tResA.position.y, tResA.angle*180/Math.PI);
+        if (tResB) console.log("pResB:", tResB.position.x, tResB.position.y, tResB.angle*180/Math.PI);
+    });
+});
+
+
+function removeParticleA() {
+    if (pA) {
+        Matter.Composite.remove(engine.world, pA);
+        pA = null;
+    }
+}
+
+function removeParticleB() {
+    if (pB) {
+        Matter.Composite.remove(engine.world, pB);
+        pB = null;
+    }
+}
+
+function removeParticleResA() {
+    if (pResA) {
+        Matter.Composite.remove(engine.world, pResA);
+        pResA = null;
+    }
+}
+
+function removeParticleResB() {
+    if (pResB) {
+        Matter.Composite.remove(engine.world, pResB);
+        pResB = null;
+    }
+}
+
+function createA() {
+    endCreatingResults();
+    removeParticleA();
+
+    let formulaA = document.getElementById("idformulaA").value;
+    console.log("formulaA=", formulaA);
+    pA = Chemistry.create(formulaA, 200, 200, 0, null, null);
+    if (pA) {
+        Matter.World.add(engine.world, pA);
+    } else {
+        alert("Compound with formula '" + formulaA + "' not found in the database");
+    }
+};
+
+function createB() {
+    endCreatingResults();
+    removeParticleB();
+
+    let formulaB = document.getElementById("idformulaB").value;
+    console.log("formulaB=", formulaB);
+    pB = Chemistry.create(formulaB, 800, 200, 0, null, null);
+    if (pB) {
+        Matter.World.add(engine.world, pB);
+    } else {
+        alert("Compound with formula '" + formulaB + "' not found in the database");
+    }
+};
+
+function startCreatingResults() {
+    if (resultMode==false) {
+        new ParticleList(engine).forEach(p => {
+            console.log("collisionFilter = ", p.collisionFilter);
+        });
+        new ParticleList(engine).setOptions({collisionFilter: {mask: 0}}).setOpacity(0.3);
+        resultMode = true;
+    }
+};
+
+function endCreatingResults() {
+    if (resultMode==true) {
+        removeParticleResA();
+        removeParticleResB();
+        new ParticleList(engine).setOptions({collisionFilter: {mask: 4294967295}}).setOpacity(1);
+        resultMode = false;
+    }
+};
+
+function createResA(rel) {
+    startCreatingResults();
+    removeParticleResA();
+
+    let formulaResA = document.getElementById("idformulaResA").value;
+    console.log("formulaResA=", formulaResA);
+    pResA = Chemistry.create(formulaResA, 300, 200, 0, null, null);
+    if (pResA) {
+        Matter.World.add(engine.world, pResA);
+        resArelTo = rel;
+        resArelParticle = (rel=="A") ? pA : pB;
+    } else {
+        alert("Compound with formula '" + formulaResA + "' not found in the database");
+    }
+};
+
+function createResB(rel) {
+    startCreatingResults();
+    removeParticleResB();
+
+    let formulaResB = document.getElementById("idformulaResB").value;
+    console.log("formulaResB=", formulaResB);
+    pResB = Chemistry.create(formulaResB, 700, 200, 0, null, null);
+    if (pResB) {
+        Matter.World.add(engine.world, pResB);
+        resBrelTo = rel;
+        resBrelParticle = (rel=="A") ? pA : pB;
+    } else {
+        alert("Compound with formula '" + formulaResB + "' not found in the database");
+    }
+};                                                                
+
+function test() {
+    new ParticleList(engine2).remove(engine2.world);
+
+    let formulaA = document.getElementById("idformulaA").value;
+    let pA2 = Chemistry.create(formulaA, 300, 200, 0, null, null);
+    Matter.World.add(engine2.world, pA2);
+
+    let formulaB = document.getElementById("idformulaB").value;
+    let pB2 = Chemistry.create(formulaB, 700, 200, 0, null, null);
+    Matter.World.add(engine2.world, pB2);
+
+    eval("var testTransformation = " + generateTransformationText());
+    console.log(testTransformation);
+    Transformation.possibleTransformations = [testTransformation];
+};
+
+</script>
+<p>
+A: <input type="text" id="idformulaA" size="10">
+<button onclick="createA();">Create A</button>
+&nbsp;&nbsp;&nbsp;&nbsp;
+B: <input type="text" id="idformulaB" size="10">
+<button onclick="createB();">Create B</button>
+</p>
+<p>
+ResA: <input type="text" id="idformulaResA" size="10">
+<button onclick="createResA('A');">Create ResA (rel to A)</button>
+<button onclick="createResA('B');">Create ResA (rel to B)</button>
+&nbsp;&nbsp;&nbsp;&nbsp;
+ResB: <input type="text" id="idformulaResB" size="10">
+<button onclick="createResB('B');">Create ResB (rel to B)</button>
+<button onclick="createResB('A');">Create ResB (rel to A)</button>
+</p>
+<p>
+<button onclick="test();">Test</button>
+<button onclick="runner2.enabled = true;">Resume</button>
+</p>
+<p>
+<textarea id="idtransformation" row="10" cols="60" style="height: 200px"></textarea></p>
+<p>
+</p>
+</body>
+</html>

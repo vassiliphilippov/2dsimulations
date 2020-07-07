@@ -1,0 +1,120 @@
+<html>
+<head>
+  <title>Test 16: Transformation</title>
+  <script src="../matter_profile.js"></script>
+  <script src="../profiler.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
+</head>
+<body>
+<pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
+<script>
+
+Transformation.possibleTransformations = [
+    {
+        A: "OH-",
+        A_angle: 104,
+        B: "H2",
+        B_angle: -180,
+        ResA: "H2O",
+        ResA_position: {rel: "A", v: {x: -3, y: 7}},
+        ResA_angle: {rel: "A", angle: -3},
+        ResB: "H",
+        ResB_position: {rel: "B", v: {x: 36, y: -2}},
+        ResB_angle: {rel: "B", angle: 0}
+    },
+
+    {
+        A: "OH-",
+        A_angles: [94, 114],
+        B: "H2",
+        B_angles: [-190, -170],
+        ResA: "H2O",
+        ResA_position: {rel: "A", v: {x: 4, y: -2}},
+        ResA_angle: {rel: "A", angle: 0},
+        ResB: "H",
+        ResB_position: {rel: "B", v: {x: 34, y: 0}},
+        ResB_angle: {rel: "B", angle: 0}
+    },
+
+    {
+        A: "O2",
+        A_angle: -180,
+        B: "H",
+        B_angle: -180,
+        ResA: "O",
+        ResA_position: {rel: "A", v: {x: 74, y: 0}},
+        ResA_angle: {rel: "A", angle: 0},
+        ResB: "OH-",
+        ResB_position: {rel: "A", v: {x: -77, y: 0}},
+        ResB_angle: {rel: "A", angle: 180}
+    },
+
+    {
+        A: "O",
+        A_angle: -180,
+        B: "H2",
+        B_angle: 180,
+        ResA: "OH-",
+        ResA_position: {rel: "A", v: {x: -8, y: 0}},
+        ResA_angle: {rel: "A", angle: -180},
+        ResB: "H",
+        ResB_position: {rel: "B", v: {x: 35, y: 0}},
+        ResB_angle: {rel: "B", angle: 0}
+    },
+
+    {
+        A: "O",
+        A_angle: -180,
+        B: "H",
+        B_angle: -180,
+        ResA: "OH-",
+        ResA_position: {rel: "A", v: {x: -9, y: 0}},
+        ResA_angle: {rel: "A", angle: -180}
+    }
+]; 
+
+Chemistry.spaceScale = 0.3;
+Chemistry.timeScale = 2e-15;
+
+ZoneMap.load("map16.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+
+    new ParticleList(engine).filter(p => (p.position.x<350)).forEach(p => {
+        Matter.Body.setVelocity(p, {x: 0.3, y:0});
+        Matter.Body.setAngularVelocity(p, 0.01);
+    });
+
+    new ParticleList(engine).filter(p => (p.position.x>350)).forEach(p => {
+        Matter.Body.setVelocity(p, {x: -0.3, y:0});
+        Matter.Body.setAngularVelocity(p, -0.01);
+    });
+
+    Chemistry.run(engine, render);  
+});
+
+
+</script>
+<p>
+Transformation of one particles into others during chemical reactions.
+</p>
+<p><a href="map16.png">Map file</a>.</p>
+</body>
+</html>

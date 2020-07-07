@@ -36,6 +36,7 @@ var Force = {};
     };
 
     Force.applyForces = function(engine, bodies) {
+        Profiler.begin("Force.applyForces");
         for (let body of bodies) {
             if (body.plugin.force) {
                 let force = Force.calculateTotalBodyForce(body, bodies);
@@ -44,6 +45,7 @@ var Force = {};
                 }
             }
         }
+        Profiler.end();
     };
 
     Force.calculateTotalBodyForce = function(body, bodies) {

@@ -9,7 +9,7 @@ var Proximity = {};
 (function() {
 
     Proximity.init = function(engine) {
-        Matter.Events.on(engine, "beforeUpdate", (event) => {
+        Matter.Events.on(engine, "afterUpdate", (event) => {
             Proximity.check(engine, event.source.world.bodies);
        });
     };
@@ -18,6 +18,7 @@ var Proximity = {};
     //Todo: check each pair only once not twice
     //Todo: for pair of chemistry particles make formula based events
     Proximity.check = function(engine, bodies) {
+        Profiler.begin("Proximity.check");
         for (bodyA of bodies) {
             if (bodyA.plugin.proximity && bodyA.plugin.proximity.levels) {
                 if (!bodyA.plugin.proximity.levelFlags) {
@@ -48,7 +49,8 @@ var Proximity = {};
                 }
             }
         }
-    };
+        Profiler.end();
+   };
 
     //Todo: rename to remove references to Chemistry
     Proximity._distanceBetweenAtoms = function(atomA, atomB) {

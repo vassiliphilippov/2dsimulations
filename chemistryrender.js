@@ -302,8 +302,11 @@ let Engine = Matter.Engine,
             timestamp: engine.timing.timestamp
         };
 
+        Profiler.begin("beforeRender");
         Events.trigger(render, 'beforeRender', event);
+        Profiler.end();
 
+        Profiler.begin("pre bodies");
         // apply background if it has changed
         if (render.currentBackground !== background)
             _applyBackground(render, background);
@@ -358,17 +361,22 @@ let Engine = Matter.Engine,
             bodies = allBodies;
         }
 
+        Profiler.end(); //pre bodies
+
         if (!options.wireframes || (engine.enableSleeping && options.showSleeping)) {
             // fully featured rendering of bodies
-//            Profiler.begin("background");
+            Profiler.begin("background");
             ChemistryRender.bodies(render, ChemistryRender.selectBackgroundBodies(bodies), context);
-//            Profiler.end();
+            Profiler.end(); 
+
+            Profiler.begin("e:afterBackgroundRender");
             Events.trigger(render, 'afterBackgroundRender', event);
-//            Profiler.begin("bodies");
+            Profiler.end();
             ChemistryRender.bodies(render, ChemistryRender.selectNonBackgroundBodies(bodies), context);
-//            Profiler.end();
         } else {
+            Profiler.begin("e:afterBackgroundRender");
             Events.trigger(render, 'afterBackgroundRender', event);
+            Profiler.end();
             if (options.showConvexHulls)
                 ChemistryRender.bodyConvexHulls(render, bodies, context);
 
@@ -376,6 +384,7 @@ let Engine = Matter.Engine,
             ChemistryRender.bodyWireframes(render, bodies, context);
         }
 
+        Profiler.begin("after bodies");
         if (options.showBounds)
             ChemistryRender.bodyBounds(render, bodies, context);
 
@@ -411,14 +420,21 @@ let Engine = Matter.Engine,
         if (options.showDebug)
             ChemistryRender.debug(render, context);
 
+        Profiler.end();
+
+        Profiler.begin("afterParticlesRender");
         Events.trigger(render, 'afterParticlesRender', event);
+        Profiler.end();
 
         if (options.hasBounds) {
             // revert view transforms
             ChemistryRender.endViewTransform(render);
         }
 
+        Profiler.begin("afterRender");
         Events.trigger(render, 'afterRender', event);
+        Profiler.end();
+
         Profiler.end();
     };
 
@@ -652,6 +668,7 @@ let Engine = Matter.Engine,
 
         if (atom.render.sprite && atom.render.sprite.texture && !options.wireframes) {
             // part sprite
+            Profiler.begin("sprite");
             var sprite = atom.render.sprite,
                 texture = _getTexture(render, sprite.texture);
 
@@ -669,14 +686,17 @@ let Engine = Matter.Engine,
             // revert translation, hopefully faster than save / restore
             c.rotate(-atom.angle);
             c.translate(-atom.position.x, -atom.position.y);
+            Profiler.end();
         } else {
             if (!options.wireframes) {
                 Profiler.begin("draw shapes");
                 //Draw main filled circle
+                Profiler.begin("circle");
                 c.beginPath();
                 c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
                 c.fillStyle = atom.render.fillStyle;
                 c.fill();
+                Profiler.end();
 
                 let edgeWidth = 2;
                 if (atom.render.lineWidth) {
@@ -684,12 +704,15 @@ let Engine = Matter.Engine,
                 }
 
                 //Drawing flare
+                Profiler.begin("flare");
                 c.beginPath();
                 c.arc(atom.position.x+(radius-edgeWidth/2)/(2*Math.SQRT2), atom.position.y-(radius-edgeWidth/2)/(2*Math.SQRT2), (radius-edgeWidth/2)/2, 0, 2 * Math.PI);
                 c.fillStyle = ChemistryRender._getFlareColor(atom.render.fillStyle);
                 c.fill();                
+                Profiler.end();
 
                 //Draw edge
+                Profiler.begin("edge");
                 c.lineWidth = edgeWidth;
                 c.beginPath();
                 c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
@@ -699,6 +722,8 @@ let Engine = Matter.Engine,
                     c.strokeStyle = ChemistryRender._getEdgeColor(atom.render.fillStyle);
                 }
                 c.stroke();
+                Profiler.end();
+
                 Profiler.end();
             } else {
                 c.beginPath();
@@ -758,6 +783,12 @@ let Engine = Matter.Engine,
                 console.log("Error. Molecule part that is not a proper atom (has no circleRadius property).");
             }
         }
+
+        var event = {
+            context: context,
+            particle: particle
+        };
+        Events.trigger(render, 'afterParticleDraw', event);
     };
 
     /**
@@ -769,6 +800,7 @@ let Engine = Matter.Engine,
      * @param {RenderingContext} context
      */
     ChemistryRender.bodies = function(render, bodies, context) {
+        Profiler.begin("bodies");
         var c = context,
             engine = render.engine,
             options = render.options,
@@ -891,6 +923,7 @@ let Engine = Matter.Engine,
                 c.globalAlpha = 1;
             }
         }
+        Profiler.end();
     };
 
     ChemistryRender._getLabelFont = function(radius) {

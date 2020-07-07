@@ -44,6 +44,7 @@ var Chemistry = {};
         } //if not null them the particle is sticked
     };
 
+    //Todo: convert parameters to hash
     Chemistry.createAndInitEngineAndRender = function(zoneMap, element, createMappedParticles, handleMouse, randomSeed) {
         let engine = Matter.Engine.create();
 
@@ -72,6 +73,7 @@ var Chemistry = {};
         Temperature.init(engine);
         Proximity.init(engine);
         Groups.init(engine, render);
+        Transformation.init(engine);
         Chemistry.init(engine);
 
         if (handleMouse) {
@@ -122,6 +124,7 @@ var Chemistry = {};
     };
 
     Chemistry._onCollisions = function(engine, pairs) {
+        Profiler.begin("Chemistry._onCollisions");
         for (var pair of pairs) {
             bodyA = pair.bodyA.parent;
             bodyB = pair.bodyB.parent;
@@ -137,12 +140,13 @@ var Chemistry = {};
                 }
             }
         }
+        Profiler.end();
     };
 
-    Chemistry.create = function(formula, x, y, chemistryOptions, options) {
+    Chemistry.create = function(formula, x, y, angle, chemistryOptions, options) {
         let particleInfo = Chemistry._findParticleInfoByFormula(formula);
         if (particleInfo) {
-            return Chemistry.createParticleByParticleInfo(particleInfo, x, y, chemistryOptions, options);
+            return Chemistry.createParticleByParticleInfo(particleInfo, x, y, angle, chemistryOptions, options);
         } else {
             console.log("Error. Particle info database doesn't contain information about formula: ", formula);
             return null;
@@ -211,6 +215,7 @@ var Chemistry = {};
     };
 
     Chemistry.cloneParticle = function(p, dx, dy) {
+       //Todo: position must be replaced with the first atom coordinates
         let pClone = Chemistry.create(p.plugin.chemistry.formula, p.position.x+dx, p.position.y+dy);
         if (p.plugin.force && p.plugin.force.sticked) {
             Chemistry.stick(pClone);
@@ -403,17 +408,18 @@ var Chemistry = {};
         return a;
     };
 
-    Chemistry.createParticleByParticleInfo = function(particleInfo, x, y, chemistryOptions, options) {
+    Chemistry.createParticleByParticleInfo = function(particleInfo, x, y, angle, chemistryOptions, options) {
+        //Todo: use options
         if (!particleInfo.compound) {
             let atomSymbol = Chemistry._convertSingleIonFormulaToAtomSymbol(particleInfo.formula);
             let struct = {
                 atom: atomSymbol,
             }
-            return Chemistry.createParticleByStruct(particleInfo.formula, struct, x, y);
+            return Chemistry.createParticleByStruct(particleInfo.formula, struct, x, y, angle, chemistryOptions, options);
         } else {
             if (particleInfo.formula in chemistryCompoundStructures) {
                 let struct = chemistryCompoundStructures[particleInfo.formula];
-                return Chemistry.createParticleByStruct(particleInfo.formula, struct, x, y);
+                return Chemistry.createParticleByStruct(particleInfo.formula, struct, x, y, angle, chemistryOptions, options);
             } else {
                 console.log("Error. Compound \"" + particleInfo.formula + "\" is not found in chemistryCompoundStructures");
                 return null;
@@ -421,10 +427,10 @@ var Chemistry = {};
         }
     };
 
-    Chemistry.createParticleByStruct = function(formula, struct, x, y, chemistryOptions, options) {
+    Chemistry.createParticleByStruct = function(formula, struct, x, y, angle, chemistryOptions, options) {
         //todo: think about passing type and charge
         if (!options) {
-            options = {}
+            options = {};
         }
 
         let chemistryDefaults = {
@@ -443,7 +449,7 @@ var Chemistry = {};
             label: formula
         }
 
-        var atoms = Chemistry._createParticleAtoms(struct, x, y, 0);
+        var atoms = Chemistry._createParticleAtoms(struct, x, y, angle);
 
         let totalAtomicMass = 0;
         for (atom of atoms) {
@@ -517,8 +523,27 @@ var Chemistry = {};
 
         let ball = Matter.Bodies.circle(x, y, radius, atomOptions);
         ball.plugin.chemistry = atomChemistryOptions;
+//        ball.render.sprite.texture = "na.png";
         Matter.Body.setMass(ball, atomInfo.mass);
         return ball;
+    };
+
+    //Maximum distance from the position of the particle to its edge, 
+    //in other words it is radius of a minimum circle around the position that includes this particle
+    //in screen coordinates
+    Chemistry.particleRadius = function(particle) {
+        let maxL = 0;
+        for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
+            let part = particle.parts[k];
+            let l = Matter.Vector.magnitude(Matter.Vector.sub(part.position, particle.position));
+            if (part.circleRadius) {
+                l += part.circleRadius;
+            }
+            if (l>maxL) {
+                maxL = l;
+            }
+        }
+        return maxL;
     };
 
     Chemistry._atomInfoBySymbol = function(atomSymbol) {
@@ -528,6 +553,28 @@ var Chemistry = {};
             }
         }
         return null;
+    };
+
+    //Todo: replace usage of Chemistry.spaceScale to convert functions everywere in the code
+
+    //Convert distance in pixels to pm
+    Chemistry.screenToSpace = function(screenDistance) {
+        return screenDistance / Chemistry.spaceScale;
+    };
+
+    //Convert distance in pm to pixels
+    Chemistry.spaceToScreen = function(spaceDistance) {
+        return spaceDistance * Chemistry.spaceScale;
+    };
+
+    //Convert distance in pixels to pm
+    Chemistry.screenVectorToSpace = function(screenVector) {
+        return {x: Chemistry.screenToSpace(screenVector.x), y: Chemistry.screenToSpace(screenVector.y)};
+    };
+
+    //Convert distance in pm to pixels
+    Chemistry.spaceVectorToScreen = function(spaceVector) {
+        return {x: Chemistry.spaceToScreen(spaceVector.x), y: Chemistry.spaceToScreen(spaceVector.y)};
     };
 
 })();

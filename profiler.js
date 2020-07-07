@@ -13,6 +13,7 @@ var Profiler = {};
     Profiler._newLine = "\n";
     Profiler._otherBlockName = "_other";
     Profiler._msSuffix = "ms";
+    Profiler._trashhold = 0.000005;
 
     Profiler.init = function() {
         Profiler._stack = [];
@@ -39,6 +40,9 @@ var Profiler = {};
                     counter: 0,
                     totalTime: 0,
                     averageTime: 0,
+                    maxTime: 0,
+                    startTime: endTime,
+                    endTime: endTime,
                     blocks: {}
                 };
             }
@@ -51,6 +55,9 @@ var Profiler = {};
         block.counter += 1;
         block.totalTime += t;
         block.averageTime = block.totalTime / block.counter;
+        block.endTime = endTime;
+        block.fps = block.counter*1000/(block.endTime-block.startTime);
+        if (t>block.maxTime) block.maxTime = t;
     };
 
     Profiler.getStatistics = function(clearStatistics) {
@@ -69,16 +76,25 @@ var Profiler = {};
     }
 
     Profiler.getStatisticsRec = function(block, blockName, indent, globalCounter) {
+        if (block.totalTime/globalCounter<Profiler._trashhold) return "";
         let s = "";
-        s += indent + blockName + ": " + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
+        if (indent=="") {
+            //Top level block
+            s += indent + blockName + ": " + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + " (fps: " + block.fps.toFixed(2) + ")" + Profiler._newLine;
+        } else {
+            //Sub-block
+            s += indent + blockName + ": " + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
+        }
         let totalSubblocksTime = 0;
         let anySubblocks = false;
         for (blockName in block.blocks) {
-            s += Profiler.getStatisticsRec(block.blocks[blockName], blockName, indent+Profiler._indent, globalCounter);
-            totalSubblocksTime += block.blocks[blockName].totalTime;
+            if (block.blocks[blockName].totalTime/globalCounter>Profiler._trashhold) {
+                s += Profiler.getStatisticsRec(block.blocks[blockName], blockName, indent+Profiler._indent, globalCounter);
+                totalSubblocksTime += block.blocks[blockName].totalTime;
+            }
             anySubblocks = true;
         }
-        if (anySubblocks) {
+        if (anySubblocks && (block.totalTime-totalSubblocksTime)/globalCounter > Profiler._trashhold) {
             s += indent + Profiler._indent + Profiler._otherBlockName + ": " + ((block.totalTime-totalSubblocksTime)/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
         }
         return s;

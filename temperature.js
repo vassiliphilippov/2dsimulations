@@ -24,9 +24,10 @@ var Temperature = {};
     };
 
     Temperature.UpdateAllSpeedsToTheirTemperature = function(engine, bodies) {
+        Profiler.begin("Temperature.UpdateAllSpeedsToTheirTemperature");
         var temperatures = {}
         for (let body of bodies) {
-            if (body.plugin.chemistry && (body.plugin.chemistry.temperature!==undefined)) {
+            if (body.plugin.chemistry && (body.plugin.chemistry.temperature!==undefined) && (!body.plugin.chemistry.temperatureDisabled)) {
                 let t = body.plugin.chemistry.temperature;
                 if (!(t in temperatures)) {
                     temperatures[t] = []
@@ -37,6 +38,7 @@ var Temperature = {};
         for (t in temperatures) {
             Temperature._UpdateAllSpeedsToGivenTemperature(engine, temperatures[t], t);
         }
+        Profiler.end();
     };
 
     Temperature._UpdateAllSpeedsToGivenTemperature = function(engine, particles, temperature) {

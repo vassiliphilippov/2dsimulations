@@ -4501,7 +4501,7 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 501,
-   "formula": "CO3--",
+   "formula": "CO3-2",
    "name": "carbonate",
    "charge": -2,
    "compound": true,
@@ -4861,7 +4861,7 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 541,
-   "formula": "PO4---",
+   "formula": "PO4-3",
    "name": "phosphate",
    "charge": -3,
    "compound": true,
@@ -4978,7 +4978,7 @@ var ChemistryParticleInfoDatabase = [
  },
  {
    "id": 554,
-   "formula": "C2O4--",
+   "formula": "C2O4-2",
    "name": "oxalate anion",
    "charge": -2,
    "compound": true,

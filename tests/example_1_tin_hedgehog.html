@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 16: Tin hedgehog</title>
+  <title>Example 1: Tin hedgehog</title>
   <script src="../matter_profile.js"></script>
   <script src="../profiler.js"></script>
   <script src="../force.js"></script>
@@ -21,6 +21,7 @@
   <script src="../animation.js"></script>
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
 </head>
 <body>
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
@@ -28,7 +29,7 @@
 
 var engine = null;
 
-ZoneMap.load("map16.png", function (zoneMap) {
+ZoneMap.load("ex_map1.png", function (zoneMap) {
     Chemistry.spaceScale = 0.10;
     Chemistry.timeScale = 6e-15;
     const colorZnAtom = "#5E6182";
@@ -169,6 +170,6 @@ ZoneMap.load("map16.png", function (zoneMap) {
 <p>
   Tin hedgehog experiment.
 </p>
-<p><a href="map16.png">Map file</a>.</p>
+<p><a href="ex_map1.png">Map file</a>.</p>
 </body>
 </html>

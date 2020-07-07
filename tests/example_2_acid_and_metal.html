@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 17: Acid and metal</title>
+  <title>Example 2: Acid and metal</title>
   <script src="../matter_profile.js"></script>
   <script src="../profiler.js"></script>
   <script src="../force.js"></script>
@@ -21,6 +21,7 @@
   <script src="../animation.js"></script>
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
 </head>
 <body>
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
@@ -31,7 +32,7 @@
 
 var engine = null;
 
-ZoneMap.load("map17.png", function (zoneMap) {
+ZoneMap.load("ex_map2.png", function (zoneMap) {
     Chemistry.spaceScale = 0.20;
     Chemistry.timeScale = 6e-15;
     const colorH2 = "#FF0000";
@@ -133,6 +134,6 @@ ZoneMap.load("map17.png", function (zoneMap) {
 <p>
   Acid and metal.
 </p>
-<p><a href="map17.png">Map file</a>.</p>
+<p><a href="ex_map2.png">Map file</a>.</p>
 </body>
 </html>

@@ -58,12 +58,14 @@ var Groups = {};
     }
 
     Groups._drawGroups = function(engine, render) {
+        Profiler.begin("Groups._drawGroups");
         let bodies = engine.world.bodies;
         let groups = Groups._bodiesByGroup(bodies);
         for (let group in groups) {
             let bodiesInGroup = groups[group];
             Groups._drawGroup(render, group, bodiesInGroup);
         }
+        Profiler.end();
     };
 
     Groups._bodiesByGroup = function(bodies) {

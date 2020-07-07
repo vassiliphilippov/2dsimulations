@@ -21,6 +21,7 @@
   <script src="../animation.js"></script>
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
 </head>
 <body>
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
@@ -52,6 +53,8 @@ ZoneMap.load("map13.png", function (zoneMap) {
     new ParticleList(engine).formula("Zn").setTemperature(295);
 
     new BodyList(engine).label("border").hide();
+
+    console.log(new ParticleList(engine).atoms().length());
 
     Chemistry.run(engine, render);
 });
