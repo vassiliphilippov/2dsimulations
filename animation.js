@@ -14,7 +14,7 @@ var Animation = {};
             isStatic: true, 
             render: {
                 visible: true, 
-                fillStyle: "yellow",
+                fillStyle: "#FFF200",
                 opacity: 0.3
             },
             collisionFilter: {
@@ -99,7 +99,6 @@ var Animation = {};
     Animation.getAnimationAttractorList = function(engine, colorFirst, colorNext) {
         let a = new AttractorList(engine).zoneMapColor(colorFirst).getFirst();
         let attractors = new AttractorList(engine).zoneMapColor(colorNext).toArray();
-        console.log(new AttractorList(engine));
         let pathAttractors = [a];
         let prevPosition = a.position;
         while (attractors.length>0) {

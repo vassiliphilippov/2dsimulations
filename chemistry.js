@@ -10,7 +10,6 @@
 
 var Chemistry = {};
 
-//Todo: think if we can use collision mask to make solid particles to don't interract with each other but with others
 (function() {
     Chemistry.spaceScale = 0.25; //pixels per pm
     Chemistry.timeScale = 6e-15; //real seconds per rendering second
@@ -61,7 +60,7 @@ var Chemistry = {};
             Matter.Common._seed = engine.world._seed;
         });
 
-        var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height, rotateAtomLabels: true}});
+        var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
         if (createMappedParticles) {
             Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
         }
@@ -101,7 +100,7 @@ var Chemistry = {};
                 }
             });
 
-        World.add(engine.world, mouseConstraint);
+        Matter.World.add(engine.world, mouseConstraint);
 
         // keep the mouse in sync with rendering
         render.mouse = mouse;
@@ -113,6 +112,7 @@ var Chemistry = {};
         TextureLoader.onAllTextureLoad(engine.world.bodies, () => {
             Matter.Runner.run(runner, engine);
             ChemistryRender.run(render);
+//            RenderPixi.run(render);
         });
         return runner;
     };
@@ -388,21 +388,19 @@ var Chemistry = {};
             restitution: 1, 
             frictionStatic: 0, 
             render: {
-                fillStyle: "green",
+                fillStyle: "#00FF00",
                 visible: visible
             } 
         };
         return Matter.Bodies.rectangle(x, y, w, h, options);
     };
 
-    //Todo: move atractors to Force module
     Chemistry.createAttractor = function(rect) {
         let x = (rect.min.x + rect.max.x)/2;
         let y = (rect.min.y + rect.max.y)/2;
         //Todo: recheck these options
-        //Todo: mark border marked as chemistry options in plugin data
         //Todo: change options like in createBorder
-        let a = Matter.Bodies.circle(x, y, 20, {isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {visible: false, fillStyle: "blue"}, collisionFilter: {mask: 0}});
+        let a = Matter.Bodies.circle(x, y, 20, {isStatic: true, frictionAir: 0, friction: 0, restitution: 1, frictionStatic: 0, render: {visible: false, fillStyle: "#0000FF"}, collisionFilter: {mask: 0}});
         a.label = "attractor";
         a.plugin.force = {attractor: true, charge: 1, forces: {}};
         return a;

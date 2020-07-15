@@ -4,7 +4,6 @@
 * @class Scenario
 */
 
-//Todo: make oncollision event
 class Scenario {
     constructor(engine, render) {
         this.engine = engine;

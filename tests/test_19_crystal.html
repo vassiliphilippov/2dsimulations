@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Test 4: Creating particles manually</title>
+  <title>Test 19: Crystal</title>
   <script src="../matter_profile.js"></script>
   <script src="../profiler.js"></script>
   <script src="../force.js"></script>
@@ -22,9 +22,7 @@
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
   <script src="../transformation.js"></script>
-  <script src="../RenderPixi.js"></script>
-  <script src="../pixi.min.js"></script>
-  <script src="../atomdrawer.js"></script>
+  <script src="../crystal.js"></script>
   <script src="../atomdrawer.js"></script>
   <script src="../pixi.min.js"></script>
 </head>
@@ -32,32 +30,42 @@
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
 <script>
 
-ZoneMap.load("map4.png", function (zoneMap) {
-    Chemistry.spaceScale = 0.10;
+ZoneMap.load("map19.png", function (zoneMap) {
+    Chemistry.spaceScale = 0.20;
 
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
-    Background.setBackground(engine.world, "background4.png", zoneMap.width, zoneMap.height);
+    let bounds = ZoneMap.getBounds(zoneMap, [255, 201, 14]);
+    let crystal = Crystal.create("CuSO4", bounds.min, 0);
+    console.log(crystal);
 
-    ZoneMap.spawnSeries(zoneMap, [1, 0, 210], (x, y, width, height) => {
-        Matter.World.add(engine.world, Chemistry.create("Na+", x, y));
+    let places = Crystal.places(crystal);
+    for (placeId in places) {
+        let place = places[placeId];
+        for (let dx=0; dx<5; dx++) {
+            for (let dy=0; dy<4; dy++) {
+                let index = {x: dx, y: dy};
+                let position = Crystal.getPlacePosition(crystal, placeId, index);
+                let particle = Chemistry.create(place.formula, position.x, position.y, place.angle);
+                Crystal.stickParticleToPlace(crystal, particle, placeId, index);
+                Matter.World.add(engine.world, particle);
+            }
+        }
+    }
+
+    Matter.Events.on(engine, "afterUpdate", (event) => {
+        crystal.position.x += 1;
+        Crystal.updatePlacePositions(crystal);
     });
 
-    ZoneMap.spawnRandom(zoneMap, [0, 200, 210], 100, (x, y) => {
-        Matter.World.add(engine.world, Chemistry.create("H2O", x, y));
-    });
-
-    ZoneMap.spawnLattice(zoneMap, [200, 0, 210], Chemistry.spaceScale*300, Chemistry.spaceScale*300, (x, y) => {
-        Matter.World.add(engine.world, Chemistry.create("Zn", x, y));
-    });
 
     Chemistry.run(engine, render);
 });
 
 </script>
 <p>
-  Background is placed behind all other elements.
+  Crystal;
 </p>
-<p><a href="map4.png">Map file</a>.</p>
+<p><a href="map19.png">Map file</a>.</p>
 </body>
 </html>

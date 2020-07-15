@@ -22,6 +22,8 @@
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
   <script src="../transformation.js"></script>
+  <script src="../atomdrawer.js"></script>
+  <script src="../pixi.min.js"></script>
   <style>
       canvas {margin-bottom: 10px}
   </style>
@@ -91,9 +93,6 @@ function generateTransformationText() {
 ZoneMap.load("tool_map1.png", function (zoneMap) {
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     [engine2, render2] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
-    Transformation.init(engine);
-    //Todo: move transformation init to Chemistry.init
-    Transformation.init(engine2);
 
     pAngleMarkerA = Matter.Bodies.circle(30, zoneMap.height/2, 10, {label: "angleMarkerA", render: {fillStyle: "#0000FF"}});
     pAngleMarkerB = Matter.Bodies.circle(1000-30, zoneMap.height/2, 10, {label: "angleMarkerB", render: {fillStyle: "#FF00FF"}});
@@ -101,17 +100,18 @@ ZoneMap.load("tool_map1.png", function (zoneMap) {
     Matter.World.add(engine.world, pAngleMarkerB);
 
     Matter.Events.on(render, "afterParticleDraw", (event) => {
-        let context = event.context;
+        let graphics = event.graphics;
         let particle = event.particle;
-        context.beginPath();
-        context.arc(particle.position.x, particle.position.y, 3, 0, 2 * Math.PI);
-        context.fillStyle = "#00FF00";
-        context.fill();                
+        let _up = ChemistryRender.scaleUp;
 
-        context.beginPath();
-        context.moveTo(particle.position.x, particle.position.y);
-        context.lineTo(particle.position.x+Math.cos(particle.angle)*20, particle.position.y+Math.sin(particle.angle)*20);
-        context.stroke();
+        graphics.beginFill(0x00FF00);
+        graphics.drawCircle(_up(particle.position.x), _up(particle.position.y), _up(3));
+        graphics.endFill();
+
+        graphics.lineStyle(_up(1), 0xFFF200, 1);
+        graphics.moveTo(_up(particle.position.x), _up(particle.position.y));
+        graphics.lineTo(_up(particle.position.x+Math.cos(particle.angle)*20), _up(particle.position.y+Math.sin(particle.angle)*20));
+        graphics.closePath();
     });
 
     Matter.Events.on(engine, "afterUpdate", (event) => {

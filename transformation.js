@@ -31,7 +31,9 @@ var Transformation = {};
             if (body.plugin.chemistry && body.plugin.chemistry.particle) {
                 let angularAcceleration  = Transformation.calculateAngluarAcceleration(body, bodies);
                 if (angularAcceleration) {
+                    Profiler.begin("setAngularVelocity");
                     Matter.Body.setAngularVelocity(body, body.angularVelocity+angularAcceleration);                         
+                    Profiler.end();
                 }
             }
         }
@@ -39,6 +41,8 @@ var Transformation = {};
     };
 
     Transformation.calculateAngluarAcceleration = function(particle, bodies) {
+        Profiler.begin("Transformation.calculateAngluarAcceleration");
+        //Todo: performance optimization
         let formula = particle.plugin.chemistry.formula;
         let totalAngluarAcceleration = null;
     
@@ -77,6 +81,7 @@ var Transformation = {};
             totalAngluarAcceleration -= particle.angularVelocity * Transformation.angularFriction;
         }
 
+        Profiler.end();
         return totalAngluarAcceleration;
     };
 
@@ -107,12 +112,12 @@ var Transformation = {};
             }
 
             if (transformation) {
-                Events.trigger(engine, 'beforeTransformation', {bodyA: bodyA, bodyB: bodyB, transformation: transformation});
+                Matter.Events.trigger(engine, 'beforeTransformation', {bodyA: bodyA, bodyB: bodyB, transformation: transformation});
                 result = Transformation.createTransformationParticle(transformation, bodyA, bodyB);
                 Matter.World.add(engine.world, result);
                 Matter.Composite.remove(engine.world, bodyA);
                 Matter.Composite.remove(engine.world, bodyB);
-                Events.trigger(engine, 'afterTransformation', {bodyA: bodyA, bodyB: bodyB, transformation: transformation, result: result});
+                Matter.Events.trigger(engine, 'afterTransformation', {bodyA: bodyA, bodyB: bodyB, transformation: transformation, result: result});
             }
         }
     };

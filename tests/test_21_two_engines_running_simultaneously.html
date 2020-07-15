@@ -22,11 +22,14 @@
   <script src="../groups.js"></script>
   <script src="../clipper.js"></script>
   <script src="../transformation.js"></script>
+  <script src="../atomdrawer.js"></script>
+  <script src="../pixi.min.js"></script>
 </head>
 <body>
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
 <script>
 
+//Todo: fix canvas size bug, it is now bigger than it should be
 let randomSeed = {};
 
 ZoneMap.load("map21.png", function (zoneMap) {

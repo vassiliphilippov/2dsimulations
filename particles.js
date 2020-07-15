@@ -4,7 +4,6 @@
 * @class BodyList
 */
 
-//Todo: implement closest
 //Todo: outer 
 class BodyList {
     //Todo: replace engine with World

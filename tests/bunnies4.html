@@ -1,0 +1,71 @@
+<html>
+<head>
+  <title>Bunny 4</title>
+  <script src="../pixi.min.js"></script>
+  <script src="../profiler.js"></script>
+  <script src="../atomdrawer.js"></script>
+</head>
+<body onload="init();">
+<script>
+
+
+var atomTexturesCache = {};
+var padding = 2;
+
+function getAtomTexture(formula, radius, angle, color) {
+    let textureId = formula + ":" + radius + ":" + angle + ":" + color;
+    if (textureId in atomTexturesCache) {
+        return atomTexturesCache[textureId];
+    } else {
+        let tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 2*radius+2*padding;
+        tempCanvas.height = 2*radius+2*padding;
+        let tempContext = tempCanvas.getContext('2d');
+
+        tempContext.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        AtomDrawer.drawAtom(tempContext, {x: radius+padding, y: radius+padding}, 0, radius, color, formula);
+        var texture = PIXI.Texture.from(tempCanvas);
+        atomTexturesCache[textureId] = texture;
+        return texture;
+    }
+}
+
+function createAtomSprite(formula, position, radius, angle, color) {
+    var texture = getAtomTexture(formula, radius,  0, color);
+    console.log(atomTexturesCache);
+
+    var sprite = new PIXI.Sprite(texture);
+    sprite.anchor.x = 0.5;
+    sprite.anchor.y = 0.5;
+    sprite.position.x = position.x;
+    sprite.position.y = position.y;
+    sprite.rotation  = angle;
+
+    return sprite;
+}
+
+function init() {
+    stage = new PIXI.Container();
+    var renderer = new PIXI.autoDetectRenderer(400, 300);
+    document.body.appendChild(renderer.view);
+
+    for (i=10; i<100; i++) {
+        var sprite = createAtomSprite("Cu", {x: 100+i*3, y:200}, i,  0, "#FF3030");
+        stage.addChild(sprite);
+    }
+
+    sprite = createAtomSprite("Sn", {x: 200, y:100}, 40,  0, "#00C030");
+    stage.addChild(sprite);
+
+    requestAnimationFrame(update);
+
+    function update() {
+        requestAnimationFrame(update);
+        sprite.rotation += 0.1;
+        renderer.render(stage);
+    }
+
+};
+</script>
+</body>
+</html>

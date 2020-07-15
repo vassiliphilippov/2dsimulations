@@ -14,9 +14,7 @@ var Proximity = {};
        });
     };
 
-    //Todo: make on collision
     //Todo: check each pair only once not twice
-    //Todo: for pair of chemistry particles make formula based events
     Proximity.check = function(engine, bodies) {
         Profiler.begin("Proximity.check");
         for (bodyA of bodies) {

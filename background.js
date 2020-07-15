@@ -34,9 +34,9 @@ var Background = {};
     Background.setBackground = function(world, backgroundImageUrl, width, height, options) {
         //Todo: remove previous backgrounds
         let background = Background.createBackground(backgroundImageUrl, width, height, options);
-        Events.trigger(world, 'beforeAdd', { object: background });
+        Matter.Events.trigger(world, 'beforeAdd', { object: background });
         world.bodies.unshift(background);
         Matter.Composite.setModified(world, true, true, false);
-        Events.trigger(world, 'afterAdd', { object: background });
+        Matter.Events.trigger(world, 'afterAdd', { object: background });
     };
 })();

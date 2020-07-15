@@ -73,21 +73,42 @@ var Profiler = {};
         }
 
         return s;        
-    }
+    };
+
+    Profiler._stars = function(ms) {
+       let quant = 0.2;
+       if (ms<quant) {
+           return "";
+       } else {
+           let s = "[";
+           while (ms>quant) {
+               ms -= quant;
+               s += "*";
+           }
+           s += "]";
+           return s;
+       }
+    };
 
     Profiler.getStatisticsRec = function(block, blockName, indent, globalCounter) {
         if (block.totalTime/globalCounter<Profiler._trashhold) return "";
         let s = "";
         if (indent=="") {
             //Top level block
-            s += indent + blockName + ": " + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + " (fps: " + block.fps.toFixed(2) + ")" + Profiler._newLine;
+            s += indent + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + " " + blockName + " (fps: " + block.fps.toFixed(2) + ")" + Profiler._stars(block.totalTime/globalCounter) + Profiler._newLine;
         } else {
             //Sub-block
-            s += indent + blockName + ": " + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
+            s += indent + (block.totalTime/globalCounter).toFixed(2) + Profiler._msSuffix + " " + blockName + Profiler._stars(block.totalTime/globalCounter) + Profiler._newLine;
         }
         let totalSubblocksTime = 0;
         let anySubblocks = false;
-        for (blockName in block.blocks) {
+
+        let blockNames = Object.keys(block.blocks);
+        blockNames.sort(function (a,b) {
+            return (block.blocks[b].totalTime-block.blocks[a].totalTime);
+        });
+
+        for (blockName of blockNames) {
             if (block.blocks[blockName].totalTime/globalCounter>Profiler._trashhold) {
                 s += Profiler.getStatisticsRec(block.blocks[blockName], blockName, indent+Profiler._indent, globalCounter);
                 totalSubblocksTime += block.blocks[blockName].totalTime;
@@ -95,7 +116,7 @@ var Profiler = {};
             anySubblocks = true;
         }
         if (anySubblocks && (block.totalTime-totalSubblocksTime)/globalCounter > Profiler._trashhold) {
-            s += indent + Profiler._indent + Profiler._otherBlockName + ": " + ((block.totalTime-totalSubblocksTime)/globalCounter).toFixed(2) + Profiler._msSuffix + Profiler._newLine;
+            s += Profiler._indent + indent + ((block.totalTime-totalSubblocksTime)/globalCounter).toFixed(2) + Profiler._msSuffix + " " + Profiler._otherBlockName + Profiler._stars((block.totalTime-totalSubblocksTime)/globalCounter) + Profiler._newLine;
         }
         return s;
     }

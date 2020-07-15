@@ -1,0 +1,210 @@
+<html>
+<head>
+  <title>Bunny 3</title>
+  <script src="../matter_profile.js"></script>
+  <script src="../profiler.js"></script>
+  <script src="../force.js"></script>
+  <script src="../zonemap.js"></script>
+  <script src="../background.js"></script>
+  <script src="../debug.js"></script>
+  <script src="../chemistryparticles.json"></script>
+  <script src="../chemistrycompoundstructures.js"></script>
+  <script src="../atomcolors.json"></script>
+  <script src="../periodictable.json"></script>
+  <script src="../chemistry.js"></script>
+  <script src="../particles.js"></script>
+  <script src="../temperature.js"></script>
+  <script src="../chemistryrender.js"></script>
+  <script src="../proximity.js"></script>
+  <script src="../textureloader.js"></script>
+  <script src="../scenario.js"></script>
+  <script src="../animation.js"></script>
+  <script src="../groups.js"></script>
+  <script src="../clipper.js"></script>
+  <script src="../transformation.js"></script>
+  <script src="../RenderPixi.js"></script>
+  <script src="../atomdrawer.js"></script>
+  <script src="https://www.goodboydigital.com/pixijs/bunnymark/js/pixi.min.js"></script>
+<!--  <script src="../pixi.min.js"></script>-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+</head>
+<body>
+<script>
+
+
+var Math2 = {};
+
+Math2.random = function(from, to)
+{
+	return Math.random()*(to-from) + from;
+}
+
+Math2.map = function(val, inputMin, inputMax, outputMin, outputMax)
+{
+			/*
+			var inputRange = inputMax - inputMin
+			
+			var inputFraction = (val - inputMin)/inputRange
+			
+			var outputRange = outputMax - outputMin
+			
+			var output = (outputRange * inputFraction) + outputMin
+			
+			return output
+			*/
+			
+	return ((outputMax - outputMin) * ((val - inputMin)/(inputMax - inputMin))) + outputMin;
+}
+
+
+Math2.randomPlusMinus = function(chance)
+{
+	chance = chance ? chance : 0.5;
+	return (Math.random() > chance) ? -1 : 1;
+}
+
+Math2.randomInt = function(from, to)
+{
+	to += 1;
+	return Math.floor(Math.random()*(to-from) + from);
+}
+
+
+
+Math2.randomBool = function(chance)
+{
+	chance = chance ? chance : 0.5;
+	return (Math.random() < chance) ? true : false;
+}
+
+Profiler.init();
+
+
+$(document).ready(onReady)
+
+$(window).resize(resize)
+window.onorientationchange = resize;
+
+var width = 480;
+var height = 320;
+
+var wabbitTexture;
+var pirateTexture;
+
+var bunnys = [];
+var gravity = 0.5//1.5 ;
+
+var maxX = width;
+var minX = 0;
+var maxY = height;
+var minY = 0;
+
+var startBunnyCount = 20000;
+var isAdding = false;
+var count = 0;
+var container;
+var pixiLogo;
+var clickImage;
+
+var amount = 100;
+
+function _createCanvas(width, height) {
+        return canvas;
+};
+
+
+
+function onReady()
+{
+var tempCanvas = document.createElement('canvas');
+tempCanvas.width = 100;
+tempCanvas.height = 100;
+var tempContext = tempCanvas.getContext('2d');
+AtomDrawer.drawAtom(tempContext, {x: 20, y: 20}, 0, 10, "#FF3030", "Cu");
+	
+	renderer = PIXI.autoDetectRenderer(800, 600, {backgroundColor:0xFFFFFF});
+	stage = new PIXI.Stage(0xFFFFFF);
+
+	amount = (renderer instanceof PIXI.WebGLRenderer) ? 100 : 5;
+
+	if(amount == 5)
+	{
+		renderer.context.mozImageSmoothingEnabled = false
+		renderer.context.webkitImageSmoothingEnabled = false;
+		
+	}
+	
+	renderer.view.style["transform"] = "translatez(0)";
+	document.body.appendChild(renderer.view);
+	renderer.view.style.position = "absolute";
+	
+	requestAnimationFrame(update);
+	
+	tempCanvasTexture = new PIXI.Texture.fromCanvas(tempCanvas);
+
+	counter = document.createElement("div");
+	counter.className = "counter";
+	document.body.appendChild( counter);
+	
+	container = new PIXI.DisplayObjectContainer();
+	container = new PIXI.ParticleContainer(200000, [false, true, false, false, false]);
+	stage.addChild(container);
+
+	bunny1 = new PIXI.Texture(tempCanvasTexture, new PIXI.math.Rectangle(0, 0, 40, 40));
+
+
+	for (var i = 0; i < startBunnyCount; i++) 
+	{
+		var bunny = new PIXI.Sprite(bunny1);
+                bunny.alpha = 0.5;
+		bunnys.push(bunny);
+		bunny.position.x = Math.random() * 800;
+		bunny.position.y = Math.random() * 600;
+		container.addChild(bunny);
+	}
+	
+	
+	resize();
+}
+
+var updateFlag = true;
+function resize()
+{
+        console.log("resizzzzze");
+	var width = $(window).width(); 
+	var height = $(window).height(); 
+	
+	if(width > 800)width  = 800;
+	if(height > 600)height = 600;
+	
+	maxX = width;
+	minX = 0;
+	maxY = height;
+	minY = 0;
+	
+	var w = $(window).width() / 2 - width/2;
+	var h = $(window).height() / 2 - height/2;
+	
+	renderer.view.style.left = $(window).width() / 2 - width/2 + "px"
+	renderer.view.style.top = $(window).height() / 2 - height/2 + "px"
+	
+	renderer.resize(width, height);
+}
+
+function update()
+{
+	for (var i = 0; i < bunnys.length; i++) 
+	{
+		var bunny = bunnys[i];
+		bunny.position.x += 1;
+		bunny.position.y += 1;
+		
+	}
+	
+	renderer.render(stage);
+
+	requestAnimationFrame(update);
+}
+</script>
+</body>
+</html>

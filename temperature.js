@@ -6,7 +6,6 @@
 
 //todo: add option to disable temperature movement
 
-//todo: prevent super fast particles
 var Temperature = {};
 
 (function() {
@@ -81,7 +80,7 @@ var Temperature = {};
         let newSpeed = Temperature._speedByKineticEnergy(p, newKE);
         if (p.speed!=0) {
             let newVelocity = Matter.Vector.mult(p.velocity, newSpeed/p.speed);
-            Body.setVelocity(p, newVelocity);
+            Matter.Body.setVelocity(p, newVelocity);
         } else {
             //If speed was 0 then we need to choose a random direction
             let randomAngle = Matter.Common.random(0, 2*Math.PI);
@@ -109,7 +108,7 @@ var Temperature = {};
         let newAngularSpeed = Temperature._angularSpeedByRotationEnergy(p, newKE);
         if (p.angularSpeed!=0) {
             let newAngularVelocity = p.angularVelocity * newAngularSpeed / p.angularSpeed;
-            Body.setAngularVelocity(p, newAngularVelocity);
+            Matter.Body.setAngularVelocity(p, newAngularVelocity);
         } else {
             //If speed was 0 then we need to choose a random direction of rotation
             let randomDirection = (Math.floor(Matter.Common.random(0, 2))-0.5)*2;

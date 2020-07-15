@@ -19,7 +19,6 @@ var ZoneMap = {};
             onload(zonemap);
         }
         //todo: handle error case when image was not found
-        //todo: check if we need to delete the image and/or the canvas in the end
         imageElement.src = url;
     };
 

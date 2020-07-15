@@ -29,7 +29,7 @@ var Groups = {};
         Groups._clipperOffsetter.MiterLimit = 2;
         Groups._clipperOffsetter.ArcTolerance = 0.25;
         Matter.Events.on(render, "afterParticlesRender", (event) => {
-            Groups._drawGroups(engine, render);
+            Groups._drawGroups(engine, render, event.stage);
        });
     };
 
@@ -57,13 +57,13 @@ var Groups = {};
         }
     }
 
-    Groups._drawGroups = function(engine, render) {
+    Groups._drawGroups = function(engine, render, stage) {
         Profiler.begin("Groups._drawGroups");
         let bodies = engine.world.bodies;
         let groups = Groups._bodiesByGroup(bodies);
         for (let group in groups) {
             let bodiesInGroup = groups[group];
-            Groups._drawGroup(render, group, bodiesInGroup);
+            Groups._drawGroup(render, stage, group, bodiesInGroup);
         }
         Profiler.end();
     };
@@ -82,36 +82,7 @@ var Groups = {};
         return groups;
     };
 
-    Groups._drawGroup2 = function(render, group, bodies) {
-        let offset = Groups._groupOffset(group, bodies);
-        let c = render.context;
-
-        //Save context settings
-        let saveFillStyle = c.fillStyle;
-        let saveGlobalAlpha = c.globalAlpha;
-
-        c.fillStyle = Groups.groupsOptions[group].fillStyle;
-        c.globalAlpha = Groups.groupsOptions[group].opacity;
-        for (body of bodies) {
-            if (!body.render.visible)
-                continue;
-
-            for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
-                part = body.parts[k];
-                if (part.circleRadius) {
-                    c.beginPath();
-                    c.arc(part.position.x, part.position.y, part.circleRadius+offset, 0, 2 * Math.PI);
-                    c.fill();
-                }
-            }
-        }
-
-        //Restore context settings
-        c.fillStyle = saveFillStyle;
-        c.globalAlpha = saveGlobalAlpha;
-    }
-
-    Groups._drawGroup = function(render, group, bodies) {
+    Groups._drawGroup = function(render, stage, group, bodies) {
         let offset = Groups._groupOffset(group, bodies);
 
         let paths = Groups._getBodiesPaths(bodies);
@@ -124,23 +95,16 @@ var Groups = {};
         Groups._clipperOffsetter.Execute(offsetted_paths, offset * Groups._clipperScale);
         ClipperLib.JS.ScaleDownPaths(offsetted_paths, Groups._clipperScale);
 
-        let c = render.context;
-
-        //Save context settings
-        let saveFillStyle = c.fillStyle;
-        let saveGlobalAlpha = c.globalAlpha;
-
+        var graphics = new PIXI.Graphics();
         if (!(group in Groups.groupsOptions)) {
             console.log("Error. Group '" + group + "' not found in Groups.groupsOptions", Groups.groupsOptions);
         }
-        c.globalAlpha = Groups.groupsOptions[group].opacity;
-        c.fillStyle = Groups.groupsOptions[group].fillStyle;
+        graphics.alpha = Groups.groupsOptions[group].opacity;
+        let groupColor = Groups.groupsOptions[group].fillStyle;
+        graphics.beginFill(Matter.Common.colorToNumber(groupColor));
 
-        Groups._drawPaths(c, offsetted_paths);
-
-        //Restore context settings
-        c.fillStyle = saveFillStyle;
-        c.globalAlpha = saveGlobalAlpha;
+        Groups._drawPaths(render, graphics, offsetted_paths);
+        stage.addChild(graphics); 
     };
 
     Groups._groupOffset = function(group, bodies) {
@@ -183,20 +147,19 @@ var Groups = {};
         return paths;
     };
 
-    Groups._drawPaths = function(c, paths) {
+    Groups._drawPaths = function(render, graphics, paths) {
         paths.forEach(path => {
-            Groups._drawPath(c, path);
+            Groups._drawPath(render, graphics, path);
         });
     };
 
-    Groups._drawPath = function(c, path) {
-        c.beginPath();
-        c.moveTo(path[0].X, path[0].Y);
+    Groups._drawPath = function(render, graphics, path) {
+        let _up = ChemistryRender.scaleUp;
+        graphics.moveTo(_up(path[0].X), _up(path[0].Y));
         for (let i=1; i<path.length; i++) {
-            c.lineTo(path[i].X, path[i].Y);
+            graphics.lineTo(_up(path[i].X), _up(path[i].Y));
         }
-        c.closePath();
-        c.fill();
+        graphics.endFill();
     };
 })();
 

@@ -8,15 +8,17 @@
 
 var ChemistryRender = {};
 
-//Todo: make option to group some particles into a colored group like Slyusarev's metal cover
-let Engine = Matter.Engine,
-    Render = Matter.Render,
-    Body = Matter.Body,
-    World = Matter.World,
-    Events = Matter.Events;
-    Bodies = Matter.Bodies;
-
+//Todo: move all calculations to a worker: https://developers.google.com/web/updates/2018/08/offscreen-canvas  
+//Todo: cash (reuse) graphics for non-particle bodies, not to create separate objects each time
+//Todo: move atom specific drawing to atomdrawing
 (function() {
+
+    //We render all textures in higher resolution for better quality. This parameter defines this upscaling coefficient
+    ChemistryRender.qualityScaleUp = 5;
+
+    _up = ChemistryRender.scaleUp = function(x) {
+        return x * ChemistryRender.qualityScaleUp;
+    };
 
     var _requestAnimationFrame,
         _cancelAnimationFrame;
@@ -76,15 +78,26 @@ let Engine = Matter.Engine,
 
         var render = Matter.Common.extend(defaults, options);
 
-        if (render.canvas) {
-            render.canvas.width = render.options.width || render.canvas.width;
-            render.canvas.height = render.options.height || render.canvas.height;
-        }
+
+        render.pixiApp = new PIXI.Application({width: render.options.width, height: render.options.height, resolution: window.devicePixelRatio || 1});
+        render.pixiStage = render.pixiApp.stage;//new PIXI.Container();
+        render.pixiRenderer = render.pixiApp.renderer;//new PIXI.autoDetectRenderer(render.options.width, render.options.height);
+
+        //Special optimization for atoms as we have a lot of them. They are divided into two sprites one that is rotated and another one that is not (for 3D effects)
+        render.atomRotatableSprites = {};
+        render.atomNonRotatableSprites = {};
+        render.atomRotatableTexturesCache = {};
+        render.atomNonRotatableTexturesCache = {};
+        render.texturesCache = {};
+        render.spriteBasedBodySprites = {};
+
+        document.body.appendChild(render.pixiRenderer.view);
+        render.pixiRenderer.view.oncontextmenu = function() { return false; };
+        render.pixiRenderer.view.onselectstart = function() { return false; };
 
         render.mouse = options.mouse;
         render.engine = options.engine;
-        render.canvas = render.canvas || _createCanvas(render.options.width, render.options.height);
-        render.context = render.canvas.getContext('2d');
+        render.canvas = render.pixiRenderer.view;
         render.textures = {};
 
         render.bounds = render.bounds || {
@@ -98,15 +111,12 @@ let Engine = Matter.Engine,
             }
         };
 
-        if (render.options.pixelRatio !== 1) {
-            ChemistryRender.setPixelRatio(render, render.options.pixelRatio);
-        }
-
         if (Matter.Common.isElement(render.element)) {
             render.element.appendChild(render.canvas);
         } else if (!render.canvas.parentNode) {
             Matter.Common.log('ChemistryRender.create: options.element was undefined, render.canvas was created but not appended', 'warn');
         }
+
 
         return render;
     };
@@ -130,30 +140,6 @@ let Engine = Matter.Engine,
      */
     ChemistryRender.stop = function(render) {
         _cancelAnimationFrame(render.frameRequestId);
-    };
-
-    /**
-     * Sets the pixel ratio of the renderer and updates the canvas.
-     * To automatically detect the correct ratio, pass the string `'auto'` for `pixelRatio`.
-     * @method setPixelRatio
-     * @param {render} render
-     * @param {number} pixelRatio
-     */
-    ChemistryRender.setPixelRatio = function(render, pixelRatio) {
-        var options = render.options,
-            canvas = render.canvas;
-
-        if (pixelRatio === 'auto') {
-            pixelRatio = _getPixelRatio(canvas);
-        }
-
-        options.pixelRatio = pixelRatio;
-        canvas.setAttribute('data-pixel-ratio', pixelRatio);
-        canvas.width = options.width * pixelRatio;
-        canvas.height = options.height * pixelRatio;
-        canvas.style.width = options.width + 'px';
-        canvas.style.height = options.height + 'px';
-        render.context.scale(pixelRatio, pixelRatio);
     };
 
     /**
@@ -242,16 +228,6 @@ let Engine = Matter.Engine,
         render.bounds.max.x -= padding.x;
         render.bounds.min.y -= padding.y;
         render.bounds.max.y -= padding.y;
-
-        // update mouse
-        if (render.mouse) {
-            Matter.Mouse.setScale(render.mouse, {
-                x: (render.bounds.max.x - render.bounds.min.x) / render.canvas.width,
-                y: (render.bounds.max.y - render.bounds.min.y) / render.canvas.height
-            });
-
-            Matter.Mouse.setOffset(render.mouse, render.bounds.min);
-        }
     };
 
     /**
@@ -265,17 +241,8 @@ let Engine = Matter.Engine,
             boundsScaleX = boundsWidth / render.options.width,
             boundsScaleY = boundsHeight / render.options.height;
 
-        render.context.scale(1 / boundsScaleX, 1 / boundsScaleY);
-        render.context.translate(-render.bounds.min.x, -render.bounds.min.y);
-    };
-
-    /**
-     * Resets all transforms on the render context.
-     * @method endViewTransform
-     * @param {render} render
-     */
-    ChemistryRender.endViewTransform = function(render) {
-        render.context.setTransform(render.options.pixelRatio, 0, 0, render.options.pixelRatio, 0, 0);
+        render.pixiStage.scale.set(1 / boundsScaleX / ChemistryRender.qualityScaleUp, 1 / boundsScaleY / ChemistryRender.qualityScaleUp);
+        render.pixiStage.position.set(-render.bounds.min.x * (1 / boundsScaleX), -render.bounds.min.y * (1 / boundsScaleY));
     };
 
     /**
@@ -286,529 +253,74 @@ let Engine = Matter.Engine,
      */
     ChemistryRender.world = function(render) {
         Profiler.begin("ChemistryRender.world");
-        var engine = render.engine,
-            world = engine.world,
-            canvas = render.canvas,
-            context = render.context,
-            options = render.options,
-            allBodies = Matter.Composite.allBodies(world),
-            allConstraints = Matter.Composite.allConstraints(world),
-            background = options.wireframes ? options.wireframeBackground : options.background,
-            bodies = [],
-            constraints = [],
-            i;
+
+        let allBodies = Matter.Composite.allBodies(render.engine.world);
+        let bodies = [];
 
         var event = {
-            timestamp: engine.timing.timestamp
+            render: render,
+            timestamp: render.engine.timing.timestamp
         };
 
         Profiler.begin("beforeRender");
-        Events.trigger(render, 'beforeRender', event);
+        Matter.Events.trigger(render, 'beforeRender', event);
         Profiler.end();
 
         Profiler.begin("pre bodies");
-        // apply background if it has changed
-        if (render.currentBackground !== background)
-            _applyBackground(render, background);
+        bodies = allBodies;
+        Profiler.end(); 
 
-        // clear the canvas with a transparent fill, to allow the canvas background to show
-        context.globalCompositeOperation = 'source-in';
-        context.fillStyle = "transparent";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.globalCompositeOperation = 'source-over';
+        ChemistryRender.startViewTransform(render);
 
-        // handle bounds
-        if (options.hasBounds) {
-            // filter out bodies that are not in view
-            for (i = 0; i < allBodies.length; i++) {
-                var body = allBodies[i];
-                if (Matter.Bounds.overlaps(body.bounds, render.bounds))
-                    bodies.push(body);
-            }
+        //Create a generic Graphics for all custom drawing on top
+        render.overlayGraphics = new PIXI.Graphics();
 
-            // filter out constraints that are not in view
-            for (i = 0; i < allConstraints.length; i++) {
-                var constraint = allConstraints[i],
-                    bodyA = constraint.bodyA,
-                    bodyB = constraint.bodyB,
-                    pointAWorld = constraint.pointA,
-                    pointBWorld = constraint.pointB;
-
-                if (bodyA) pointAWorld = Matter.Vector.add(bodyA.position, constraint.pointA);
-                if (bodyB) pointBWorld = Matter.Vector.add(bodyB.position, constraint.pointB);
-
-                if (!pointAWorld || !pointBWorld)
-                    continue;
-
-                if (Matter.Bounds.contains(render.bounds, pointAWorld) || Matter.Bounds.contains(render.bounds, pointBWorld))
-                    constraints.push(constraint);
-            }
-
-            // transform the view
-            ChemistryRender.startViewTransform(render);
-
-            // update mouse
-            if (render.mouse) {
-                Matter.Mouse.setScale(render.mouse, {
-                    x: (render.bounds.max.x - render.bounds.min.x) / render.canvas.width,
-                    y: (render.bounds.max.y - render.bounds.min.y) / render.canvas.height
-                });
-
-                Matter.Mouse.setOffset(render.mouse, render.bounds.min);
-            }
-        } else {
-            constraints = allConstraints;
-            bodies = allBodies;
-        }
-
-        Profiler.end(); //pre bodies
-
-        if (!options.wireframes || (engine.enableSleeping && options.showSleeping)) {
-            // fully featured rendering of bodies
-            Profiler.begin("background");
-            ChemistryRender.bodies(render, ChemistryRender.selectBackgroundBodies(bodies), context);
-            Profiler.end(); 
-
-            Profiler.begin("e:afterBackgroundRender");
-            Events.trigger(render, 'afterBackgroundRender', event);
-            Profiler.end();
-            ChemistryRender.bodies(render, ChemistryRender.selectNonBackgroundBodies(bodies), context);
-        } else {
-            Profiler.begin("e:afterBackgroundRender");
-            Events.trigger(render, 'afterBackgroundRender', event);
-            Profiler.end();
-            if (options.showConvexHulls)
-                ChemistryRender.bodyConvexHulls(render, bodies, context);
-
-            // optimised method for wireframes only
-            ChemistryRender.bodyWireframes(render, bodies, context);
-        }
-
-        Profiler.begin("after bodies");
-        if (options.showBounds)
-            ChemistryRender.bodyBounds(render, bodies, context);
-
-        if (options.showAxes || options.showAngleIndicator)
-            ChemistryRender.bodyAxes(render, bodies, context);
-
-        if (options.showPositions)
-            ChemistryRender.bodyPositions(render, bodies, context);
-
-        if (options.showVelocity)
-            ChemistryRender.bodyVelocity(render, bodies, context);
-
-        if (options.showIds)
-            ChemistryRender.bodyIds(render, bodies, context);
-
-        if (options.showSeparations)
-            ChemistryRender.separations(render, engine.pairs.list, context);
-
-        if (options.showCollisions)
-            ChemistryRender.collisions(render, engine.pairs.list, context);
-
-        if (options.showVertexNumbers)
-            ChemistryRender.vertexNumbers(render, bodies, context);
-
-        if (options.showMousePosition)
-            ChemistryRender.mousePosition(render, render.mouse, context);
-
-        ChemistryRender.constraints(constraints, context);
-
-        if (options.showBroadphase && engine.broadphase.controller === Grid)
-            ChemistryRender.grid(render, engine.broadphase, context);
-
-        if (options.showDebug)
-            ChemistryRender.debug(render, context);
-
+        //Remove all children from Pixi, they will be recreated again
+        Profiler.begin("removeChildren");
+        render.pixiStage.removeChildren(0);
         Profiler.end();
+
+        Profiler.begin("background");
+        ChemistryRender.bodies(render, ChemistryRender.selectBackgroundBodies(bodies));
+        Profiler.end(); 
+
+        Profiler.begin("e:afterBackgroundRender");
+        Matter.Events.trigger(render, 'afterBackgroundRender', event);
+        Profiler.end();
+
+        //Draw all non-background bodies
+        ChemistryRender.bodies(render, ChemistryRender.selectNonBackgroundBodies(bodies));
 
         Profiler.begin("afterParticlesRender");
-        Events.trigger(render, 'afterParticlesRender', event);
+        event.graphics = render.overlayGraphics;
+        event.stage = render.pixiStage;
+        Matter.Events.trigger(render, 'afterParticlesRender', event);
         Profiler.end();
 
-        if (options.hasBounds) {
-            // revert view transforms
-            ChemistryRender.endViewTransform(render);
-        }
+        //Draw the custom overlay Graphics
+        render.pixiStage.addChild(render.overlayGraphics);
+
+        Profiler.begin("pixiRendering");
+        render.pixiRenderer.render(render.pixiStage);
+        Profiler.end();
 
         Profiler.begin("afterRender");
-        Events.trigger(render, 'afterRender', event);
+        Matter.Events.trigger(render, 'afterRender', event);
         Profiler.end();
 
         Profiler.end();
     };
 
     ChemistryRender.selectBackgroundBodies = function(bodies) {
-        let selected = [];
-        for (body of bodies) {
-            if (body.plugin && body.plugin.background && body.plugin.background.isBackground) {
-                selected.push(body);
-            }
-        }
-        return selected;
+        return bodies.filter(body => (body.plugin && body.plugin.background && body.plugin.background.isBackground));
     };
 
     ChemistryRender.selectNonBackgroundBodies = function(bodies) {
-        let selected = [];
-        for (body of bodies) {
-            if (!body.plugin || !body.plugin.background || !body.plugin.background.isBackground) {
-                selected.push(body);
-            }
-        }
-        return selected;
+        return bodies.filter(body => (!body.plugin || !body.plugin.background || !body.plugin.background.isBackground));
     };
 
-    /**
-     * Description
-     * @private
-     * @method debug
-     * @param {render} render
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.debug = function(render, context) {
-        var c = context,
-            engine = render.engine,
-            world = engine.world,
-            metrics = engine.metrics,
-            options = render.options,
-            bodies = Composite.allBodies(world),
-            space = "    ";
-
-        if (engine.timing.timestamp - (render.debugTimestamp || 0) >= 500) {
-            var text = "";
-
-            if (metrics.timing) {
-                text += "fps: " + Math.round(metrics.timing.fps) + space;
-            }
-
-            // @if DEBUG
-            if (metrics.extended) {
-                if (metrics.timing) {
-                    text += "delta: " + metrics.timing.delta.toFixed(3) + space;
-                    text += "correction: " + metrics.timing.correction.toFixed(3) + space;
-                }
-
-                text += "bodies: " + bodies.length + space;
-
-                if (engine.broadphase.controller === Grid)
-                    text += "buckets: " + metrics.buckets + space;
-
-                text += "\n";
-
-                text += "collisions: " + metrics.collisions + space;
-                text += "pairs: " + engine.pairs.list.length + space;
-                text += "broad: " + metrics.broadEff + space;
-                text += "mid: " + metrics.midEff + space;
-                text += "narrow: " + metrics.narrowEff + space;
-            }
-            // @endif
-
-            render.debugString = text;
-            render.debugTimestamp = engine.timing.timestamp;
-        }
-
-        if (render.debugString) {
-            c.font = "12px Arial";
-
-            if (options.wireframes) {
-                c.fillStyle = 'rgba(255,255,255,0.5)';
-            } else {
-                c.fillStyle = 'rgba(0,0,0,0.5)';
-            }
-
-            var split = render.debugString.split('\n');
-
-            for (var i = 0; i < split.length; i++) {
-                c.fillText(split[i], 50, 50 + i * 18);
-            }
-        }
-    };
-
-    /**
-     * Description
-     * @private
-     * @method constraints
-     * @param {constraint[]} constraints
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.constraints = function(constraints, context) {
-        var c = context;
-
-        for (var i = 0; i < constraints.length; i++) {
-            var constraint = constraints[i];
-
-            if (!constraint.render.visible || !constraint.pointA || !constraint.pointB)
-                continue;
-
-            var bodyA = constraint.bodyA,
-                bodyB = constraint.bodyB,
-                start,
-                end;
-
-            if (bodyA) {
-                start = Matter.Vector.add(bodyA.position, constraint.pointA);
-            } else {
-                start = constraint.pointA;
-            }
-
-            if (constraint.render.type === 'pin') {
-                c.beginPath();
-                c.arc(start.x, start.y, 3, 0, 2 * Math.PI);
-                c.closePath();
-            } else {
-                if (bodyB) {
-                    end = Matter.Vector.add(bodyB.position, constraint.pointB);
-                } else {
-                    end = constraint.pointB;
-                }
-
-                c.beginPath();
-                c.moveTo(start.x, start.y);
-
-                if (constraint.render.type === 'spring') {
-                    var delta = Matter.Vector.sub(end, start),
-                        normal = Matter.Vector.perp(Vector.normalise(delta)),
-                        coils = Math.ceil(Matter.Common.clamp(constraint.length / 5, 12, 20)),
-                        offset;
-
-                    for (var j = 1; j < coils; j += 1) {
-                        offset = j % 2 === 0 ? 1 : -1;
-
-                        c.lineTo(
-                            start.x + delta.x * (j / coils) + normal.x * offset * 4,
-                            start.y + delta.y * (j / coils) + normal.y * offset * 4
-                        );
-                    }
-                }
-
-                c.lineTo(end.x, end.y);
-            }
-
-            if (constraint.render.lineWidth) {
-                c.lineWidth = constraint.render.lineWidth;
-                c.strokeStyle = constraint.render.strokeStyle;
-                c.stroke();
-            }
-
-            if (constraint.render.anchors) {
-                c.fillStyle = constraint.render.strokeStyle;
-                c.beginPath();
-                c.arc(start.x, start.y, 3, 0, 2 * Math.PI);
-                c.arc(end.x, end.y, 3, 0, 2 * Math.PI);
-                c.closePath();
-                c.fill();
-            }
-        }
-    };
-
-    /**
-     * Description
-     * @private
-     * @method bodyShadows
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyShadows = function(render, bodies, context) {
-        var c = context,
-            engine = render.engine;
-
-        for (var i = 0; i < bodies.length; i++) {
-            var body = bodies[i];
-
-            if (!body.render.visible)
-                continue;
-
-            if (body.circleRadius) {
-                c.beginPath();
-                c.arc(body.position.x, body.position.y, body.circleRadius, 0, 2 * Math.PI);
-                c.closePath();
-            } else {
-                c.beginPath();
-                c.moveTo(body.vertices[0].x, body.vertices[0].y);
-                for (var j = 1; j < body.vertices.length; j++) {
-                    c.lineTo(body.vertices[j].x, body.vertices[j].y);
-                }
-                c.closePath();
-            }
-
-            var distanceX = body.position.x - render.options.width * 0.5,
-                distanceY = body.position.y - render.options.height * 0.2,
-                distance = Math.abs(distanceX) + Math.abs(distanceY);
-
-            c.shadowColor = 'rgba(0,0,0,0.15)';
-            c.shadowOffsetX = 0.05 * distanceX;
-            c.shadowOffsetY = 0.05 * distanceY;
-            c.shadowBlur = 1 + 12 * Math.min(1, distance / 1000);
-
-            c.fill();
-
-            c.shadowColor = null;
-            c.shadowOffsetX = null;
-            c.shadowOffsetY = null;
-            c.shadowBlur = null;
-        }
-    };
-
-    ChemistryRender.drawAtom = function(render, atom, radius, particle, singleAtomParticle, context) {
-        Profiler.begin("drawAtom");
-        //Todo: implement balls and sticks
-        //Todo: try drawing when picture is bigger than real particle
-        //Todo: optimize performance
-
-        let c = context;
-        let engine = render.engine;
-        let options = render.options;
-
-        if (options.showSleeping && particle.isSleeping) {
-            c.globalAlpha = 0.5 * atom.render.opacity;
-        } else if (atom.render.opacity !== 1) {
-            c.globalAlpha = atom.render.opacity;
-        }
-
-        if (atom.render.sprite && atom.render.sprite.texture && !options.wireframes) {
-            // part sprite
-            Profiler.begin("sprite");
-            var sprite = atom.render.sprite,
-                texture = _getTexture(render, sprite.texture);
-
-            c.translate(atom.position.x, atom.position.y);
-            c.rotate(atom.angle);
-
-            c.drawImage(
-                texture,
-                texture.width * -sprite.xOffset * sprite.xScale,
-                texture.height * -sprite.yOffset * sprite.yScale,
-                texture.width * sprite.xScale,
-                texture.height * sprite.yScale
-            );
-
-            // revert translation, hopefully faster than save / restore
-            c.rotate(-atom.angle);
-            c.translate(-atom.position.x, -atom.position.y);
-            Profiler.end();
-        } else {
-            if (!options.wireframes) {
-                Profiler.begin("draw shapes");
-                //Draw main filled circle
-                Profiler.begin("circle");
-                c.beginPath();
-                c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
-                c.fillStyle = atom.render.fillStyle;
-                c.fill();
-                Profiler.end();
-
-                let edgeWidth = 2;
-                if (atom.render.lineWidth) {
-                    edgeWidth = atom.render.lineWidth;
-                }
-
-                //Drawing flare
-                Profiler.begin("flare");
-                c.beginPath();
-                c.arc(atom.position.x+(radius-edgeWidth/2)/(2*Math.SQRT2), atom.position.y-(radius-edgeWidth/2)/(2*Math.SQRT2), (radius-edgeWidth/2)/2, 0, 2 * Math.PI);
-                c.fillStyle = ChemistryRender._getFlareColor(atom.render.fillStyle);
-                c.fill();                
-                Profiler.end();
-
-                //Draw edge
-                Profiler.begin("edge");
-                c.lineWidth = edgeWidth;
-                c.beginPath();
-                c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
-                if (atom.render.lineWidth) {
-                    c.strokeStyle = atom.render.strokeStyle;
-                } else {
-                    c.strokeStyle = ChemistryRender._getEdgeColor(atom.render.fillStyle);
-                }
-                c.stroke();
-                Profiler.end();
-
-                Profiler.end();
-            } else {
-                c.beginPath();
-                c.arc(atom.position.x, atom.position.y, radius, 0, 2 * Math.PI);
-                c.lineWidth = 1;
-                c.strokeStyle = '#bbb';
-                c.stroke();
-            }
-                
-            Profiler.begin("draw text");
-            c.translate(atom.position.x, atom.position.y);
-            if (options.rotateAtomLabels) {
-                c.rotate(particle.angle);
-            }
-
-            c.textAlign = "center";
-            c.textBaseline = "middle";
-            c.font = ChemistryRender._getLabelFont(radius);
-            c.fillStyle = ChemistryRender._getLabelTextColor(atom.render.fillStyle);
-
-            let labelText = ChemistryRender._useSubscript(atom.plugin.chemistry.formula);
-            if (singleAtomParticle) {
-                labelText = ChemistryRender._useSubscript(particle.plugin.chemistry.formula);
-            }
-
-            if (atom.plugin.chemistry && atom.plugin.chemistry.formula) {
-                c.fillText(labelText, 0, 0);
-            };
-
-            // revert translation, hopefully faster than save / restore
-            if (options.rotateAtomLabels) {
-                c.rotate(-particle.angle);
-            }
-            c.translate(-atom.position.x, -atom.position.y);
-            Profiler.end();
-        }
-        c.globalAlpha = 1;
-        Profiler.end();
-    };
-
-    ChemistryRender.drawParticle = function(render, particle, context) {
-        let c = context;
-        let engine = render.engine;
-        let options = render.options;
-
-        let singleAtomParticle = (particle.parts.length == 2);
-
-        for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
-            part = particle.parts[k];
-
-            if (!part.render.visible)
-                continue;
-
-            if (part.circleRadius) {
-                ChemistryRender.drawAtom(render, part, part.circleRadius, particle, singleAtomParticle, context);
-            } else {
-                console.log("Error. Molecule part that is not a proper atom (has no circleRadius property).");
-            }
-        }
-
-        var event = {
-            context: context,
-            particle: particle
-        };
-        Events.trigger(render, 'afterParticleDraw', event);
-    };
-
-    /**
-     * Description
-     * @private
-     * @method bodies
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodies = function(render, bodies, context) {
+    ChemistryRender.bodies = function(render, bodies) {
         Profiler.begin("bodies");
-        var c = context,
-            engine = render.engine,
-            options = render.options,
-            showInternalEdges = options.showInternalEdges || !options.wireframes,
-            body,
-            part,
-            i,
-            k;
 
         for (i = 0; i < bodies.length; i++) {
             body = bodies[i];
@@ -817,890 +329,259 @@ let Engine = Matter.Engine,
                 continue;
 
             if (body.plugin.chemistry && body.plugin.chemistry.particle) {
-                ChemistryRender.drawParticle(render, body, context);
-                continue;
+                ChemistryRender.drawParticle(render, body);
+            } else {
+                ChemistryRender.drawBody(render, body);
             }
 
-            // handle compound parts
-            let singlePartBody = (body.parts.length == 2);
-
-            for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
-                part = body.parts[k];
-
-                if (!part.render.visible)
-                    continue;
-
-                if (options.showSleeping && body.isSleeping) {
-                    c.globalAlpha = 0.5 * part.render.opacity;
-                } else if (part.render.opacity !== 1) {
-                    c.globalAlpha = part.render.opacity;
-                }
-
-                if (part.render.sprite && part.render.sprite.texture && !options.wireframes) {
-                    // part sprite
-                    var sprite = part.render.sprite,
-                        texture = _getTexture(render, sprite.texture);
-
-                    c.translate(part.position.x, part.position.y);
-                    c.rotate(part.angle);
-
-                    c.drawImage(
-                        texture,
-                        texture.width * -sprite.xOffset * sprite.xScale,
-                        texture.height * -sprite.yOffset * sprite.yScale,
-                        texture.width * sprite.xScale,
-                        texture.height * sprite.yScale
-                    );
-
-                    // revert translation, hopefully faster than save / restore
-                    c.rotate(-part.angle);
-                    c.translate(-part.position.x, -part.position.y);
-                } else {
-                    // part polygon
-                    if (part.circleRadius) {
-                    //Start of test
-                        c.beginPath();
-                        c.arc(part.position.x, part.position.y, part.circleRadius, 0, 2 * Math.PI);
-                    } else {
-                        c.beginPath();
-                        c.moveTo(part.vertices[0].x, part.vertices[0].y);
-
-                        for (var j = 1; j < part.vertices.length; j++) {
-                            if (!part.vertices[j - 1].isInternal || showInternalEdges) {
-                                c.lineTo(part.vertices[j].x, part.vertices[j].y);
-                            } else {
-                                c.moveTo(part.vertices[j].x, part.vertices[j].y);
-                            }
-
-                            if (part.vertices[j].isInternal && !showInternalEdges) {
-                                c.moveTo(part.vertices[(j + 1) % part.vertices.length].x, part.vertices[(j + 1) % part.vertices.length].y);
-                            }
-                        }
-
-                        c.lineTo(part.vertices[0].x, part.vertices[0].y);
-                        c.closePath();
-                    }
-
-                    if (!options.wireframes) {
-                        c.fillStyle = part.render.fillStyle;
-
-                        if (part.render.lineWidth) {
-                            c.lineWidth = part.render.lineWidth;
-                            c.strokeStyle = part.render.strokeStyle;
-                            c.stroke();
-                        }
-
-                        c.fill();
-                    } else {
-                        c.lineWidth = 1;
-                        c.strokeStyle = '#bbb';
-                        c.stroke();
-                    }
-                
-                    c.translate(part.position.x, part.position.y);
-                    c.rotate(body.angle);
-                    //Todo: Make a separate overridable method for particle drawing
-                    //Todo: implement balls and sticks
-                    //Todo: try drawing when picture is bigger than real particle
-                    //Todo: optimize performance
-                    c.fillStyle = ChemistryRender._getLabelTextColor(part.render.fillStyle);
-                    c.textAlign = "center";
-                    c.textBaseline = "middle";
-                    c.font = ChemistryRender._getLabelFont(part.circleRadius);
-                    if (singlePartBody) {
-                        if (body.plugin.chemistry && body.plugin.chemistry.formula) {
-                            c.fillText(ChemistryRender._useSubscript(body.plugin.chemistry.formula), 0, 0);
-                        };
-                    } else {
-                        if (part.plugin.chemistry && part.plugin.chemistry.formula) {
-                            c.fillText(part.plugin.chemistry.formula, 0, 0);
-                        };
-                    }
-                    c.rotate(-body.angle);
-                    c.translate(-part.position.x, -part.position.y);
-                }
-
-                c.globalAlpha = 1;
-            }
         }
         Profiler.end();
     };
 
-    ChemistryRender._getLabelFont = function(radius) {
-       let fontSize = 10;
-       if (radius<10) fontSize = 8;
-       if (radius<8) fontSize = 6;
-       if (radius<7) fontSize = 5;
-       if (radius>15) fontSize = 15;
-       return fontSize + "px Verdana";
+    ChemistryRender.drawBody = function(render, body) {
+        for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
+            part = body.parts[k];
+
+            if (!part.render.visible)
+                continue;
+
+            ChemistryRender.drawPart(render, part);
+        }
     };
 
-    ChemistryRender._getLabelTextColor = function(fillColor) {
-        if (fillColor.substring(0,1) == '#') {
-            fillColor = fillColor.substring(1);                           
+    ChemistryRender.drawParticle = function(render, particle) {
+        for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
+            part = particle.parts[k];
+
+            if (!part.render.visible)
+                continue;
+
+            ChemistryRender.drawAtom(render, part);
         }
 
-        var rgb = {};
-
-        // Grab each pair (channel) of hex values and parse them to ints using hexadecimal decoding 
-        rgb.r = parseInt(fillColor.substring(0,2),16);
-        rgb.g = parseInt(fillColor.substring(2,4),16);
-        rgb.b = parseInt(fillColor.substring(4),16);
-
-        let lightnessThreshold = 0.7; //If average lightless more than treshold we use black
-        if (rgb.r + rgb.g + rgb.b > 255*3*lightnessThreshold) {
-            return "#000000";   
-        } else {
-            return "#FFFFFF";   
+        var event = {
+            render: render,
+            particle: particle,
+            graphics: render.overlayGraphics
         };
+        Matter.Events.trigger(render, 'afterParticleDraw', event);
     };
 
-    /**
-     * Converts an RGB color value to HSL. Conversion formula
-     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-     * Assumes r, g, and b are contained in the set [0, 255] and
-     * returns h, s, and l in the set [0, 1].
-     *
-     * @param   {number}  r       The red color value
-     * @param   {number}  g       The green color value
-     * @param   {number}  b       The blue color value
-     * @return  {Array}           The HSL representation
-     */
-    ChemistryRender._rgbToHsl = function(r, g, b) {
-        r /= 255, g /= 255, b /= 255;
-        let max = Math.max(r, g, b), min = Math.min(r, g, b);
-        let h, s, l = (max + min) / 2;
+    ChemistryRender._getSpriteBasedBodyKey = function(body) {
+        return body.id + ":" + part.render.sprite.texture;
+    };
 
-        if (max == min){
-            h = s = 0; // achromatic
+    ChemistryRender.drawPart = function(render, part) {
+        if (part.render.sprite && part.render.sprite.texture) {
+            ChemistryRender.drawSpriteBasedPart(render, part);
         } else {
-            let d = max - min;
-            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-            switch(max) {
-                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                case g: h = (b - r) / d + 2; break;
-                case b: h = (r - g) / d + 4; break;
-            }
-            h /= 6;
-        }
-
-        return [h, s, l];
-    }
-
-    /**
-     * Converts an HSL color value to RGB. Conversion formula
-     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-     * Assumes h, s, and l are contained in the set [0, 1] and
-     * returns r, g, and b in the set [0, 255].
-     *
-     * @param   {number}  h       The hue
-     * @param   {number}  s       The saturation
-     * @param   {number}  l       The lightness
-     * @return  {Array}           The RGB representation
-     */
-    ChemistryRender._hslToRgb = function(h, s, l) {
-        var r, g, b;
-
-        if (s == 0) {
-            r = g = b = l; // achromatic
-        } else {
-            let hue2rgb = function hue2rgb(p, q, t){
-                if(t < 0) t += 1;
-                if(t > 1) t -= 1;
-                if(t < 1/6) return p + (q - p) * 6 * t;
-                if(t < 1/2) return q;
-                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                return p;
-            }
-
-            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            let p = 2 * l - q;
-            r = hue2rgb(p, q, h + 1/3);
-            g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1/3);
-        }
-
-        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-    }
-
-    ChemistryRender._rgbToHex = function(r,g,b) {
-        r = r.toString(16);
-        g = g.toString(16);
-        b = b.toString(16);
-
-        if (r.length == 1)
-            r = "0" + r;
-        if (g.length == 1)
-            g = "0" + g;
-        if (b.length == 1)
-            b = "0" + b;
-
-      return "#" + r + g + b;
-    }
-
-    ChemistryRender._HexToRgb = function(hex) {
-        if (hex.substring(0,1) == '#') {
-            hex = hex.substring(1);                           
-        }
-
-        // Grab each pair (channel) of hex values and parse them to ints using hexadecimal decoding 
-        let r = parseInt(hex.substring(0,2),16);
-        let g = parseInt(hex.substring(2,4),16);
-        let b = parseInt(hex.substring(4),16);
-
-        return [r, g, b]
-    }
-
-    //Todo: cash colors
-    ChemistryRender._getEdgeColor = function(fillColor) {
-        [r, g, b] = ChemistryRender._HexToRgb(fillColor);
-        r = Math.floor(r*0.7);
-        g = Math.floor(g*0.7);
-        b = Math.floor(b*0.7);
-        return ChemistryRender._rgbToHex(r, g, b);
-    };
-
-    ChemistryRender._getFlareColor = function(fillColor) {
-        [r, g, b] = ChemistryRender._HexToRgb(fillColor);
-        r = Math.floor(255-(255-r)*0.7);
-        g = Math.floor(255-(255-g)*0.7);
-        b = Math.floor(255-(255-b)*0.7);
-        return ChemistryRender._rgbToHex(r, g, b);
-    };
-
-    ChemistryRender._useSubscript = function(s) {
-        //Full table: https://stackoverflow.com/questions/17908593/how-to-find-the-unicode-of-the-subscript-alphabet
-        return s.replace("+2", "\u00B2\u207A").
-                 replace("+", "\u207A").
-                 replace("-", "\u207B").
-                 replace("1", "\u00B9").
-                 replace("2", "\u00B2").
-                 replace("3", "\u00B3").
-                 replace("4", "\u2074");
-    };
-
-    /**
-     * Optimised method for drawing body wireframes in one pass
-     * @private
-     * @method bodyWireframes
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyWireframes = function(render, bodies, context) {
-        var c = context,
-            showInternalEdges = render.options.showInternalEdges,
-            body,
-            part,
-            i,
-            j,
-            k;
-
-        c.beginPath();
-
-        // render all bodies
-        for (i = 0; i < bodies.length; i++) {
-            body = bodies[i];
-
-            if (!body.render.visible)
-                continue;
-
-            // handle compound parts
-            for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
-                part = body.parts[k];
-
-                c.moveTo(part.vertices[0].x, part.vertices[0].y);
-
-                for (j = 1; j < part.vertices.length; j++) {
-                    if (!part.vertices[j - 1].isInternal || showInternalEdges) {
-                        c.lineTo(part.vertices[j].x, part.vertices[j].y);
-                    } else {
-                        c.moveTo(part.vertices[j].x, part.vertices[j].y);
-                    }
-
-                    if (part.vertices[j].isInternal && !showInternalEdges) {
-                        c.moveTo(part.vertices[(j + 1) % part.vertices.length].x, part.vertices[(j + 1) % part.vertices.length].y);
-                    }
-                }
-
-                c.lineTo(part.vertices[0].x, part.vertices[0].y);
-            }
-        }
-
-        c.lineWidth = 1;
-        c.strokeStyle = '#bbb';
-        c.stroke();
-    };
-
-    /**
-     * Optimised method for drawing body convex hull wireframes in one pass
-     * @private
-     * @method bodyConvexHulls
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyConvexHulls = function(render, bodies, context) {
-        var c = context,
-            body,
-            part,
-            i,
-            j,
-            k;
-
-        c.beginPath();
-
-        // render convex hulls
-        for (i = 0; i < bodies.length; i++) {
-            body = bodies[i];
-
-            if (!body.render.visible || body.parts.length === 1)
-                continue;
-
-            c.moveTo(body.vertices[0].x, body.vertices[0].y);
-
-            for (j = 1; j < body.vertices.length; j++) {
-                c.lineTo(body.vertices[j].x, body.vertices[j].y);
-            }
-
-            c.lineTo(body.vertices[0].x, body.vertices[0].y);
-        }
-
-        c.lineWidth = 1;
-        c.strokeStyle = 'rgba(255,255,255,0.2)';
-        c.stroke();
-    };
-
-    /**
-     * Renders body vertex numbers.
-     * @private
-     * @method vertexNumbers
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.vertexNumbers = function(render, bodies, context) {
-        var c = context,
-            i,
-            j,
-            k;
-
-        for (i = 0; i < bodies.length; i++) {
-            var parts = bodies[i].parts;
-            for (k = parts.length > 1 ? 1 : 0; k < parts.length; k++) {
-                var part = parts[k];
-                for (j = 0; j < part.vertices.length; j++) {
-                    c.fillStyle = 'rgba(255,255,255,0.2)';
-                    c.fillText(i + '_' + j, part.position.x + (part.vertices[j].x - part.position.x) * 0.8, part.position.y + (part.vertices[j].y - part.position.y) * 0.8);
-                }
-            }
+            ChemistryRender.drawGeometryPart(render, part);
         }
     };
 
-    /**
-     * Renders mouse position.
-     * @private
-     * @method mousePosition
-     * @param {render} render
-     * @param {mouse} mouse
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.mousePosition = function(render, mouse, context) {
-        var c = context;
-        c.fillStyle = 'rgba(255,255,255,0.8)';
-        c.fillText(mouse.position.x + '  ' + mouse.position.y, mouse.position.x + 5, mouse.position.y - 5);
-    };
-
-    /**
-     * Draws body bounds
-     * @private
-     * @method bodyBounds
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyBounds = function(render, bodies, context) {
-        var c = context,
-            engine = render.engine,
-            options = render.options;
-
-        c.beginPath();
-
-        for (var i = 0; i < bodies.length; i++) {
-            var body = bodies[i];
-
-            if (body.render.visible) {
-                var parts = bodies[i].parts;
-                for (var j = parts.length > 1 ? 1 : 0; j < parts.length; j++) {
-                    var part = parts[j];
-                    c.rect(part.bounds.min.x, part.bounds.min.y, part.bounds.max.x - part.bounds.min.x, part.bounds.max.y - part.bounds.min.y);
-                }
-            }
-        }
-
-        if (options.wireframes) {
-            c.strokeStyle = 'rgba(255,255,255,0.08)';
-        } else {
-            c.strokeStyle = 'rgba(0,0,0,0.1)';
-        }
-
-        c.lineWidth = 1;
-        c.stroke();
-    };
-
-    /**
-     * Draws body angle indicators and axes
-     * @private
-     * @method bodyAxes
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyAxes = function(render, bodies, context) {
-        var c = context,
-            engine = render.engine,
-            options = render.options,
-            part,
-            i,
-            j,
-            k;
-
-        c.beginPath();
-
-        for (i = 0; i < bodies.length; i++) {
-            var body = bodies[i],
-                parts = body.parts;
-
-            if (!body.render.visible)
-                continue;
-
-            if (options.showAxes) {
-                // render all axes
-                for (j = parts.length > 1 ? 1 : 0; j < parts.length; j++) {
-                    part = parts[j];
-                    for (k = 0; k < part.axes.length; k++) {
-                        var axis = part.axes[k];
-                        c.moveTo(part.position.x, part.position.y);
-                        c.lineTo(part.position.x + axis.x * 20, part.position.y + axis.y * 20);
-                    }
-                }
+    ChemistryRender.drawSpriteBasedPart = function(render, part) {
+        let sprite = render.spriteBasedBodySprites[ChemistryRender._getSpriteBasedBodyKey(part)];
+        if (!sprite) {
+            let texture = null;
+            if (part.render.sprite.texture in render.texturesCache) {
+                texture = render.texturesCache[part.render.sprite.texture];
             } else {
-                for (j = parts.length > 1 ? 1 : 0; j < parts.length; j++) {
-                    part = parts[j];
-                    for (k = 0; k < part.axes.length; k++) {
-                        // render a single axis indicator
-                        c.moveTo(part.position.x, part.position.y);
-                        c.lineTo((part.vertices[0].x + part.vertices[part.vertices.length-1].x) / 2,
-                                 (part.vertices[0].y + part.vertices[part.vertices.length-1].y) / 2);
-                    }
-                }
+                texture = PIXI.Texture.from(part.render.sprite.texture); 
+                render.texturesCache[part.render.sprite.texture] = texture;
             }
+        
+            sprite = new PIXI.Sprite(texture);
+            sprite.anchor.x = 0.5;
+            sprite.anchor.y = 0.5;
+            sprite.scale.set(ChemistryRender.qualityScaleUp, ChemistryRender.qualityScaleUp);
+            render.spriteBasedBodySprites[ChemistryRender._getSpriteBasedBodyKey(part)] = sprite;
         }
 
-        if (options.wireframes) {
-            c.strokeStyle = 'indianred';
-            c.lineWidth = 1;
+        sprite.position.x = _up(part.position.x);
+        sprite.position.y = _up(part.position.y);
+        sprite.rotation = part.angle;
+        sprite.alpha  = part.render.opacity;
+        render.pixiStage.addChild(sprite);
+    }
+
+    ChemistryRender.drawGeometryPart = function(render, part) {
+        let graphics = new PIXI.Graphics();
+        if (part.render.lineWidth) {
+            graphics.lineStyle(_up(part.render.lineWidth), Matter.Common.colorToNumber(part.render.strokeStyle), 1);
         } else {
-            c.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-            c.globalCompositeOperation = 'overlay';
-            c.lineWidth = 2;
+            graphics.lineStyle(0);
         }
 
-        c.stroke();
-        c.globalCompositeOperation = 'source-over';
-    };
+        graphics.beginFill(Matter.Common.colorToNumber(part.render.fillStyle), 1);
 
-    /**
-     * Draws body positions
-     * @private
-     * @method bodyPositions
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyPositions = function(render, bodies, context) {
-        var c = context,
-            engine = render.engine,
-            options = render.options,
-            body,
-            part,
-            i,
-            k;
-
-        c.beginPath();
-
-        // render current positions
-        for (i = 0; i < bodies.length; i++) {
-            body = bodies[i];
-
-            if (!body.render.visible)
-                continue;
-
-            // handle compound parts
-            for (k = 0; k < body.parts.length; k++) {
-                part = body.parts[k];
-                c.arc(part.position.x, part.position.y, 3, 0, 2 * Math.PI, false);
-                c.closePath();
-            }
-        }
-
-        if (options.wireframes) {
-            c.fillStyle = 'indianred';
+        if (part.circleRadius) {
+            graphics.drawCircle(_up(part.position.x), _up(part.position.y), _up(part.circleRadius));
         } else {
-            c.fillStyle = 'rgba(0,0,0,0.5)';
-        }
-        c.fill();
+            graphics.moveTo(_up(part.vertices[0].x), _up(part.vertices[0].y));
 
-        c.beginPath();
-
-        // render previous positions
-        for (i = 0; i < bodies.length; i++) {
-            body = bodies[i];
-            if (body.render.visible) {
-                c.arc(body.positionPrev.x, body.positionPrev.y, 2, 0, 2 * Math.PI, false);
-                c.closePath();
-            }
-        }
-
-        c.fillStyle = 'rgba(255,165,0,0.8)';
-        c.fill();
-    };
-
-    /**
-     * Draws body velocity
-     * @private
-     * @method bodyVelocity
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyVelocity = function(render, bodies, context) {
-        var c = context;
-
-        c.beginPath();
-
-        for (var i = 0; i < bodies.length; i++) {
-            var body = bodies[i];
-
-            if (!body.render.visible)
-                continue;
-
-            c.moveTo(body.position.x, body.position.y);
-            c.lineTo(body.position.x + (body.position.x - body.positionPrev.x) * 2, body.position.y + (body.position.y - body.positionPrev.y) * 2);
-        }
-
-        c.lineWidth = 3;
-        c.strokeStyle = 'cornflowerblue';
-        c.stroke();
-    };
-
-    /**
-     * Draws body ids
-     * @private
-     * @method bodyIds
-     * @param {render} render
-     * @param {body[]} bodies
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.bodyIds = function(render, bodies, context) {
-        var c = context,
-            i,
-            j;
-
-        for (i = 0; i < bodies.length; i++) {
-            if (!bodies[i].render.visible)
-                continue;
-
-            var parts = bodies[i].parts;
-            for (j = parts.length > 1 ? 1 : 0; j < parts.length; j++) {
-                var part = parts[j];
-                c.font = "12px Arial";
-                c.fillStyle = 'rgba(255,255,255,0.5)';
-                c.fillText(part.id, part.position.x + 10, part.position.y - 10);
-            }
-        }
-    };
-
-    /**
-     * Description
-     * @private
-     * @method collisions
-     * @param {render} render
-     * @param {pair[]} pairs
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.collisions = function(render, pairs, context) {
-        var c = context,
-            options = render.options,
-            pair,
-            collision,
-            corrected,
-            bodyA,
-            bodyB,
-            i,
-            j;
-
-        c.beginPath();
-
-        // render collision positions
-        for (i = 0; i < pairs.length; i++) {
-            pair = pairs[i];
-
-            if (!pair.isActive)
-                continue;
-
-            collision = pair.collision;
-            for (j = 0; j < pair.activeContacts.length; j++) {
-                var contact = pair.activeContacts[j],
-                    vertex = contact.vertex;
-                c.rect(vertex.x - 1.5, vertex.y - 1.5, 3.5, 3.5);
-            }
-        }
-
-        if (options.wireframes) {
-            c.fillStyle = 'rgba(255,255,255,0.7)';
-        } else {
-            c.fillStyle = 'orange';
-        }
-        c.fill();
-
-        c.beginPath();
-
-        // render collision normals
-        for (i = 0; i < pairs.length; i++) {
-            pair = pairs[i];
-
-            if (!pair.isActive)
-                continue;
-
-            collision = pair.collision;
-
-            if (pair.activeContacts.length > 0) {
-                var normalPosX = pair.activeContacts[0].vertex.x,
-                    normalPosY = pair.activeContacts[0].vertex.y;
-
-                if (pair.activeContacts.length === 2) {
-                    normalPosX = (pair.activeContacts[0].vertex.x + pair.activeContacts[1].vertex.x) / 2;
-                    normalPosY = (pair.activeContacts[0].vertex.y + pair.activeContacts[1].vertex.y) / 2;
-                }
-
-                if (collision.bodyB === collision.supports[0].body || collision.bodyA.isStatic === true) {
-                    c.moveTo(normalPosX - collision.normal.x * 8, normalPosY - collision.normal.y * 8);
+            for (var j = 1; j < part.vertices.length; j++) {
+                if (!part.vertices[j - 1].isInternal) {
+                    graphics.lineTo(_up(part.vertices[j].x), _up(part.vertices[j].y));
                 } else {
-                    c.moveTo(normalPosX + collision.normal.x * 8, normalPosY + collision.normal.y * 8);
+                    graphics.moveTo(_up(part.vertices[j].x), _up(part.vertices[j].y));
                 }
 
-                c.lineTo(normalPosX, normalPosY);
+                if (part.vertices[j].isInternal) {
+                    graphics.moveTo(_up(part.vertices[(j + 1) % part.vertices.length].x), _up(part.vertices[(j + 1) % part.vertices.length].y));
+                }
             }
+      
+            graphics.lineTo(_up(part.vertices[0].x), _up(part.vertices[0].y));
+            graphics.closePath();
         }
 
-        if (options.wireframes) {
-            c.strokeStyle = 'rgba(255,165,0,0.7)';
+        graphics.endFill();
+        graphics.alpha  = part.render.opacity;
+        render.pixiStage.addChild(graphics); 
+    }
+
+    ChemistryRender.drawAtom = function(render, atom) {
+        Profiler.begin("drawAtom");
+
+        let particle = atom.parent;
+        let radius = atom.circleRadius;
+        let labelText = ChemistryRender._getAtomDisplayText(atom);
+
+        //Drawing of each atom is divided into two parts: rotatable and non-rotatable sprite
+
+        //First we draw rotatable sprite
+        let atomSprite1 = render.atomRotatableSprites[ChemistryRender._getAtomKey(atom)];
+
+        if (!atomSprite1) {
+            atomSprite1 = ChemistryRender.createAtomRotatableSprite(render, labelText, atom.position, radius, particle.angle, atom.render.fillStyle);
+            render.atomRotatableSprites[ChemistryRender._getAtomKey(atom)] = atomSprite1;
+        }
+
+        atomSprite1.position.x = _up(atom.position.x);
+        atomSprite1.position.y = _up(atom.position.y);
+        atomSprite1.rotation  = particle.angle;
+        atomSprite1.alpha  = atom.render.opacity;
+        render.pixiStage.addChild(atomSprite1);
+
+        //Second we draw non-rotatable sprite
+        let atomSprite2 = render.atomNonRotatableSprites[ChemistryRender._getAtomKey(atom)];
+
+        if (!atomSprite2) {
+            atomSprite2 = ChemistryRender.createAtomNonRotatableSprite(render, labelText, atom.position, radius, particle.angle, atom.render.fillStyle);
+            render.atomNonRotatableSprites[ChemistryRender._getAtomKey(atom)] = atomSprite2;
+        }
+
+        atomSprite2.position.x = _up(atom.position.x);
+        atomSprite2.position.y = _up(atom.position.y);
+        atomSprite2.alpha  = atom.render.opacity;
+        render.pixiStage.addChild(atomSprite2);
+
+        Profiler.end();
+    };
+
+    ChemistryRender._getAtomDisplayText = function(atom) {
+        let particle = atom.parent;
+        let singleAtomParticle = particle.parts.length == 2;
+        if (singleAtomParticle) {
+            return particle.plugin.chemistry.formula;
         } else {
-            c.strokeStyle = 'orange';
+            return atom.plugin.chemistry.formula;
         }
-
-        c.lineWidth = 1;
-        c.stroke();
     };
 
-    /**
-     * Description
-     * @private
-     * @method separations
-     * @param {render} render
-     * @param {pair[]} pairs
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.separations = function(render, pairs, context) {
-        var c = context,
-            options = render.options,
-            pair,
-            collision,
-            corrected,
-            bodyA,
-            bodyB,
-            i,
-            j;
-
-        c.beginPath();
-
-        // render separations
-        for (i = 0; i < pairs.length; i++) {
-            pair = pairs[i];
-
-            if (!pair.isActive)
-                continue;
-
-            collision = pair.collision;
-            bodyA = collision.bodyA;
-            bodyB = collision.bodyB;
-
-            var k = 1;
-
-            if (!bodyB.isStatic && !bodyA.isStatic) k = 0.5;
-            if (bodyB.isStatic) k = 0;
-
-            c.moveTo(bodyB.position.x, bodyB.position.y);
-            c.lineTo(bodyB.position.x - collision.penetration.x * k, bodyB.position.y - collision.penetration.y * k);
-
-            k = 1;
-
-            if (!bodyB.isStatic && !bodyA.isStatic) k = 0.5;
-            if (bodyA.isStatic) k = 0;
-
-            c.moveTo(bodyA.position.x, bodyA.position.y);
-            c.lineTo(bodyA.position.x + collision.penetration.x * k, bodyA.position.y + collision.penetration.y * k);
-        }
-
-        if (options.wireframes) {
-            c.strokeStyle = 'rgba(255,165,0,0.5)';
-        } else {
-            c.strokeStyle = 'orange';
-        }
-        c.stroke();
+    ChemistryRender._getAtomKey = function(atom) {
+        return atom.id + ":" + ChemistryRender._getAtomDisplayText(atom) + ":" + atom.circleRadius + ":" + atom.render.fillStyle;
     };
 
-    /**
-     * Description
-     * @private
-     * @method grid
-     * @param {render} render
-     * @param {grid} grid
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.grid = function(render, grid, context) {
-        var c = context,
-            options = render.options;
 
-        if (options.wireframes) {
-            c.strokeStyle = 'rgba(255,180,0,0.1)';
-        } else {
-            c.strokeStyle = 'rgba(255,180,0,0.5)';
-        }
+    ChemistryRender.createAtomRotatableSprite = function(render, formula, position, radius, angle, color) {
+        var texture = ChemistryRender.getAtomRotatableTexture(render, formula, radius,  0, color);
 
-        c.beginPath();
+        var sprite = new PIXI.Sprite(texture);
+        sprite.anchor.x = 0.5;
+        sprite.anchor.y = 0.5;
 
-        var bucketKeys = Matter.Common.keys(grid.buckets);
-
-        for (var i = 0; i < bucketKeys.length; i++) {
-            var bucketId = bucketKeys[i];
-
-            if (grid.buckets[bucketId].length < 2)
-                continue;
-
-            var region = bucketId.split(/C|R/);
-            c.rect(0.5 + parseInt(region[1], 10) * grid.bucketWidth,
-                    0.5 + parseInt(region[2], 10) * grid.bucketHeight,
-                    grid.bucketWidth,
-                    grid.bucketHeight);
-        }
-
-        c.lineWidth = 1;
-        c.stroke();
+        return sprite;
     };
 
-    /**
-     * Description
-     * @private
-     * @method inspector
-     * @param {inspector} inspector
-     * @param {RenderingContext} context
-     */
-    ChemistryRender.inspector = function(inspector, context) {
-        var engine = inspector.engine,
-            selected = inspector.selected,
-            render = inspector.render,
-            options = render.options,
-            bounds;
+    ChemistryRender.createAtomNonRotatableSprite = function(render, formula, position, radius, angle, color) {
+        var texture = ChemistryRender.getAtomNonRotatableTexture(render, formula, radius,  0, color);
 
-        if (options.hasBounds) {
-            var boundsWidth = render.bounds.max.x - render.bounds.min.x,
-                boundsHeight = render.bounds.max.y - render.bounds.min.y,
-                boundsScaleX = boundsWidth / render.options.width,
-                boundsScaleY = boundsHeight / render.options.height;
+        var sprite = new PIXI.Sprite(texture);
+        sprite.anchor.x = 0.5;
+        sprite.anchor.y = 0.5;
 
-            context.scale(1 / boundsScaleX, 1 / boundsScaleY);
-            context.translate(-render.bounds.min.x, -render.bounds.min.y);
-        }
-
-        for (var i = 0; i < selected.length; i++) {
-            var item = selected[i].data;
-
-            context.translate(0.5, 0.5);
-            context.lineWidth = 1;
-            context.strokeStyle = 'rgba(255,165,0,0.9)';
-            context.setLineDash([1,2]);
-
-            switch (item.type) {
-
-            case 'body':
-
-                // render body selections
-                bounds = item.bounds;
-                context.beginPath();
-                context.rect(Math.floor(bounds.min.x - 3), Math.floor(bounds.min.y - 3),
-                             Math.floor(bounds.max.x - bounds.min.x + 6), Math.floor(bounds.max.y - bounds.min.y + 6));
-                context.closePath();
-                context.stroke();
-
-                break;
-
-            case 'constraint':
-
-                // render constraint selections
-                var point = item.pointA;
-                if (item.bodyA)
-                    point = item.pointB;
-                context.beginPath();
-                context.arc(point.x, point.y, 10, 0, 2 * Math.PI);
-                context.closePath();
-                context.stroke();
-
-                break;
-
-            }
-
-            context.setLineDash([]);
-            context.translate(-0.5, -0.5);
-        }
-
-        // render selection region
-        if (inspector.selectStart !== null) {
-            context.translate(0.5, 0.5);
-            context.lineWidth = 1;
-            context.strokeStyle = 'rgba(255,165,0,0.6)';
-            context.fillStyle = 'rgba(255,165,0,0.1)';
-            bounds = inspector.selectBounds;
-            context.beginPath();
-            context.rect(Math.floor(bounds.min.x), Math.floor(bounds.min.y),
-                         Math.floor(bounds.max.x - bounds.min.x), Math.floor(bounds.max.y - bounds.min.y));
-            context.closePath();
-            context.stroke();
-            context.fill();
-            context.translate(-0.5, -0.5);
-        }
-
-        if (options.hasBounds)
-            context.setTransform(1, 0, 0, 1, 0, 0);
+        return sprite;
     };
 
-    /**
-     * Description
-     * @method _createCanvas
-     * @private
-     * @param {} width
-     * @param {} height
-     * @return canvas
-     */
-    var _createCanvas = function(width, height) {
-        var canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        canvas.oncontextmenu = function() { return false; };
-        canvas.onselectstart = function() { return false; };
-        return canvas;
+
+    ChemistryRender.getAtomRotatableTexture = function(render, formula, radius, angle, color) {
+        let textureKey = formula + ":" + radius + ":" + angle + ":" + color;
+        let texture = render.atomRotatableTexturesCache[textureKey];
+        if (!texture) {
+            let padding = 2; //Todo: move this magic constant to the top of the file 
+            var graphics = new PIXI.Graphics();
+            ChemistryRender.drawAtomToGraphics(graphics, formula, radius, padding, color);  
+
+            texture = render.pixiRenderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, 1, new PIXI.Rectangle(0, 0, _up(2*radius+2*padding), _up(2*radius+2*padding)));
+            render.atomRotatableTexturesCache[textureKey] = texture;
+        }
+        return texture;
     };
+
+    ChemistryRender.getAtomNonRotatableTexture = function(render, formula, radius, angle, color) {
+        let textureKey = formula + ":" + radius + ":" + angle + ":" + color;
+        let texture = render.atomNonRotatableTexturesCache[textureKey];
+        if (!texture) {
+            let padding = 2; //Todo: magic constants
+            let edgeWidth = 2;
+            var graphics = new PIXI.Graphics();
+
+            //Todo: move magic numbers to parameters
+            graphics.beginFill(0xFFFFFF, 0.3);
+            graphics.drawCircle(_up(padding+radius+(radius-edgeWidth/2)/(2*Math.SQRT2)), _up(padding+radius-(radius-edgeWidth/2)/(2*Math.SQRT2)), _up((radius-edgeWidth/2)/2));
+            graphics.endFill();
+
+            texture = render.pixiRenderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, 1, new PIXI.Rectangle(0, 0, _up(2*radius+2*padding), _up(2*radius+2*padding)));
+            render.atomNonRotatableTexturesCache[textureKey] = texture;
+        }
+        return texture;
+    };
+
+    ChemistryRender.drawAtomToGraphics = function(graphics, formula, radius, padding, color) {
+        let colorInt = Matter.Common.colorToNumber(color);
+        let edgeColorInt = Matter.Common.colorToNumber(AtomDrawer._getEdgeColor(color));
+        let textColor = AtomDrawer._getLabelTextColor(color);
+        let textSize = ChemistryRender._getLabelFont(radius);
+        let edgeWidth = 2;
+        graphics.lineStyle(_up(edgeWidth), edgeColorInt);
+        graphics.beginFill(colorInt);
+        graphics.drawCircle(_up(padding+radius), _up(padding+radius), _up(radius));
+        graphics.endFill();
+
+        const style = new PIXI.TextStyle({
+            align: 'center',
+            fontFamily: 'Verdana',
+            fontSize: _up(textSize),
+            fill: textColor
+        });
+
+        const text = new PIXI.Text(AtomDrawer._useSubscript(formula), style);
+        text.anchor.set(0.5, 0.5);
+        text.x = _up(radius+padding);
+        text.y = _up(radius+padding);
+        graphics.addChild(text);
+    };
+
+
+    ChemistryRender._getLabelFont = function(radius) {
+       if (radius<20) {
+           return Math.floor(radius*0.8);
+       } else {
+           return Math.floor(radius*0.7);
+       }
+    };
+
 
     /**
      * Gets the pixel ratio of the canvas.
@@ -1718,44 +599,5 @@ let Engine = Matter.Engine,
 
         return devicePixelRatio / backingStorePixelRatio;
     };
-
-    /**
-     * Gets the requested texture (an Image) via its path
-     * @method _getTexture
-     * @private
-     * @param {render} render
-     * @param {string} imagePath
-     * @return {Image} texture
-     */
-    var _getTexture = function(render, imagePath) {
-        var image = render.textures[imagePath];
-
-        if (image)
-            return image;
-
-        image = render.textures[imagePath] = new Image();
-        image.src = imagePath;
-
-        return image;
-    };
-
-    /**
-     * Applies the background to the canvas using CSS.
-     * @method applyBackground
-     * @private
-     * @param {render} render
-     * @param {string} background
-     */
-    var _applyBackground = function(render, background) {
-        var cssBackground = background;
-
-        if (/(jpg|gif|png)$/.test(background))
-            cssBackground = 'url(' + background + ')';
-
-        render.canvas.style.background = cssBackground;
-        render.canvas.style.backgroundSize = "contain";
-        render.currentBackground = background;
-    };
-
 
 })();
