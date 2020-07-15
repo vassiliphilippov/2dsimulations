@@ -13,8 +13,16 @@ var ChemistryRender = {};
 //Todo: move atom specific drawing to atomdrawing
 (function() {
 
-    //We render all textures in higher resolution for better quality. This parameter defines this upscaling coefficient
-    ChemistryRender.qualityScaleUp = 5;
+    ChemistryRender.qualityScaleUp = 5; //We render all textures in higher resolution for better quality. This parameter defines this upscaling coefficient
+    ChemistryRender.TextureResolution = 1; //The resolution / device pixel ratio of the texture being generated for the generateTexture method
+    ChemistryRender.AtomPadding = 3; //Padding around atom in the textures (needed for antialiasing), it make the texture bigger than needed
+
+    //Atom drawing parameters
+    ChemistryRender.AtomEdgeWidth = 2; 
+    ChemistryRender.AtomFlareOpacity = 0.3;
+    ChemistryRender.AtomFlareColor = 0xFFFFFF;
+    ChemistryRender.AtomFontWeight = 'normal'; 
+    ChemistryRender.AtomFontFamily = 'Verdana'; 
 
     _up = ChemistryRender.scaleUp = function(x) {
         return x * ChemistryRender.qualityScaleUp;
@@ -32,14 +40,6 @@ var ChemistryRender = {};
                                       || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame;
     }
 
-    /**
-     * Creates a new renderer. The options parameter is an object that specifies any properties you wish to override the defaults.
-     * All properties have default values, and many are pre-calculated automatically based on other properties.
-     * See the properties section below for detailed information on what you can pass via the `options` object.
-     * @method create
-     * @param {object} [options]
-     * @return {render} A new renderer
-     */
     ChemistryRender.create = function(options) {
         var defaults = {
             controller: ChemistryRender,
@@ -228,6 +228,16 @@ var ChemistryRender = {};
         render.bounds.max.x -= padding.x;
         render.bounds.min.y -= padding.y;
         render.bounds.max.y -= padding.y;
+
+        // update mouse
+        if (render.mouse) {
+            Matter.Mouse.setScale(render.mouse, {
+                x: (render.bounds.max.x - render.bounds.min.x) / render.canvas.width,
+                y: (render.bounds.max.y - render.bounds.min.y) / render.canvas.height
+            });
+
+            Matter.Mouse.setOffset(render.mouse, render.bounds.min);
+        }
     };
 
     /**
@@ -481,7 +491,7 @@ var ChemistryRender = {};
 
     ChemistryRender._getAtomDisplayText = function(atom) {
         let particle = atom.parent;
-        let singleAtomParticle = particle.parts.length == 2;
+        let singleAtomParticle = (particle.parts.length == 2);
         if (singleAtomParticle) {
             return particle.plugin.chemistry.formula;
         } else {
@@ -492,7 +502,6 @@ var ChemistryRender = {};
     ChemistryRender._getAtomKey = function(atom) {
         return atom.id + ":" + ChemistryRender._getAtomDisplayText(atom) + ":" + atom.circleRadius + ":" + atom.render.fillStyle;
     };
-
 
     ChemistryRender.createAtomRotatableSprite = function(render, formula, position, radius, angle, color) {
         var texture = ChemistryRender.getAtomRotatableTexture(render, formula, radius,  0, color);
@@ -519,11 +528,11 @@ var ChemistryRender = {};
         let textureKey = formula + ":" + radius + ":" + angle + ":" + color;
         let texture = render.atomRotatableTexturesCache[textureKey];
         if (!texture) {
-            let padding = 2; //Todo: move this magic constant to the top of the file 
+            let padding = ChemistryRender.AtomPadding;
             var graphics = new PIXI.Graphics();
-            ChemistryRender.drawAtomToGraphics(graphics, formula, radius, padding, color);  
+            ChemistryRender.drawAtomIntoGraphics(graphics, formula, radius, padding, color);  
 
-            texture = render.pixiRenderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, 1, new PIXI.Rectangle(0, 0, _up(2*radius+2*padding), _up(2*radius+2*padding)));
+            texture = render.pixiRenderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, ChemistryRender.TextureResolution, new PIXI.Rectangle(0, 0, _up(2*radius+2*padding), _up(2*radius+2*padding)));
             render.atomRotatableTexturesCache[textureKey] = texture;
         }
         return texture;
@@ -533,27 +542,27 @@ var ChemistryRender = {};
         let textureKey = formula + ":" + radius + ":" + angle + ":" + color;
         let texture = render.atomNonRotatableTexturesCache[textureKey];
         if (!texture) {
-            let padding = 2; //Todo: magic constants
-            let edgeWidth = 2;
+            let padding = ChemistryRender.AtomPadding;
+            let edgeWidth = ChemistryRender.AtomEdgeWidth;
             var graphics = new PIXI.Graphics();
 
-            //Todo: move magic numbers to parameters
-            graphics.beginFill(0xFFFFFF, 0.3);
+            graphics.beginFill(ChemistryRender.AtomFlareColor, ChemistryRender.AtomFlareOpacity);
             graphics.drawCircle(_up(padding+radius+(radius-edgeWidth/2)/(2*Math.SQRT2)), _up(padding+radius-(radius-edgeWidth/2)/(2*Math.SQRT2)), _up((radius-edgeWidth/2)/2));
             graphics.endFill();
 
-            texture = render.pixiRenderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, 1, new PIXI.Rectangle(0, 0, _up(2*radius+2*padding), _up(2*radius+2*padding)));
+            texture = render.pixiRenderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, ChemistryRender.TextureResolution, new PIXI.Rectangle(0, 0, _up(2*radius+2*padding), _up(2*radius+2*padding)));
             render.atomNonRotatableTexturesCache[textureKey] = texture;
         }
         return texture;
     };
 
-    ChemistryRender.drawAtomToGraphics = function(graphics, formula, radius, padding, color) {
+    ChemistryRender.drawAtomIntoGraphics = function(graphics, formula, radius, padding, color) {
         let colorInt = Matter.Common.colorToNumber(color);
         let edgeColorInt = Matter.Common.colorToNumber(AtomDrawer._getEdgeColor(color));
         let textColor = AtomDrawer._getLabelTextColor(color);
         let textSize = ChemistryRender._getLabelFont(radius);
-        let edgeWidth = 2;
+        let edgeWidth = ChemistryRender.AtomEdgeWidth;
+
         graphics.lineStyle(_up(edgeWidth), edgeColorInt);
         graphics.beginFill(colorInt);
         graphics.drawCircle(_up(padding+radius), _up(padding+radius), _up(radius));
@@ -561,8 +570,9 @@ var ChemistryRender = {};
 
         const style = new PIXI.TextStyle({
             align: 'center',
-            fontFamily: 'Verdana',
+            fontFamily: ChemistryRender.AtomFontFamily,
             fontSize: _up(textSize),
+            fontWeight: ChemistryRender.AtomFontWeight,
             fill: textColor
         });
 
@@ -581,23 +591,4 @@ var ChemistryRender = {};
            return Math.floor(radius*0.7);
        }
     };
-
-
-    /**
-     * Gets the pixel ratio of the canvas.
-     * @method _getPixelRatio
-     * @private
-     * @param {HTMLElement} canvas
-     * @return {Number} pixel ratio
-     */
-    var _getPixelRatio = function(canvas) {
-        var context = canvas.getContext('2d'),
-            devicePixelRatio = window.devicePixelRatio || 1,
-            backingStorePixelRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio
-                                      || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio
-                                      || context.backingStorePixelRatio || 1;
-
-        return devicePixelRatio / backingStorePixelRatio;
-    };
-
 })();

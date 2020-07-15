@@ -229,6 +229,7 @@ var RenderPixi = {};
      * @deprecated
      */
     RenderPixi.world = function(render) {
+        Profiler.begin("RenderPixi.world");
         var engine = render.engine,
             world = engine.world,
             renderer = render.renderer,
@@ -239,6 +240,15 @@ var RenderPixi = {};
             constraints = [],
             i;
 
+        var event = {
+            timestamp: engine.timing.timestamp
+        };
+
+        Profiler.begin("e:beforeRender");
+        Events.trigger(render, 'beforeRender', event);
+        Profiler.end();
+
+        Profiler.begin("pre bodies");
         if (options.wireframes) {
             RenderPixi.setBackground(render, options.wireframeBackground);
         } else {
@@ -282,14 +292,35 @@ var RenderPixi = {};
         } else {
             constraints = allConstraints;
         }
+        Profiler.end(); //pre bodies
 
-        for (i = 0; i < bodies.length; i++)
-            RenderPixi.body(render, bodies[i]);
+        let backgroundBodies = _selectBackgroundBodies(bodies);
+        let nonbackgroundBodies = _selectNonBackgroundBodies(bodies);
 
+        Profiler.begin("backgrounds");
+        for (i = 0; i < backgroundBodies.length; i++)
+            RenderPixi.body(render, backgroundBodies[i]);
+        Profiler.end(); //pre bodies
+
+        Profiler.begin("bodies");
+        for (i = 0; i < nonbackgroundBodies.length; i++)
+            RenderPixi.body(render, nonbackgroundBodies[i]);
+        Profiler.end(); //pre bodies
+
+        Profiler.begin("constraints");
         for (i = 0; i < constraints.length; i++)
             RenderPixi.constraint(render, constraints[i]);
+        Profiler.end(); //pre bodies
 
+        Profiler.begin("e:afterRender");
+        Events.trigger(render, 'afterRender', event);
+        Profiler.end();
+
+        Profiler.begin("container");
         renderer.render(container);
+        Profiler.end();
+
+        Profiler.end();
     };
 
 
@@ -353,11 +384,14 @@ var RenderPixi = {};
      * @deprecated
      */
     RenderPixi.body = function(render, body) {
+        Profiler.begin("RenderPixi.body");
         var engine = render.engine,
             bodyRender = body.render;
 
-        if (!bodyRender.visible)
+        if (!bodyRender.visible) {
+            Profiler.end();
             return;
+        }
 
         if (bodyRender.sprite && bodyRender.sprite.texture) {
             var spriteId = 'b-' + body.id,
@@ -398,6 +432,7 @@ var RenderPixi = {};
             primitive.position.y = body.position.y;
             primitive.rotation = body.angle - primitive.initialAngle;
         }
+        Profiler.end();
     };
 
     /**
@@ -502,6 +537,26 @@ var RenderPixi = {};
             texture = render.textures[imagePath] = PIXI.Texture.fromImage(imagePath);
 
         return texture;
+    };
+
+    _selectBackgroundBodies = function(bodies) {
+        let selected = [];
+        for (body of bodies) {
+            if (body.plugin && body.plugin.background && body.plugin.background.isBackground) {
+                selected.push(body);
+            }
+        }
+        return selected;
+    };
+
+    _selectNonBackgroundBodies = function(bodies) {
+        let selected = [];
+        for (body of bodies) {
+            if (!body.plugin || !body.plugin.background || !body.plugin.background.isBackground) {
+                selected.push(body);
+            }
+        }
+        return selected;
     };
 
 })();

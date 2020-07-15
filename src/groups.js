@@ -95,16 +95,11 @@ var Groups = {};
         Groups._clipperOffsetter.Execute(offsetted_paths, offset * Groups._clipperScale);
         ClipperLib.JS.ScaleDownPaths(offsetted_paths, Groups._clipperScale);
 
-        var graphics = new PIXI.Graphics();
         if (!(group in Groups.groupsOptions)) {
             console.log("Error. Group '" + group + "' not found in Groups.groupsOptions", Groups.groupsOptions);
         }
-        graphics.alpha = Groups.groupsOptions[group].opacity;
-        let groupColor = Groups.groupsOptions[group].fillStyle;
-        graphics.beginFill(Matter.Common.colorToNumber(groupColor));
 
-        Groups._drawPaths(render, graphics, offsetted_paths);
-        stage.addChild(graphics); 
+        Groups._drawPaths(render, stage, offsetted_paths, Groups.groupsOptions[group].opacity, Groups.groupsOptions[group].fillStyle);
     };
 
     Groups._groupOffset = function(group, bodies) {
@@ -147,9 +142,15 @@ var Groups = {};
         return paths;
     };
 
-    Groups._drawPaths = function(render, graphics, paths) {
+    Groups._drawPaths = function(render, stage, paths, opacity, color) {
         paths.forEach(path => {
+            var graphics = new PIXI.Graphics();
+            graphics.alpha = opacity;
+            graphics.beginFill(Matter.Common.colorToNumber(color));
+
             Groups._drawPath(render, graphics, path);
+
+            stage.addChild(graphics); 
         });
     };
 
