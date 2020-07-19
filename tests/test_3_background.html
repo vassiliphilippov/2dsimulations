@@ -1,29 +1,32 @@
 <html>
 <head>
   <title>Test 3: Background</title>
-  <script src="../matter_profile.js"></script>
-  <script src="../profiler.js"></script>
-  <script src="../force.js"></script>
-  <script src="../zonemap.js"></script>
-  <script src="../background.js"></script>
-  <script src="../debug.js"></script>
-  <script src="../chemistryparticles.json"></script>
-  <script src="../chemistrycompoundstructures.js"></script>
-  <script src="../atomcolors.json"></script>
-  <script src="../periodictable.json"></script>
-  <script src="../chemistry.js"></script>
-  <script src="../particles.js"></script>
-  <script src="../temperature.js"></script>
-  <script src="../chemistryrender.js"></script>
-  <script src="../proximity.js"></script>
-  <script src="../textureloader.js"></script>
-  <script src="../scenario.js"></script>
-  <script src="../animation.js"></script>
-  <script src="../groups.js"></script>
-  <script src="../clipper.js"></script>
-  <script src="../transformation.js"></script>
-  <script src="../atomdrawer.js"></script>
-  <script src="../pixi.min.js"></script>
+  <script src="../libs/clipper.js"></script>
+  <script src="../libs/matter_profile.js"></script>
+  <script src="../libs/pixi.min.js"></script>
+
+  <script src="../data/atomcolors.json"></script>
+  <script src="../data/chemistrycompoundstructures.js"></script>
+  <script src="../data/chemistryparticles.json"></script>
+  <script src="../data/periodictable.json"></script>
+
+  <script src="../src/animation.js"></script>
+  <script src="../src/atomdrawer.js"></script>
+  <script src="../src/background.js"></script>
+  <script src="../src/chemistry.js"></script>
+  <script src="../src/chemistryrender.js"></script>
+  <script src="../src/crystal.js"></script>
+  <script src="../src/debug.js"></script>
+  <script src="../src/force.js"></script>
+  <script src="../src/groups.js"></script>
+  <script src="../src/particles.js"></script>
+  <script src="../src/profiler.js"></script>
+  <script src="../src/proximity.js"></script>
+  <script src="../src/scenario.js"></script>
+  <script src="../src/temperature.js"></script>
+  <script src="../src/textureloader.js"></script>
+  <script src="../src/transformation.js"></script>
+  <script src="../src/zonemap.js"></script>
 </head>
 <body>
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>

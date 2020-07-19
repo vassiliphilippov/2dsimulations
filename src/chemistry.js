@@ -14,6 +14,8 @@ var Chemistry = {};
     Chemistry.spaceScale = 0.25; //pixels per pm
     Chemistry.timeScale = 6e-15; //real seconds per rendering second
 
+    Chemistry.BorderExtension = 100;
+
     Chemistry.zoneTypes = {
         waterMedium: 1,
         invisibleBorder: 2,
@@ -60,6 +62,7 @@ var Chemistry = {};
             Matter.Common._seed = engine.world._seed;
         });
 
+//        var render = Matter.Render.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
         var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
         if (createMappedParticles) {
             Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
@@ -112,7 +115,7 @@ var Chemistry = {};
         TextureLoader.onAllTextureLoad(engine.world.bodies, () => {
             Matter.Runner.run(runner, engine);
             ChemistryRender.run(render);
-//            RenderPixi.run(render);
+//            Matter.Render.run(render);
         });
         return runner;
     };
@@ -121,6 +124,18 @@ var Chemistry = {};
         Matter.Events.on(engine, "collisionEnd", (event) => {
             Chemistry._onCollisions(engine, event.pairs);
         });
+    };
+
+    Chemistry.isParticle = function(body) {
+        return body.plugin.chemistry && body.plugin.chemistry.particle;
+    };
+
+    Chemistry.forEachParticle = function(world, callback) {
+        for (body of world.bodies) {
+            if (Chemistry.isParticle(body)) {
+                callback(body);
+            }
+        }
     };
 
     Chemistry._onCollisions = function(engine, pairs) {
@@ -172,7 +187,7 @@ var Chemistry = {};
             {
                 for (rect of zoneMap.zones[color]) {
                     let visible = zoneType==Chemistry.zoneTypes.border;
-                    let b = Chemistry.createBorder(rect, visible);
+                    let b = Chemistry.createBorder(rect, visible, zoneMap.width, zoneMap.height);
                     b.zoneMapColor = color;
                     borders.push(b);
                 }
@@ -373,7 +388,12 @@ var Chemistry = {};
         return atomSymbol;
     };
 
-    Chemistry.createBorder = function(rect, visible) {
+    Chemistry.createBorder = function(rect, visible, screenWidth, screenHeight) {
+        if (rect.min.x<=0) rect.min.x -= Chemistry.BorderExtension;
+        if (rect.min.y<=0) rect.min.y -= Chemistry.BorderExtension;
+        if (rect.max.x>=screenWidth-1) rect.max.x += Chemistry.BorderExtension;
+        if (rect.max.y>=screenHeight-1) rect.max.y += Chemistry.BorderExtension;
+
         let x = (rect.min.x+rect.max.x)/2;
         let y = (rect.min.y+rect.max.y)/2;
         let w = rect.max.x-rect.min.x;
@@ -554,6 +574,11 @@ var Chemistry = {};
     };
 
     //Todo: replace usage of Chemistry.spaceScale to convert functions everywere in the code
+
+    Chemistry.spaceDist = function(screenPoint1, screenPoint2) {
+        let screenDist = Matter.Vector.magnitude(Matter.Vector.sub(screenPoint1, screenPoint2));
+        return Chemistry.screenToSpace(screenDist);
+    };
 
     //Convert distance in pixels to pm
     Chemistry.screenToSpace = function(screenDistance) {

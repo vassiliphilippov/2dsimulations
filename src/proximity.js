@@ -59,6 +59,7 @@ var Proximity = {};
         return Matter.Vector.magnitude(Matter.Vector.sub(atomA.position, atomB.position)) - atomA.circleRadius - atomB.circleRadius;
     };
 
+    //Todo: move this method to Chemistry
     Proximity.distanceBetweenParticles = function(pA, pB) {
         let minD = Infinity;
         for (let k = pA.parts.length > 1 ? 1 : 0; k < pA.parts.length; k++) {
@@ -74,6 +75,7 @@ var Proximity = {};
         return minD;
     };
 
+    //Todo: move this method to Chemistry
     Proximity.distanceToAtom = function(point, atom) {
         if (!atom.circleRadius) {
             console.log("Error. Atom without circleRadius property");
@@ -82,6 +84,7 @@ var Proximity = {};
         return Matter.Vector.magnitude(Matter.Vector.sub(atom.position, point)) - atom.circleRadius;
     };
 
+    //Todo: move this method to Chemistry
     Proximity.distanceToParticle = function(point, particle) {
         let minD = Infinity;
         for (let k = particle.parts.length > 1 ? 1 : 0; k < particle.parts.length; k++) {
