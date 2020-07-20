@@ -4,7 +4,7 @@
 * @class BodyList
 */
 
-//Todo: outer 
+//Todo: replace new with create and allow create to take both world, body and array of bodies
 class BodyList {
     //Todo: replace engine with World
     constructor(engine) {

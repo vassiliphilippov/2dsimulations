@@ -42,7 +42,7 @@ var Transformation = {};
 
     Transformation.calculateAngluarAcceleration = function(particle, bodies) {
         Profiler.begin("Transformation.calculateAngluarAcceleration");
-        //Todo: performance optimization
+        //Todo: performance optimization needed, it is too slow
         let formula = particle.plugin.chemistry.formula;
         let totalAngluarAcceleration = null;
     

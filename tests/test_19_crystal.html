@@ -35,14 +35,14 @@
 <script>
 
 ZoneMap.load("map19.png", function (zoneMap) {
-    Chemistry.spaceScale = 0.20;
+    Chemistry.spaceScale = 0.10;
+    Chemistry.timeScale = 6e-14; 
 
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
     Crystal.init(engine);
 
     let bounds = ZoneMap.getBounds(zoneMap, [255, 201, 14]);
     let crystal = Crystal.create("CuSO4", bounds.min, 0);
-    console.log(crystal);
 
 //    var r = Matter.Bodies.rectangle(300, 300, 1800, 1800, {collisionFilter: {mask: 0}, density: 0.001, render: {visible: true}});
 //    Matter.Composite.add(cmp, r);
@@ -65,13 +65,21 @@ ZoneMap.load("map19.png", function (zoneMap) {
     }
 
     Matter.World.add(engine.world, crystal);
-    Matter.World.add(engine.world, Chemistry.create("Cu+2", 700, 500));
-    Matter.World.add(engine.world, Chemistry.create("Cu+2", 40, 40));
-    Matter.World.add(engine.world, Chemistry.create("Cu+2", 500, 500));
-    Matter.World.add(engine.world, Chemistry.create("Cu+2", 700, 200));
-//    new ParticleList(engine).setTemperature(270);
 
-    console.log(engine);
+    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 30, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.create("Cu+2", x, y));
+    });
+
+    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 30, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.create("SO4-2", x, y));
+    });
+
+/*    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 200, (x, y) => {
+        Matter.World.add(engine.world, Chemistry.create("H2O", x, y));
+    });
+*/
+
+    new ParticleList(engine).setOpacity(0.2).setTemperature(270).setChemistryOptions({brownianMotion: {medium: 'water'}});
 
     Crystal.applyForcesAndCheck(engine, engine.world);
 
@@ -84,9 +92,31 @@ ZoneMap.load("map19.png", function (zoneMap) {
 //        Matter.World.add(engine.world, r2);
     });
 
-    Matter.Events.on(engine, "afterUpdate", (event) => {
-//        crystal.position.x += 1;
-//        Crystal.updatePlacePositions(crystal);
+    Crystal.forEachCrystal(engine.world, crystal => {
+        Crystal.forEachBorderPosition(crystal, null, (placeId, index, position, placeCharge) => {
+            console.log("test", placeId, index, position, placeCharge);//, );
+        });
+    });
+
+    Matter.Events.on(render, "afterParticlesRender", (event) => {
+        let graphics = event.graphics;
+        let _up = ChemistryRender.scaleUp;
+
+
+        Crystal.forEachCrystal(engine.world, crystal => {
+            Crystal.forEachBorderPosition(crystal, null, (placeId, index, position, placeCharge) => {
+                if (placeCharge>0) {
+                    graphics.beginFill(0xFF0000);
+                    graphics.drawCircle(_up(position.x), _up(position.y), _up(3));
+                    graphics.endFill();
+                } else {
+                    graphics.beginFill(0x0000FF);
+                    graphics.drawCircle(_up(position.x), _up(position.y), _up(3));
+                    graphics.endFill();
+                }
+            });
+        });
+
     });
 
 

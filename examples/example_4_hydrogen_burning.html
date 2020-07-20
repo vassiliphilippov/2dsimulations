@@ -104,22 +104,24 @@ Transformation.possibleTransformations = [
         ResA_position: {rel: "A", v: {x: 1, y: 5}},
         ResA_angle: {rel: "A", angle: 0}
     } 
-
 ]; 
 
-Chemistry.spaceScale = 0.25;
-Chemistry.timeScale = 3e-15;
+Chemistry.spaceScale = 0.20;
+Chemistry.timeScale = 3e-16;
 
 var addRadical = null;
 
 ZoneMap.load("ex_map4.png", function (zoneMap) {
     [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
 
-    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 50, (x, y) => {
+    let N = Math.floor(Chemistry.screenToSpace(zoneMap.width)*Chemistry.screenToSpace(zoneMap.height)/300000);
+    console.log("N=", N);
+
+    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], N*2, (x, y) => {
         Matter.World.add(engine.world, Chemistry.create("H2", x, y));
     });
 
-    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], 25, (x, y) => {
+    ZoneMap.spawnRandom(zoneMap, [255, 255, 255], N, (x, y) => {
         Matter.World.add(engine.world, Chemistry.create("O2", x, y));
     });
 
@@ -131,6 +133,7 @@ ZoneMap.load("ex_map4.png", function (zoneMap) {
         T += deltaT;
         new ParticleList(engine).setTemperature(T);
         let center = {x: (event.bodyA.position.x+event.bodyB.position.x)/2, y: (event.bodyA.position.y+event.bodyB.position.y)/2};
+        ParticleList.create(event.result).formula("H2O").atoms().setColor("#3E5B6B");
         Animation.highlight(engine, render, center, 50);
     });
 
@@ -152,6 +155,11 @@ Hydrogen burning: 2H<sub>2</sub> + O<sub>2</sub> -> 2H<sub>2</sub>O. The transfo
 </p>
 <p>
   <button onclick="addRadical();">Add a radical to start the reaction</button>
+</p>
+<p>
+  <button onclick="Chemistry.timeScale = 3e-16;">Slow</button>
+  <button onclick="Chemistry.timeScale = 9e-16;">Fast</button>
+  <button onclick="Chemistry.timeScale = 3e-15;">Very fast</button>
 </p>
 <p><a href="ex_map4.png">Map file</a>.</p>
 </body>

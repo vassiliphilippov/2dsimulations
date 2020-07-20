@@ -55,21 +55,29 @@ var Crystal = {};
         });
 
         Chemistry.forEachParticle(world, particle => {
+            let anyCrystalAttraction = false;
+            let alreadySticked = false;
             let formula = particle.plugin.chemistry.formula;
             if (formula in allBorderPositionsByFromula) {
                 let crystalPositions = allBorderPositionsByFromula[formula];
                 for (pos of crystalPositions) {
                     let spaceDist = Chemistry.spaceDist(particle.position, pos.position);
-                    if (spaceDist<50) {
+                    if (spaceDist<50 && !alreadySticked) {
+                        ParticleList.create([particle]).setOpacity(1);
                         Matter.Composite.remove(world, particle);
                         Crystal.stickParticleToPlace(pos.crystal, particle, pos.placeId, pos.index);
-                    } else if (spaceDist<150) {
+                        alreadySticked = true;
+                    } else if (spaceDist<550 && !alreadySticked) {
                         let v = Matter.Vector.sub(pos.position, particle.position);
-                        let force = Matter.Vector.mult(v, 0.01);
-                        console.log("Apply force", v);
-                        Matter.Body.applyForce(particle, particle.position, force);    
+                        let forceAttraction = Matter.Vector.mult(v, 0.01);
+                        Matter.Body.applyForce(particle, particle.position, forceAttraction);    
+                        anyCrystalAttraction = true;
                     }
                 }
+            }
+            if (anyCrystalAttraction && !alreadySticked) {
+                let forceAirFriction = Matter.Vector.mult(Matter.Vector.neg(particle.velocity), particle.speed*0.001);
+                Matter.Body.applyForce(particle, particle.position, forceAirFriction);    
             }
         });
     };
@@ -143,19 +151,16 @@ var Crystal = {};
 
     Crystal.stickParticleToPlace = function(crystal, particle, placeId, index) {
         //Todo: check if this position is already occupied
-/*        let dx = particle.bounds.max.x-particle.bounds.min.x;
-        let dy = particle.bounds.max.y-particle.bounds.min.y;
-        let vibrationRadius = Math.max(dx/2, dy/2);
-        if (!particle.plugin.force) {
-            particle.plugin.force = {}
-        }
-*/
         if (particle.plugin.chemistry && particle.plugin.chemistry.brownianMotion) {
             delete particle.plugin.chemistry.brownianMotion;
         }
 
         let inCrystalPosition = Crystal.getInCrystalPlacePosition(crystal, placeId, index);
         let position = Crystal.getPlacePosition(crystal, placeId, index);
+
+        Matter.Body.setPosition(particle, position);
+        Matter.Body.setAngle(particle, crystal.plugin.crystal.base.angle);
+        Matter.Body.setVelocity(particle, crystal.plugin.crystal.base.velocity);
 
         particle.plugin.crystal = {
             isCrystalParticle: true,
@@ -171,7 +176,7 @@ var Crystal = {};
             pointA: {x: inCrystalPosition.x-10, y: inCrystalPosition.y},
             pointB: {x: -10, y:0},
             stiffness: 0.1,
-            damping: 0.1,
+            damping: 0.4,
             length: 0
         });
 
@@ -181,26 +186,11 @@ var Crystal = {};
             pointA: {x: inCrystalPosition.x+10, y: inCrystalPosition.y},
             pointB: {x: 10, y:0},
             stiffness: 0.1,
-            damping: 0.1,
+            damping: 0.4,
             length: 0
         });
 
         Matter.Composite.add(crystal, [particle, constraint1, constraint2]);
-
-
-/*        let pp = {
-            placeId: placeId,
-            index: {x: index.x, y: index.y},
-            position: Crystal.getPlacePosition(crystal, placeId, index)
-        }
-        crystal.placePositions.push(pp);
-
-        particle.frictionAir = 0.5;
-        particle.plugin.force.sticked = {
-            stickPosition: pp.position,
-            vibrationRadius: vibrationRadius/4
-        }
-*/
     };
 
     Crystal.forEachParticle = function(crystal, callback) {
@@ -228,7 +218,8 @@ var Crystal = {};
                 for (placeId of placeIds) {
                     if (!occupiedPlaces[Crystal._getPlaceKey(placeId, index)]) {
                         let position = Crystal.getPlacePosition(crystal, placeId, index);
-                        callback(placeId, index, position);
+                        let placeCharge = crystal.plugin.crystal.info.places[placeId].charge;
+                        callback(placeId, index, position, placeCharge);
                     }
                 }
             }
@@ -300,6 +291,23 @@ var Crystal = {};
         return minDistance;
     };
 
+    //How many particles in crystal of the given charge closer to the given particle than radius
+    Crystal.nearParticlesInCrystal = function(crystal, position, charge, radius) {
+        let crystalInfo = Crystal._getCrystalInfo(crystal);
+        let counter = 0;
+        Crystal.forEachParticle(crystal, p => {
+            let place = crystalInfo.places[p.plugin.crystal.placeId];
+            let particleCharge = place.charge;
+            if (charge==null || Crystal._isOppositeCharge(particleCharge, charge)) {
+                let dist = Proximity.distanceToParticle(position, p);
+                if (dist<radius) {
+                    counter += 1;
+                }
+            }
+        });
+        return counter;
+    };
+
     Crystal.forEachBorderPosition = function(crystal, formula, callback) {
         let charge = formula ? Crystal._getCharge(formula) : 0;
 
@@ -310,18 +318,27 @@ var Crystal = {};
         indexBounds.max.y += 1;
 
         let candidates = [];
-        Crystal.forEachVacantPlace(crystal, formula, indexBounds, (placeId, index, position) => {
-            let dist = Crystal.distanceToCrystal(crystal, position, charge);
-            candidates.push({placeId: placeId, index: {x:index.x, y:index.y}, position: position, distance: dist});
+        Crystal.forEachVacantPlace(crystal, formula, indexBounds, (placeId, index, position, placeCharge) => {
+            let dist = Crystal.distanceToCrystal(crystal, position, placeCharge);
+            candidates.push({placeId: placeId, index: {x:index.x, y:index.y}, position: position, distance: dist, placeCharge: placeCharge});
         }); 
 
         candidates.sort((a, b) => (a.distance-b.distance));
-
         let minD = candidates[0].distance;
+
+        let candidates2 = [];
         for (c of candidates) {
-            if (c.distance<minD*2) {
-                callback(c.placeId, c.index, c.position);
+            if (Crystal.nearParticlesInCrystal(crystal, c.position, c.placeCharge, minD*2)>1) {
+                candidates2.push(c);
             }
+        }
+
+        if (candidates2.length==0) {
+            candidates2 = candidates.filter(c => (c.distance<minD*2));
+        }
+
+        for (c of candidates2) {
+            callback(c.placeId, c.index, c.position, c.placeCharge);
         }
     };
 })();
