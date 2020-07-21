@@ -117,38 +117,11 @@ var ChemistryRender = {};
             Matter.Common.log('ChemistryRender.create: options.element was undefined, render.canvas was created but not appended', 'warn');
         }
 
-        ChemistryRender.setPixelRatio(render, render.options.pixelRatio);
+        render.canvas.style.width = render.options.width + 'px';
+        render.canvas.style.height = render.options.height + 'px';
 
         return render;
     };
-
-    ChemistryRender.setPixelRatio = function(render, pixelRatio) {
-        var options = render.options,
-            canvas = render.canvas;
-
-        if (pixelRatio === 'auto') {
-            pixelRatio = _getPixelRatio(canvas);
-        }
-
-        options.pixelRatio = pixelRatio;
-        canvas.setAttribute('data-pixel-ratio', pixelRatio);
-        canvas.width = options.width * pixelRatio;
-        canvas.height = options.height * pixelRatio;
-        canvas.style.width = options.width + 'px';
-        canvas.style.height = options.height + 'px';
-        render.context.scale(pixelRatio, pixelRatio);
-    };
-
-    var _getPixelRatio = function(canvas) {
-        var context = canvas.getContext('2d'),
-            devicePixelRatio = window.devicePixelRatio || 1,
-            backingStorePixelRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio
-                                      || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio
-                                      || context.backingStorePixelRatio || 1;
-
-        return devicePixelRatio / backingStorePixelRatio;
-    };
-
 
     /**
      * Continuously updates the render canvas on the `requestAnimationFrame` event.
