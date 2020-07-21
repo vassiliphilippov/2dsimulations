@@ -90,7 +90,7 @@ ZoneMap.load("ex_map1.png", function (zoneMap) {
         new BodyList(engine).zoneMapColor("230,101,2","100,231,2").remove(engine.world);
     });
 
-    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 50);
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap)], 50);
 
     scenario.addWait(100);
 
@@ -127,7 +127,7 @@ ZoneMap.load("ex_map1.png", function (zoneMap) {
 
     scenario.addWait(50);
 
-    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 50);
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap)], 50);
 
     scenario.addOnCollision("Sn+2_Zn", null, (event, pSn, pZn) => {
         ParticleList.create([pSn]).setColor(colorSnAtom);

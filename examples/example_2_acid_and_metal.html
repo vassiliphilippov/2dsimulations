@@ -93,7 +93,7 @@ ZoneMap.load("ex_map2.png", function (zoneMap) {
         new BodyList(engine).zoneMapColor("230,101,2","100,231,2").remove(engine.world);
     });
 
-    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap, "230,100,4"), ZoneMap.getBounds(zoneMap, "100,230,4")], 20);
+    scenario.addLookAtAnimation([ZoneMap.getBounds(zoneMap)], 20);
 
     scenario.addWait(100);
 

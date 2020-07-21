@@ -9,6 +9,11 @@ const app = new PIXI.Application({
     width: 800, height: 600, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
 });
 document.body.appendChild(app.view);
+app.view.width = 800;
+app.view.height = 600;
+app.view.style.width = 800 + 'px';
+app.view.style.height = 600 + 'px';
+
 
 const container = new PIXI.Container();
 

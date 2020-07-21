@@ -80,6 +80,10 @@ var ZoneMap = {};
     };
 
     ZoneMap.getBounds = function(zonemap, color) {
+        if (!color) {
+            return {min: {x: 0, y: 0}, max: {x: zonemap.width, y: zonemap.height}}; 
+        }
+
         if (!ZoneMap.isZoneFound(zonemap, color)) {
             console.log("Error. getBounds failed, color not found: ", color);
             console.log(zonemap);
