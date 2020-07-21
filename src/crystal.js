@@ -19,7 +19,7 @@ var Crystal = {};
     ];
 
     Crystal.init = function(engine) {
-        Matter.Events.on(engine, "beforeUpdate", (event) => {
+        Matter.Events.on(engine, "afterUpdate", (event) => {
             Crystal.applyForcesAndCheck(engine, engine.world);
         });
     };
@@ -105,7 +105,18 @@ var Crystal = {};
 
         //Todo: make width and height constants
         //Todo: make options better and inheritable
-        let base = Matter.Bodies.rectangle(position.x, position.y, 1600, 1600, {collisionFilter: {mask: 0}, density: 0.0001, render: {visible: false}, plugin: {crystal: {isBase: true}}});
+        let baseOptions = {
+            isStatic: false, 
+            frictionAir: 0, 
+            friction: 0, 
+            restitution: 1, 
+            frictionStatic: 0, 
+            collisionFilter: {mask: 0}, 
+            density: 0.0001, 
+            render: {visible: false}, 
+            plugin: {crystal: {isBase: true}}
+        };
+        let base = Matter.Bodies.rectangle(position.x, position.y, 1600, 1600, baseOptions);
 
         crystal.plugin.crystal = {
             info: crystalInfo,
@@ -159,6 +170,7 @@ var Crystal = {};
         let position = Crystal.getPlacePosition(crystal, placeId, index);
 
         Matter.Body.setPosition(particle, position);
+        particle.position = position;
         Matter.Body.setAngle(particle, crystal.plugin.crystal.base.angle);
         Matter.Body.setVelocity(particle, crystal.plugin.crystal.base.velocity);
 
@@ -168,29 +180,51 @@ var Crystal = {};
             placeId: placeId,
             index: index
         };
+
+        Matter.Events.trigger(engine, 'beforeStickingToCrystal', {particle: particle, crystal: crystal, placeId: placeId, index: index});
         
         //Todo: replace +-10 with something based in particle size
         var constraint1 = Matter.Constraint.create({
             bodyA: crystal.plugin.crystal.base,
             bodyB: particle,
             pointA: {x: inCrystalPosition.x-10, y: inCrystalPosition.y},
-            pointB: {x: -10, y:0},
-            stiffness: 0.1,
+//            pointB: {x: -10, y:0},
+            pointB: {x: 0, y:0},
+            stiffness: 0.01,
             damping: 0.4,
             length: 0
         });
 
-        var constraint2 = Matter.Constraint.create({
+/*        var constraint2 = Matter.Constraint.create({
             bodyA: crystal.plugin.crystal.base,
             bodyB: particle,
             pointA: {x: inCrystalPosition.x+10, y: inCrystalPosition.y},
             pointB: {x: 10, y:0},
-            stiffness: 0.1,
+            stiffness: 0.01,
             damping: 0.4,
             length: 0
         });
+*/
+        Crystal.forEachParticle(crystal, p2 => {
+            let l = Matter.Vector.magnitude(Matter.Vector.sub(p2.position, particle.position));
+            //Todo: replace 50 with something meanful
+            if (l<50 && false) {
+                var constraint3 = Matter.Constraint.create({
+                    bodyA: p2,
+                    bodyB: particle,
+                    pointA: {x: 0, y: 0},
+                    pointB: {x: 0, y:0},
+                    stiffness: 1,
+                    damping: 0.4,
+                    length: l
+                });
+                Matter.Composite.add(crystal, [constraint3]);
+            }
+        });
 
-        Matter.Composite.add(crystal, [particle, constraint1, constraint2]);
+        Matter.Composite.add(crystal, [particle, constraint1/*, constraint2*/]);
+
+        Matter.Events.trigger(engine, 'afterStickingToCrystal', {particle: particle, crystal: crystal, placeId: placeId, index: index});
     };
 
     Crystal.forEachParticle = function(crystal, callback) {

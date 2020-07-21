@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>Test</title>
+  <script src="../libs/clipper.js"></script>
+  <script src="../libs/matter_profile.js"></script>
+  <script src="../libs/pixi.min.js"></script>
+
+  <script src="../data/atomcolors.json"></script>
+  <script src="../data/chemistrycompoundstructures.js"></script>
+  <script src="../data/chemistryparticles.json"></script>
+  <script src="../data/periodictable.json"></script>
+
+  <script src="../src/animation.js"></script>
+  <script src="../src/atomdrawer.js"></script>
+  <script src="../src/background.js"></script>
+  <script src="../src/chemistry.js"></script>
+  <script src="../src/chemistryrender.js"></script>
+  <script src="../src/crystal.js"></script>
+  <script src="../src/debug.js"></script>
+  <script src="../src/force.js"></script>
+  <script src="../src/groups.js"></script>
+  <script src="../src/particles.js"></script>
+  <script src="../src/profiler.js"></script>
+  <script src="../src/proximity.js"></script>
+  <script src="../src/scenario.js"></script>
+  <script src="../src/temperature.js"></script>
+  <script src="../src/textureloader.js"></script>
+  <script src="../src/transformation.js"></script>
+  <script src="../src/zonemap.js"></script>
+</head>
+<body>
+<pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
+<script>
+
+ZoneMap.load("map.png", function (zoneMap) {
+
+const app = new PIXI.Application({
+    width: 800, height: 600, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
+});
+document.body.appendChild(app.view);
+
+const container = new PIXI.Container();
+
+app.stage.addChild(container);
+
+// Create a new texture
+const texture = PIXI.Texture.from('examples/assets/bunny.png');
+
+// Create a 5x5 grid of bunnies
+for (let i = 0; i < 25; i++) {
+    const bunny = new PIXI.Sprite(texture);
+    bunny.anchor.set(0.5);
+    bunny.x = (i % 5) * 40;
+    bunny.y = Math.floor(i / 5) * 40;
+    container.addChild(bunny);
+}
+
+// Move container to the center
+container.x = app.screen.width / 2;
+container.y = app.screen.height / 2;
+
+// Center bunny sprite in local container coordinates
+container.pivot.x = container.width / 2;
+container.pivot.y = container.height / 2;
+
+// Listen for animate update
+app.ticker.add((delta) => {
+    // rotate the container!
+    // use delta to create frame-independent transform
+    container.rotation -= 0.01 * delta;
+});
+
+});
+
+</script>
+</body>
+</html>

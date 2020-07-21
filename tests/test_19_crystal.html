@@ -34,6 +34,8 @@
 <pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
 <script>
 
+var runner = null;
+
 ZoneMap.load("map19.png", function (zoneMap) {
     Chemistry.spaceScale = 0.10;
     Chemistry.timeScale = 6e-14; 
@@ -98,6 +100,10 @@ ZoneMap.load("map19.png", function (zoneMap) {
         });
     });
 
+    Matter.Events.on(engine, "beforeStickingToCrystal", (event) => {
+        runner.enabled = false;
+    });
+
     Matter.Events.on(render, "afterParticlesRender", (event) => {
         let graphics = event.graphics;
         let _up = ChemistryRender.scaleUp;
@@ -120,13 +126,14 @@ ZoneMap.load("map19.png", function (zoneMap) {
     });
 
 
-    Chemistry.run(engine, render);
+    runner = Chemistry.run(engine, render);
 });
 
 </script>
 <p>
   Crystal;
 </p>
+<button onclick="runner.enabled = true;">Resume</button>
 <p><a href="map19.png">Map file</a>.</p>
 </body>
 </html>

@@ -62,8 +62,8 @@ var Chemistry = {};
             Matter.Common._seed = engine.world._seed;
         });
 
-//        var render = Matter.Render.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
-        var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
+        var render = Matter.Render.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
+//        var render = ChemistryRender.create({element: element, engine: engine, options: {width: zoneMap.width, height: zoneMap.height}});
         if (createMappedParticles) {
             Matter.World.add(engine.world, Chemistry.createMappedBodies(zoneMap));
         }
@@ -114,8 +114,8 @@ var Chemistry = {};
         runner.isFixed = true; //We want to have a predictable reproducable behaviour
         TextureLoader.onAllTextureLoad(engine.world.bodies, () => {
             Matter.Runner.run(runner, engine);
-            ChemistryRender.run(render);
-//            Matter.Render.run(render);
+//            ChemistryRender.run(render);
+            Matter.Render.run(render);
         });
         return runner;
     };
