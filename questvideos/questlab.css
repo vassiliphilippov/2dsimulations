@@ -1,0 +1,77 @@
+.lab-container {
+  position: relative;
+  overflow: hidden; 
+  display: flex; 
+  -webkit-box-align: center; 
+  align-items: center;
+  min-height: 80vh; 
+  padding-bottom: 51.2px; 
+  box-sizing: border-box;
+}
+
+.video-js {
+  display: flex; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  min-width: 100%; 
+  min-height: 100%; 
+  width: auto; 
+  height: auto; 
+  -webkit-transform: translate(-50%,-50%); 
+  transform: translate(-50%,-50%); 
+  z-index: 2;
+}
+
+.overlway-left {
+  display: flex; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  min-width: 20%; 
+  min-height: 100%; 
+  width: 20%; 
+  height: 100%; 
+  -webkit-transform: translate(-50%,-50%); 
+  transform: translate(-250%,-50%); 
+  z-index: 3;
+}
+
+.overlway-right {
+  display: flex; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  min-width: 20%; 
+  min-height: 100%; 
+  width: 20%; 
+  height: 100%; 
+  -webkit-transform: translate(-50%,-50%); 
+  transform: translate(150%,-50%); 
+  z-index: 4;
+}
+
+
+td.overlay-td-left {
+  height: 70px;
+}
+
+td.overlay-td-right {
+  height: 100px;
+}
+
+td.overlay-td-right-button {
+  height: 40px;
+}
+
+td.overlay-td-right-separator {
+  height: 20px;
+}
+
+.time-control-section {
+  color: #FFFFFF
+}
+
+.td-time {
+  width: 50px;
+}
