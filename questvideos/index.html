@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>v5 Quest Video</title>
-  <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+  <title>v9 Quest Video</title>
   <link href="questlab.css" rel="stylesheet" >
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
-  <!--<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>-->
 </head>
 <body>
 <script>
@@ -47,7 +44,6 @@ function playspeed(x) {
   v().playbackRate = x;
 //  videojs('lab-video').playbackRate = x;
 }
- 
 </script>
 <div class="lab-container"> 
     <video id="lab-video" class="video-js" preload="auto" poster="poster.jpg" loop autoplay muted playsinline>
@@ -61,12 +57,12 @@ function playspeed(x) {
               <tr>  
                 <td class="td-time"><div id="lab-time">T: 2:30</div></td>
                 <td>
-                  <button id="button-pause" onclick="mypause()">⏸︎</button>
-                  <button style="visibility:hidden" id="button-play" onclick="myplay()">▶️</button>
+                  <button id="button-pause" onclick="mypause()">aa</button>
+                  <button style="visibility:hidden" id="button-play" onclick="myplay()">bb</button>
                 </td>
                 <td>
-                  <button id="button-speed-05" onclick="playspeed(0.5)">⏩️</button>
-                  <button style="visibility:hidden" id="button-play" onclick="myplay()">▶️</button>
+                  <button id="button-speed-05" onclick="playspeed(0.5)">cc</button>
+                  <button style="visibility:hidden" id="button-play" onclick="myplay()">dd</button>
                 </td>
               </tr>
             </table>
@@ -109,7 +105,7 @@ function playspeed(x) {
         </tr>
     </table>
     </div>
-    <div class="overlway-right"> 
+    <div class="overlway-right" style="color: white"> BBBBBBBBBBBBB
       <table>
         <tr>
           <td class="overlay-td-right">
@@ -183,12 +179,6 @@ function playspeed(x) {
     </div>
   </div>
 
-   <!-- <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script> -->
-
-<script>
-v().muted = true;
-v().play();
-</script>
 
 </body>
 </html>
