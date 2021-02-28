@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>v9 Quest Video</title>
+  <title>v5 Quest Video</title>
   <link href="questlab.css" rel="stylesheet" >
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="labstates.js"></script>
 </head>
 <body>
 <script>
+var state = phLabStates.yellow;
+
+$(document).ready(function() {
+  changeState("yellow");
+});
+
 var interval = setInterval(function() {
   updateTime();
 }, 100);
@@ -17,37 +24,58 @@ function v() {
   return document.getElementById('lab-video');
 }
 
+function changeState(stateName) {
+  console.log("changeState : ", stateName);
+  state = phLabStates[stateName];
+  console.log(state);
+  v().src = "videos/"+state.videoFile;
+  createControls();
+}
+
+function addControl(control) {
+  console.log("Add control : ", control);
+  $("#lab-controls").append("<div><button onclick='changeState(\""+control.action.newState+"\")'>"+control.picture+"</button></div>");
+}
+
+function createControls() {
+  $("#lab-controls").empty();
+  for (var key in state.controls) {
+    if (state.controls.hasOwnProperty(key)) {
+      addControl(state.controls[key]);
+    }
+  }
+}
+
 function updateTime() {
   document.getElementById('lab-time').innerHTML = Math.round(v().currentTime*10)/10;
 }
 
 function mypause() {
+  createControls();
   v().pause();
   $("#button-play").show();
   $("#button-pause").hide();
-
-//  videojs('lab-video').pause();
 }
+
 function myplay() {
+  console.log(phLabStates);
   v().play();
   $("#button-play").hide();
   $("#button-pause").show();
-//  videojs('lab-video').play();
 }
+
 function changevideo(videofile) {
   v().src = "videos/"+videofile;
-//  videojs('lab-video').src([
-//        {type: "video/webm", src: "videos/"+videofile}
-//  ]);
 }
+
 function playspeed(x) {
   v().playbackRate = x;
-//  videojs('lab-video').playbackRate = x;
 }
+
 </script>
 <div class="lab-container"> 
-    <video id="lab-video" class="video-js" preload="auto" poster="poster.jpg" loop autoplay muted playsinline>
-      <source src="videos/video01.mp4" type="video/mp4" />
+    <video id="lab-video" class="video-js" preload="auto" poster="poster.jpg" autoplay muted playsinline>
+      <source src="videos/yellow.mp4" type="video/mp4" />
     </video>
     <div class="overlway-left">
       <table>
@@ -57,50 +85,20 @@ function playspeed(x) {
               <tr>  
                 <td class="td-time"><div id="lab-time">T: 2:30</div></td>
                 <td>
-                  <button id="button-pause" onclick="mypause()">aa</button>
-                  <button style="visibility:hidden" id="button-play" onclick="myplay()">bb</button>
+                  <button id="button-pause" onclick="mypause()">Pause</button>
+                  <button style="display: none" id="button-play" onclick="myplay()">Play</button>
                 </td>
+<!--
                 <td>
-                  <button id="button-speed-05" onclick="playspeed(0.5)">cc</button>
-                  <button style="visibility:hidden" id="button-play" onclick="myplay()">dd</button>
+                  <button id="button-speed-05" onclick="playspeed(0.5)">FF</button>
                 </td>
+-->
               </tr>
             </table>
           </td>
         </tr>
         <tr>
-          <td class="overlay-td-left">
-            <button onclick="playspeed(0.5)">Speed = 0.5</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="overlay-td-left">
-            <button onclick="playspeed(2)">Speed = 2</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="overlay-td-left">
-            <button onclick="mypause()">Pause</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="overlay-td-left">
-            <button onclick="myplay()">Play</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="overlay-td-left">
-            <button onclick="changevideo('video01.mp4')">Video 1</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="overlay-td-left">
-            <button onclick="changevideo('video02.webm')">Video 2</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="overlay-td-left">
-            <button type="button" data-toggle="modal" data-target="#myModal">Open Modal</button>
+          <td class="overlay-td-left" id="lab-controls">
           </td>
         </tr>
     </table>

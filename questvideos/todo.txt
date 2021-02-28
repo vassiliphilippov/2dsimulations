@@ -1,2 +1,7 @@
-5. iOS
 6. implement timing
+7. states
+
+Acidic:
+- looped ends
+- take acid from a bottle
+- brand all glasses
