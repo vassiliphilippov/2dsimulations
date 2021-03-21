@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#f0f0f0;}.cls-2{fill:#0a9e01;}</style>
+</defs>
+<title>tc</title>
+<rect class="cls-1" width="200" height="200"/>
+<rect class="cls-2" x="116.67" y="73.862" width="33.333" height="16.667"/>
+<polygon class="cls-2" points="100 73.862 100 90.528 83.333 90.528 83.333 123.86 66.667 123.86 66.667 90.528 50 90.528 50 73.862"/>
+<polygon class="cls-2" points="150 107.2 150 123.86 100 123.86 100 90.528 116.67 90.528 116.67 107.2"/>
+</svg>

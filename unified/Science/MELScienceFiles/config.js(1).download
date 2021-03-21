@@ -1,0 +1,3 @@
+
+window[window["TiktokAnalyticsObject"]].instance("C04OJD5BB3R16RD92LM0").setAdvancedMatchingAvailableProperties({"email":false,"phone_number":false});
+window[window["TiktokAnalyticsObject"]].instance("C04OJD5BB3R16RD92LM0").setPixelInfo && window[window["TiktokAnalyticsObject"]].instance("C04OJD5BB3R16RD92LM0").setPixelInfo({status: 0, name: "Tik-Tok Ads Pixel DEV mode", advertiserID: "6850081484359860229", setupMode: 1, partner: ""});
