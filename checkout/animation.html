@@ -353,16 +353,16 @@
 
             
 <style>
-.step-div2 {
+.step-div {
   border-top: 1px solid #DEDEDE;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 19px;
 }
 
-.step-div2 h2 {
+.step-div h2 {
     font-family: Geometria;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
@@ -375,15 +375,15 @@
     margin-inline-end: 0px;
 }
 
-.step-div2 ul {
+.step-div ul {
     padding-left: 20px;
 }
 
-.step-div2 ul li {
+.step-div ul li {
     font-size: 16px;
 }
 
-.step-div2 p.note {
+.step-div p.note {
     font-size: 14px; 
     text-align: center; 
     font-weight: 400; 
@@ -396,7 +396,7 @@
     margin-bottom: 0;
 }
 
-.step-div2 label {
+.step-div label {
     display: inline-block;
     margin-top: 14px;
     font-size: 12px;
@@ -405,7 +405,7 @@
     color: #444;
 }
 
-.step-div2 input {
+.step-div input {
     font-family: Geometria,Verdana,sans-serif;
     width: 100%;
     font-size: 16px;
@@ -420,12 +420,13 @@
 }
 
 
-.step-div2 .next-button-container {
+.step-div .next-button-container {
     text-align: center; 
     padding-top: 40px;
+    padding-bottom: 20px;
 }
 
-.step-div2 .next-button {
+.step-div .next-button {
     width: 80%;
     font-size: 17px;
     font-weight: normal;
@@ -443,14 +444,14 @@
     text-decoration: none;
 }
 
-.step-div2 .tile {
+.step-div .tile {
     background-color: #fff;
     border-radius: 5px;
     width: 100%;
     padding: 5px 5px 5px 5px;
 }
 
-.step-div2 .custom-input-radio {
+.step-div .custom-input-radio {
     background-color: transparent;
     border: 1px solid WindowFrame;
     color: inherit;
@@ -459,20 +460,30 @@
     cursor: default;
     appearance: auto;
 }
+
+.step-div .form-section {
+    margin-bottom: 10px;
+}
+
+.step-div a {
+    color: #ee482a; 
+    text-decoration: none;
+}
+
 </style>    
     
-  <div class="step-div step-div2" id="step1">
+  <div class="step-div" id="step1">
     <h2>Create your science account</h2>
     <ul>
       <li>Access to 100+ science experiments</li>
       <li>Your achivements and lab notes</li>
     </ul>
     <div>
-      <label for="id_email">Email&nbsp;*</label>
+      <label for="id_email">Email</label>
       <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
     </div>
     <p class="note">
-      By continuing you agree you have read and consent to our <a style="color: #ee482a; text-decoration: none" href="#">Terms &amp; Conditions</a>.
+      By continuing you agree you have read and consent to our <a href="#">Terms &amp; Conditions</a>.
     </p>
     <div class="next-button-container">
       <a class="next-button" href="#2">CONTINUE</a>
@@ -480,24 +491,96 @@
   </div>
     
 
-  <div class="step-div step-div2 step-grey" id="step2">
+
+  <div class="step-div step-grey" id="step2">
     <h2>Select your plan</h2>
     <img src="step2-01.png" style="margin-left: -9px; margin-top: 10px">
     <img src="step2-02.png" style="margin-left: -9px; margin-top: 35px">
     <div class="next-button-container">
       <a class="next-button" href="#3">CONTINUE</a>
     </div>
-    <div style="bottom: 0"></div>
   </div>
+
     
-  <div class="step-div step-div2 step-grey" id="step3">
-    <h2>How would you like to pay</h2>
+  <div class="step-div step-grey" id="step3">
+    <h2>How would you like to pay?</h2>
     <img src="step3-01.png" style="margin-left: -9px; margin-top: 10px">
     <div class="next-button-container">
       <a class="next-button" href="#4">CONTINUE</a>
     </div>
-    <div style="bottom: 0"></div>
   </div>
+
+
+  <div class="step-div" id="step4">
+    <h2>Where should we ship to?</h2>
+    <div class="form-section">
+      <label for="id_email">First name for delivery&nbsp;*</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <div class="form-section">
+      <label for="id_email">Last name for delivery&nbsp;*</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <div class="form-section">
+      <label for="id_email">Address line 1&nbsp;*</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <div class="form-section">
+      <label for="id_email">Address line 2</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <div class="form-section">
+      <label for="id_email">City&nbsp;*</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <div class="form-section">
+      <label for="id_email">Postcode</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <p>
+      <label for="id_email">Country&nbsp;*</label><br>
+      United Kingdom (<a href="#">Change</a>)
+    </p>
+    <div class="form-section">
+      <label for="id_email">Phone&nbsp;*</label>
+      <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
+    </div>
+    <div class="next-button-container">
+      <a class="next-button" href="#5">CONTINUE</a>
+    </div>
+  </div>
+
+  <div class="step-div" id="step5">
+    <h2>Your order summary</h2>
+    <img src="step5-01.png" style="margin-left: 0px; margin-top: 20px; margin-bottom: 20px">
+    <p class="note">
+      Change or cancel anytime online
+    </p>
+    <div class="next-button-container">
+      <a class="next-button" href="#6">CONTINUE</a>
+    </div>
+  </div>
+
+  <div class="step-div" id="step6">
+    <h2>Set up your payment</h2>
+    <ul>
+      <li>The first set will be shipped in 2 days</li>
+      <li>No commitments</li>
+      <li>Cancel online at any time</li>
+    </ul>
+    <img src="step6-01.png" style="margin-left: 0px; margin-top: 20px;">
+    <p class="note">
+      We accept Visa, Mastercard and Americal Express
+    </p>
+    <div class="next-button-container">
+      <a class="next-button" href="#6">CHECKOUT</a>
+    </div>
+    <p>
+      <img src="step6-02.png" style="margin-right: 10px"> 100% money-back guarantee
+    </p>
+  </div>
+
+
 </main>
 
         
