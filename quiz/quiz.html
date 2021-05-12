@@ -576,6 +576,20 @@
     box-shadow: 1px 1px rgba(250,72, 42,.15);
 }
 
+.sets-image-carousel {
+    margin-top: 20px;
+}
+
+.sets-image-carousel img {
+    border: 1px solid rgb(255, 255, 255);
+    width: 80px; 
+    height: auto;
+}
+
+.sets-image-carousel .selected-carousel-item {
+    border: 1px solid rgb(250, 72, 42);
+}
+
 </style>    
     
   <div class="step-div landing firststep" id="step1">
@@ -585,7 +599,7 @@
         Subscription for science experiments. 
       </p>
       <div class="next-button-container">
-        <a class="next-button" href="#2">Get Started</a>
+        <a class="next-button" href="#222">Get Started</a>
       </div>
     </div>
     <div>
@@ -595,6 +609,29 @@
     </div>
   </div>
     
+
+  <div class="step-div margin-container" id="step222" data-onactive="startCarouselItem();">
+    <div class="step-number">STEP 1 OF 5</div>
+    <h2>Chech some of the sets we've selected for you</h2>
+
+    <div class="sets-image-carousel">
+      <img src="images/Electric motor unboxed small.jpg" class="selected-carousel-item" data-big-image-src="images/Electric motor unboxed 900.jpg" data-video-src="videos/Electric motor compilation.mp4">
+      <img src="images/Luminescence unboxed small.jpg" data-big-image-src="images/Luminescence unboxed 900.jpg" data-video-src="videos/Luminescence compilation.mp4"> 
+      <img src="images/Rheoscopic fluid unboxed small.jpg" data-big-image-src="images/Rheoscopic fluid unboxed 900.jpg" data-video-src="videos/Rheoscopic fluid compilation.mp4"> 
+    </div>
+
+    <div class="sets-carousel" style="position:relative;">
+      <video id="selected-set-video" class="video-js" preload="auto" autoplay muted playsinline style="width: 100%; height: auto; margin-top: 20px;">
+        <source src="videos/Electric motor compilation.mp4" type="video/mp4" />
+      </video>
+      <img id="selected-set-picture" src="images/Electric motor unboxed 900.jpg" style="width: 100%; height: auto; margin-top: 20px; display: block; position:absolute; top: 0px; left: 0px; z-index:300000; padding: 0px; margin-bottom: 0px;">
+    </div>
+
+    <div class="next-button-container">
+      <a class="next-button" href="#2">CONTINUE</a>
+    </div>
+  </div>
+
 
   <div class="step-div margin-container" id="step2">
     <div class="step-number">STEP 1 OF 5</div>
@@ -868,7 +905,7 @@ https://res.cloudinary.com/mel-science/image/upload/fl_progressive:steep,q_auto:
     <h2>Whose recommendations about science education do you trust?</h2>
     <div class="form-section tag-cloud">
       <span class="tag">Scientists</span>&nbsp;
-      <span class="tag">Selebrities</span>&nbsp;
+      <span class="tag">Celebrities</span>&nbsp;
       <span class="tag">Universities</span>&nbsp;
       <span class="tag">Schools</span>&nbsp;
       <span class="tag">Other parents</span>&nbsp;
@@ -1099,8 +1136,33 @@ $(document).ready(function(){
   $(".tag").click(function(e) {
     $(this).toggleClass("tag-checked");
   });
+
+  $(".sets-image-carousel img").click(function(e) {
+    $(this).siblings().removeClass("selected-carousel-item");
+    $(this).addClass("selected-carousel-item");
+    startCarouselItem();
+  });
 });
 
+
+function startCarouselItem() {
+  var img = $(".selected-carousel-item").first();
+  var imageUrl = $(img).attr("data-big-image-src");
+  var videoUrl = $(img).attr("data-video-src");
+
+  $("#selected-set-picture").attr("src", imageUrl);
+  $("#selected-set-picture").css("display", "block");
+  $("#selected-set-video source").attr("src", videoUrl);
+  $("#selected-set-video").on('ended', function() {
+    $("#selected-set-picture").css("display", "block");
+  });
+  setTimeout(function() {
+    $("#selected-set-video")[0].load();
+    setTimeout(function() {
+      $("#selected-set-picture").css("display", "none");
+    }, 300);
+  }, 1000);
+}
 
 function toNewStep(step) {
   $(".step-div").css("display", "none");
@@ -1109,6 +1171,13 @@ function toNewStep(step) {
     $("body").css("background-color", "#F0F0F0");
   } else {
     $("body").css("background-color", "#FFFFFF");
+  }
+
+  //Step specific initializations
+  var onActive = $("#step" + step).attr("data-onactive");
+  console.log(onActive); 
+  if (onActive) {
+    eval(onActive);
   }
 }
 
@@ -1121,11 +1190,12 @@ window.onpopstate = function(event) {
    toNewStep(step);
 }; 
 
-   let step = window.location.hash.substr(1);
-   if (step=="") {
-     step = 1;
-   }
-   toNewStep(step);
+let step = window.location.hash.substr(1);
+if (step=="") {
+  step = 1;
+}
+toNewStep(step);
+
 </script> 
             
     
