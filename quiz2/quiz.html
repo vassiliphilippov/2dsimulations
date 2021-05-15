@@ -355,7 +355,6 @@
 
             
 <style>
-
 .previous{
   margin-bottom: 7px;
   display: flex;
@@ -366,7 +365,6 @@
   display: flex;
   align-items: center;
 }
-
 .step-div {
   border-top: 1px solid #DEDEDE;
   padding-top: 19px;
@@ -437,7 +435,7 @@
 }
 
 .step-div input {
-    font-family: Geometria;
+    font-family: Geometria,Verdana,sans-serif;
     width: 100%;
     font-size: 16px;
     line-height: 16px;
@@ -614,7 +612,7 @@
 }
 .choice .radio-choice {
     border: 2px solid rgba(0,0,0,.15);
-    padding: 10px; 
+    padding: 8px; 
     padding-left: 20px; 
     padding-right: 20px;
     height: 45px;
@@ -892,17 +890,22 @@
       </div>
     </div>
     <div class="next-button-container" id="step2-btn-wrap">
-      <a class="next-button add-css1" href="#10">DID IT</a>
-      <a class="next-button add-css2" href="#10">NEW</a>
+      <a class="next-button add-css1" >DID IT</a>
+      <a class="next-button add-css2" >NEW</a>
     </div>
     <div>
       <p style="margin: 0;">
         We will not ship you these experiments
         if you already did them &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </p>
+    </div>
+    <div style="text-align: center;">
+      <sapn>You can skip this step:</sapn>
+      <span>
         <a href="#10" style="text-decoration:underline">
           skip
         </a>
-      </p>
+      </span>
     </div>
   </div>
 
@@ -1159,7 +1162,15 @@
 <script src="./slick/slick.js" type="text/javascript" charset="utf-8"></script>       
 <script>
 $(document).ready(function(){
-  let childName;
+  
+  $(".add-css1").click(()=>{
+    $('.autoplay-step2').slick('slickPrev');
+  })
+
+  $(".add-css2").click(()=>{
+    $('.autoplay-step2').slick('slickPrev');
+  })
+
   $("#step10-confirm").click(()=>{
     if($(".skip-feature.radio-checked").attr('val') == "yes"){
       window.location.href = "#11"
@@ -1210,7 +1221,6 @@ $(document).ready(function(){
       }
     }
   })
-
   
 
   if($('#step222').css('display') == 'block'){
@@ -1252,7 +1262,6 @@ $(document).ready(function(){
           autoplay: false,
           autoplaySpeed: 2000,
           arrows: false,
-          // dots: true
       });
     }
     
