@@ -512,16 +512,17 @@
     text-align: center;
     margin-top: 50px;
 }
-.val-alarm1{
+
+.error-message {
   background-color: rgb(245, 161, 146);
   color: white;
   text-align: center;
   border-radius: 5px;
   display: none;
-}
-.val-alarm1 p{
   padding: 7px;
+  margin-top: 15px;
 }
+
 .val-alarm2{
   background-color: rgb(245, 161, 146);
   color: white;
@@ -660,9 +661,23 @@
 }
 
 .first-quiz-progress {
-    margin-bottom: 10px;
+    margin-top: -5px;
+    margin-bottom: 20px;
 }
 </style>    
+
+<!--SVG styles for progress pictures-->
+<style>
+.past-number {fill: #FA482A; stroke-width: 0; x: 30%; y: 75%; font-size: 75%; font-family: sans-serif; text-anchor: start} 
+.current-number {fill: #FA482A; stroke-width: 0; x: 30%; y: 75%; font-size: 75%; font-family: sans-serif; text-anchor: start} 
+.future-number {fill: #CCC; stroke-width: 0; x: 30%; y: 75%; font-size: 75%; font-family: sans-serif; text-anchor: start} 
+.past-circle {stroke: #FA482A; fill: none; stroke-width: 5%; ry: 45%; rx: 45%; cy: 50%; cx: 50%;}
+.current-circle {stroke: #FA482A; fill: none; stroke-width: 5%; ry: 45%; rx: 45%; cy: 50%; cx: 50%;}
+.future-circle {stroke: #CCC; fill: none; stroke-width: 5%; ry: 45%; rx: 45%; cy: 50%; cx: 50%;}
+.past-line {stroke-width: 5%; stroke: #FA482A; fill: none;}
+.future-line {stroke-width: 5%; stroke: #CCC; fill: none;}
+</style>
+
     
   <div class="step-div landing firststep" id="step1">
     <div class="margin-container">
@@ -680,62 +695,96 @@
       </video>
     </div>
   </div>
+
+<script>
+function checkChildValues() {
+  var name = $("#id_child_name").val();
+  var childType = $("#id_child_type").attr("data-active");
+  if (!childType) {
+    showErrorMessage("Please choose");
+    return false;
+  }
+
+  if (!name) {
+    showErrorMessage("Please enter name to continue");
+    return false;
+  }
+
+  $(".child-name-to-replace").each(function() {
+    var s = $(this).attr("data-template");
+    if (!s) {
+        s = $(this).text();
+    }
+    s = s.replace("%NAME%", name);
+    $(this).text(s);
+  });
+  
+  return true;
+}
+</script>
     
-
-<style>
-.current-number {fill: #FA482A; stroke-width: 0; x: 30%; y: 75%; font-size: 75%; font-family: sans-serif; text-anchor: start} 
-.future-number {fill: #CCC; stroke-width: 0; x: 30%; y: 75%; font-size: 75%; font-family: sans-serif; text-anchor: start} 
-.current-circle {stroke: #FA482A; fill: none; stroke-width: 5%; ry: 45%; rx: 45%; cy: 50%; cx: 50%;}
-.future-circle {stroke: #CCC; fill: none; stroke-width: 5%; ry: 45%; rx: 45%; cy: 50%; cx: 50%;}
-</style>
-
-  <div class="step-div margin-container" id="step2" data-title="Setup Quiz - MEL Science">
+  <div class="step-div margin-container" id="step2" data-title="Setup Quiz - MEL Science" data-oncheck="checkChildValues();">
     <div class="step-number first-quiz">STEP 1 OF 5</div>
     <div class="first-quiz-progress">
-      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle"/><text class="current-number" x="30%" y="75%">1</text></g></svg>
-      <svg width="45" height="20" xmlns="http://www.w3.org/2000/svg"><g><line id="svg_1" x1="5%" x2="95%" y1="50%" y2="50%" stroke-width="5%" stroke="#CCC" fill="none"/></g></svg>
-      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="30%" y="75%">2</text></g></svg>
-      <svg width="45" height="20" xmlns="http://www.w3.org/2000/svg"><g><line id="svg_1" x1="5%" x2="95%" y1="50%" y2="50%" stroke-width="5%" stroke="#CCC" fill="none"/></g></svg>
-      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="30%" y="75%">3</text></g></svg>
-      <svg width="45" height="20" xmlns="http://www.w3.org/2000/svg"><g><line id="svg_1" x1="5%" x2="95%" y1="50%" y2="50%" stroke-width="5%" stroke="#CCC" fill="none"/></g></svg>
-      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="30%" y="75%">4</text></g></svg>
-      <svg width="45" height="20" xmlns="http://www.w3.org/2000/svg"><g><line id="svg_1" x1="5%" x2="95%" y1="50%" y2="50%" stroke-width="5%" stroke="#CCC" fill="none"/></g></svg>
-      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="30%" y="75%">5</text></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle"/><text class="current-number" x="32%" y="73%">1</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">2</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">3</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">4</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">5</text></g></svg>
     </div>
     <h2>Who is the young explorer?</h2>
 
-    <div class="form-section choice choice-cloud" data-onchange="$('#name-form-elements').removeClass('hidden-form-elements');">
+    <div id="id_child_type" class="form-section choice choice-cloud" data-onchange="$('#name-form-elements').removeClass('hidden-form-elements');">
       <span class="radio-choice">My child</span> &nbsp; 
       <span class="radio-choice">Grandchild</span> &nbsp; 
       <span class="radio-choice">Friend's child</span> &nbsp; 
       <span class="radio-choice">Student</span> &nbsp; 
       <span class="radio-choice">Myself :)</span> &nbsp; 
+      <span class="radio-choice">Other</span> &nbsp; 
     </div>
 
     <div class="cols2__col cols2 cols2--nonadaptive hidden-form-elements" id="name-form-elements">
       <div class="cols2__col">
         <label for="id_state" class="form-label-v2">Name&nbsp;*</label>
-        <input type="text" name="state" maxlength="255" class="form-control-v2 -metrika-nokeys" autocomplete="shipping address-level1" id="id_state">
+        <input type="text" name="child_name" maxlength="255" class="form-control-v2 -metrika-nokeys" id="id_child_name">
       </div>
 
       <div class="cols2__col">
         <label for="id_postcode" class="form-label-v2">Age&nbsp;</label>
-        <input type="text" name="postcode" maxlength="255" class="form-control-v2 -metrika-nokeys" autocomplete="shipping postal-code" required="" id="id_postcode">
+        <input type="text" name="child_age" maxlength="255" class="form-control-v2 -metrika-nokeys" required="" id="id_child_age">
       </div>
     </div>
-    <div class="val-alarm1">
-      <p>Please enter name to continue</p>
+    <div class="error-message">
+      Please enter name to continue
     </div>
     <div class="next-button-container">
-      <a class="next-button" id="step2-confirm">CONTINUE</a>
+      <a class="next-button" id="step2-confirm" href="#3">CONTINUE</a>
     </div>
+    <p class="note">
+      You can add other children later.
+    </p>
     
   </div>
 
 
   <div class="step-div margin-container" id="step3">
-    <div class="step-number">STEP 2 OF 5</div>
-    <h2 id="alice-wrap1">Why is science education important for Alice?</h2>
+    <div class="step-number first-quiz">STEP 2 OF 5</div>
+    <div class="first-quiz-progress">
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle"/><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle" /><text class="current-number" x="32%" y="73%">2</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">3</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">4</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">5</text></g></svg>
+    </div>
+    <h2 class="child-name-to-replace" data-template="Why is science education important for %NAME%?">Why is science education important for your children?</h2>
 
     <div class="form-section tag-cloud" style="text-align: left">
       <span class="tag">Inspire curiosity</span> 
@@ -753,7 +802,18 @@
 
 
   <div class="step-div margin-container" id="step4">
-    <div class="step-number">STEP 3 OF 5</div>
+    <div class="step-number first-quiz">STEP 3 OF 5</div>
+    <div class="first-quiz-progress">
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle"/><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle" /><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle" /><text class="current-number" x="32%" y="73%">3</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">4</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">5</text></g></svg>
+    </div>
     <h2>Where would you do hands-on science?</h2>
 
     <div class="form-section tag-cloud">
@@ -772,8 +832,19 @@
 
 
   <div class="step-div margin-container" id="step5">
-    <div class="step-number">STEP 4 OF 5</div>
-    <h2 id="alice-wrap2">What is the best time for Alice for science?</h2>
+    <div class="step-number first-quiz">STEP 4 OF 5</div>
+    <div class="first-quiz-progress">
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle"/><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle" /><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle" /><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle" /><text class="current-number" x="32%" y="73%">4</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="future-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="future-circle" /><text class="future-number" x="32%" y="73%">5</text></g></svg>
+    </div>
+    <h2 class="child-name-to-replace" data-template="What is the best time for %NAME% for science?">What is the best time for science?</h2>
 
     <div class="form-section tag-cloud" style="text-align: left">
       <span class="tag">After school</span><br>
@@ -789,8 +860,19 @@
 
 
   <div class="step-div margin-container" id="step6">
-    <div class="step-number">STEP 5 OF 5</div>
-    <h2 id="alice-wrap3">What topics will engage Alice the most?</h2>
+    <div class="step-number first-quiz">STEP 5 OF 5</div>
+    <div class="first-quiz-progress">
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle"/><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle" /><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle" /><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="past-circle" /><text class="past-number" x="32%" y="73%">&#10003;</text></g></svg>
+      <svg width="40" height="20" xmlns="http://www.w3.org/2000/svg"><g><line class="past-line" x1="5%" x2="95%" y1="50%" y2="50%"/></g></svg>
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle" /><text class="current-number" x="32%" y="73%">5</text></g></svg>
+    </div>
+    <h2 class="child-name-to-replace" data-template="What topics will engage %NAME% the most?">What science topics will engage the most?</h2>
     <img src="step5-02.png" width="325">
 
     <div class="next-button-container">
@@ -799,8 +881,30 @@
   </div>
 
 
+<script>
+function isEmail(email) {
+  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return regex.test(email);
+}
 
-  <div class="step-div margin-container" id="step7">
+function checkEmail() {
+  var email = $("#id_email").val();
+  if (!email) {
+    showErrorMessage("Please enter email to continue");
+    return false;
+  }
+
+  if (!isEmail(email)) {
+    showErrorMessage("Incorrect email address");
+    return false;
+  }
+     
+  return true;
+}
+</script>
+    
+
+  <div class="step-div margin-container" id="step7" data-title="Create science account - MEL Science" data-oncheck="checkEmail();">
     <h2>Create your science account</h2>
     <ul>
       <li>Access to 100+ science experiments</li>
@@ -808,17 +912,14 @@
       <li>Your achivements and lab notes</li>
     </ul>
     <div>
-      <label for="id_email">Email</label>
+      <label for="id_email">Email*</label>
       <input type="email" name="email" maxlength="254" autocomplete="email" id="id_email" required/>
     </div>
+    <div class="error-message">
+      Please enter name to continue
+    </div>
     <div class="next-button-container">
-      <a class="next-button" id="step7-confirm">CONTINUE</a>
-    </div>
-    <div class="val-alarm2">
-      <p>Please Input Email Field</p>
-    </div>
-    <div class="val-alarm3">
-      <p>Email type is incorrect</p>
+      <a class="next-button" href="#8">CONTINUE</a>
     </div>
     <p class="note">
       By continuing you agree you have read and consent to our <a href="#">Terms &amp; Conditions</a>.
@@ -828,7 +929,7 @@
     
   <div class="step-div margin-container" id="step8">
     <div class="step-number">STEP 1 OF 7</div>
-    <h2 id="alice-wrap4">How will Alice perform experiments?</h2>
+    <h2 class="child-name-to-replace" data-template="How will %NAME% perform experiments?">How will you perform experiments?</h2>
     <div class="form-section choice">
       <div class="radio-choice">With family</div>
       <div class="radio-choice">With MEL Science online tutor</div>
@@ -885,7 +986,7 @@
     
   <div class="step-div margin-container" id="step10">
     <div class="step-number">STEP 3 OF 7</div>
-    <h2>Would you allow using a smartphone or a table for educational purpose?</h2>
+    <h2 class="child-name-to-replace" data-template="Would you allow %NAME% using a smartphone or a table for educational purpose?">Would you allow your children using a smartphone or a table for educational purpose?</h2>
     <div class="form-section choice">
       <div class="radio-choice skip-feature" val="yes">Yes</div>
       <div class="radio-choice skip-feature" val="no">No</div>
@@ -964,7 +1065,7 @@
     
   <div class="step-div margin-container" id="step15">
     <h2>RECOMMENDATION</h2>
-    <p id="alice-wrap5">
+    <p class="child-name-to-replace">
        You are seconds away from an ideal education subscription for Alice
     </p>
     <div class="next-button-container">
@@ -1188,7 +1289,48 @@
     
 <script src="./slick/slick.js" type="text/javascript" charset="utf-8"></script>       
 <script>
+
+function showErrorMessage(text) {
+  $(".error-message").text(text);
+  $(".error-message").fadeIn();
+  setTimeout(function() {
+    $(".error-message").fadeOut();
+  }, 1500);
+}
+
 $(document).ready(function(){
+  //Add all listeners and handlers 
+  $('.next-button').click((e)=>{
+    var stepContainer = $(event.target).closest(".step-div").first();
+    var oncheck = stepContainer.attr("data-oncheck"); 
+    if (oncheck) {
+      var result = eval(oncheck);
+      if (!result) {
+        return false;
+      }
+    }
+  })
+
+  $(".radio-choice").click(function(e) {
+    var container = $(this).closest(".choice").first();
+    container.attr("data-active", $(this).text());
+    var onchange = container.attr("data-onchange");
+    if (onchange) {
+       eval(onchange);
+    };
+    $(this).siblings().removeClass("radio-checked");
+    $(this).addClass("radio-checked");
+  });
+
+  $(".tag").click(function(e) {
+    $(this).toggleClass("tag-checked");
+  });
+
+  $(".sets-image-carousel img").click(function(e) {
+    $(".sets-image-carousel img").removeClass("selected-carousel-item");
+    $(this).addClass("selected-carousel-item");
+    startCarouselItem();
+  });
   
   $(".add-css1").click(()=>{
     $('.autoplay-step2').slick('slickNext');
@@ -1206,49 +1348,6 @@ $(document).ready(function(){
       window.location.href = "#12"
     }
   })
-
-  $('#step2-confirm').click(()=>{
-    
-    if(!$("#id_state").val()){
-      $(".val-alarm1").fadeIn();
-      setTimeout(function(){
-        $(".val-alarm1").fadeOut();
-      }, 1500);
-    }
-    else{
-      $('#alice-wrap1').text('Why is science education important for ' + $("#id_state").val() + '?')
-      $('#alice-wrap2').text('What is the best time for ' + $("#id_state").val() + 'for science?')
-      $('#alice-wrap3').text('What topics will engage ' + $("#id_state").val() + ' the most?')
-      $('#alice-wrap4').text('How will ' + $("#id_state").val() + ' perform experiments?')
-      $('#alice-wrap5').text('You are seconds away from an ideal education subscription for ' + $("#id_state").val())
-      window.location.href = "#3"
-    }
-  })
-  function isEmail(email) {
-    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    return regex.test(email);
-  }
-  $('#step7-confirm').click(()=>{
-    
-    if(!$("#id_email").val()){
-      $(".val-alarm2").fadeIn();
-      setTimeout(function(){
-        $(".val-alarm2").fadeOut();
-      }, 1500);
-    }
-    else{
-      if(!isEmail($("#id_email").val())){
-        $(".val-alarm3").fadeIn();
-        setTimeout(function(){
-          $(".val-alarm3").fadeOut();
-        }, 1500);
-      }
-      else{
-        window.location.href = "#8"
-      }
-    }
-  })
-  
 
   if($('#step222').css('display') == 'block'){
     $('.autoplay').slick({
@@ -1299,27 +1398,9 @@ $(document).ready(function(){
     $('.autoplay').slick('slickPrev');
   })
   $('.next').click(()=>{
-    $('.autoplay').slick('slickNext');
+    $('.autoplay').slick('slickNext');                              
   })
-  $(".radio-choice").click(function(e) {
-    var onchange = $(this).closest(".choice").first().attr("data-onchange");
-    console.log("onchange = ", onchange);
-    if (onchange) {
-       eval(onchange);
-    };
-    $(this).siblings().removeClass("radio-checked");
-    $(this).addClass("radio-checked");
-  });
 
-  $(".tag").click(function(e) {
-    $(this).toggleClass("tag-checked");
-  });
-
-  $(".sets-image-carousel img").click(function(e) {
-    $(".sets-image-carousel img").removeClass("selected-carousel-item");
-    $(this).addClass("selected-carousel-item");
-    startCarouselItem();
-  });
 });
 
 
@@ -1370,7 +1451,6 @@ window.onpopstate = function(event) {
    if (step=="") {
      step = 1;
    }
-   console.log("step = ", step);
    toNewStep(step);
 }; 
 
