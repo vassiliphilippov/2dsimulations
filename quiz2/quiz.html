@@ -691,7 +691,7 @@
     </div>
     <div>
       <video id="lab-video" class="video-js" preload="auto" poster="poster.jpg" autoplay muted playsinline style="width: 100%; height: auto; margin-top: 20px">
-        <source src="landing_sc1.mp4" type="video/mp4" />
+        <source src="videos/landing_sc1.mp4" type="video/mp4" />
       </video>
     </div>
   </div>
@@ -859,6 +859,28 @@ function checkChildValues() {
 
 
 
+<style>
+.topic-header {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.topic-checkmark {
+    position:absolute; 
+    top: 105px; 
+    left: 105px; 
+    z-index:300000;	
+    display: none; 
+}
+
+.topic-video-selected .topic-checkmark {
+    display: block; 
+}
+
+.topic-checkmark-symbol {fill: #FA482A; stroke-width: 0; x: 30%; y: 100%; font-size: 150%; font-weight: bold; font-family: sans-serif; text-anchor: start} 
+.topic-checkmark-circle {stroke: #FA482A; fill: #FFF; stroke-width: 5%; ry: 45%; rx: 45%; cy: 50%; cx: 50%;}
+
+</style>
   <div class="step-div margin-container" id="step6">
     <div class="step-number first-quiz">STEP 5 OF 5</div>
     <div class="first-quiz-progress">
@@ -873,7 +895,39 @@ function checkChildValues() {
       <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="current-circle" /><text class="current-number" x="32%" y="73%">5</text></g></svg>
     </div>
     <h2 class="child-name-to-replace" data-template="What topics will engage %NAME% the most?">What science topics will engage the most?</h2>
-    <img src="step5-02.png" width="325">
+
+    <div class="cols2__col cols2 cols2--nonadaptive">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-beauty" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/topic-beauty.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Beauty of science</div>        
+      </div>
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-wow" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/topic-wow.mp4" type="video/mp4" />
+        </video>
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Wow science</div>        
+      </div>
+    </div>
+    <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-magic" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/topic-magic.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Magic science</div>        
+      </div>
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-light" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/topic-light.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Light</div>        
+      </div>
+    </div>
 
     <div class="next-button-container">
       <a class="next-button" href="#7">CONTINUE</a>
@@ -944,42 +998,92 @@ function checkEmail() {
     
   <div class="step-div margin-container" id="step9">
     <div class="step-number">STEP 2 OF 7</div>
-    <h2>Select the experiments you already did with your kids</h2>
-    <h3 style="margin-top: 30px;">Tin dendrite</h3>
-    <div class="autoplay-step2">
-      <div>
-        <img src="sample.jpg" alt="">
+    <h2 class="child-name-to-replace" data-template="Select experiments you already did with %NAME% and don't want to do again">Select experiments you already did with your kids and don't want to do again</h2>
+    <div style="margin-bottom: 20px; margin-top: 20px; display: none">
+      We will not ship you these experiments 
+    </div>
+    <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-beauty" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/electric-motor.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">X</text></g></svg>
+        <div class="topic-header">Electric motor</div>        
       </div>
-      <div>
-        <img src="sample2.jpg" alt="">
-      </div>
-      <div>
-        <img src="sample.jpg" alt="">
-      </div>
-      <div>
-        <img src="sample2.jpg" alt="">
-      </div>
-      <div>
-        <img src="sample.jpg" alt="">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-wow" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/luminesence.mp4" type="video/mp4" />
+        </video>
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Luminescence</div>        
       </div>
     </div>
-    <div class="next-button-container" id="step2-btn-wrap">
-      <a class="next-button add-css1" >DID IT</a>
-      <a class="next-button add-css2" >NEW</a>
+    <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-magic" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/chemical-seaweed.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Chemical seaweed</div>        
+      </div>
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-light" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/nitinol.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Shape memory</div>        
+      </div>
     </div>
-    <div>
-      <p style="margin: 0;">
-        We will not ship you these experiments
-        if you already did them &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      </p>
+    <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-magic" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/infinity-mirror.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Infinity mirror</div>        
+      </div>
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-light" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/distilation.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Whoosh bottle</div>        
+      </div>
     </div>
-    <div style="text-align: center;">
-      <sapn>You can skip this step:</sapn>
-      <span>
-        <a href="#10" style="text-decoration:underline">
-          skip
-        </a>
-      </span>
+    <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-magic" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/stress-patterns.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Stress patterns</div>        
+      </div>
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-light" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/burning-in-oxyden.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Pure oxygen</div>        
+      </div>
+    </div>
+    <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-magic" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/cyanotype.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Cyanotype</div>        
+      </div>
+      <div class="cols2__col" style="position:relative;">
+        <video id="topic-light" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
+          <source src="videos/experiments/chenical-jellyfish.mp4" type="video/mp4" />
+        </video>        
+        <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
+        <div class="topic-header">Chemical jellyfish</div>        
+      </div>
+    </div>
+    <div class="next-button-container">
+      <a class="next-button" id="step10-confirm">CONTINUE</a>
     </div>
   </div>
 
@@ -1298,8 +1402,8 @@ function showErrorMessage(text) {
   }, 1500);
 }
 
+//Add all listeners and handlers 
 $(document).ready(function(){
-  //Add all listeners and handlers 
   $('.next-button').click((e)=>{
     var stepContainer = $(event.target).closest(".step-div").first();
     var oncheck = stepContainer.attr("data-oncheck"); 
@@ -1324,6 +1428,11 @@ $(document).ready(function(){
 
   $(".tag").click(function(e) {
     $(this).toggleClass("tag-checked");
+  });
+
+  $(".topic-video").click(function(e) {
+    console.log("clicked");
+    $(this).parent().toggleClass("topic-video-selected");
   });
 
   $(".sets-image-carousel img").click(function(e) {
