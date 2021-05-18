@@ -897,14 +897,14 @@ function checkChildValues() {
     <div class="cols2__col cols2 cols2--nonadaptive">
       <div class="cols2__col" style="position:relative;">
         <video id="topic-beauty" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
-          <source src="videos/topic-beauty.mp4" type="video/mp4" />
+          <source src="videos/topics/topic-beauty.mp4" type="video/mp4" />
         </video>        
         <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
         <div class="topic-header">Beauty of science</div>        
       </div>
       <div class="cols2__col" style="position:relative;">
         <video id="topic-wow" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
-          <source src="videos/topic-wow.mp4" type="video/mp4" />
+          <source src="videos/topics/topic-wow.mp4" type="video/mp4" />
         </video>
         <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
         <div class="topic-header">Wow science</div>        
@@ -913,14 +913,14 @@ function checkChildValues() {
     <div class="cols2__col cols2 cols2--nonadaptive" style="margin-top: 20px">
       <div class="cols2__col" style="position:relative;">
         <video id="topic-magic" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
-          <source src="videos/topic-magic.mp4" type="video/mp4" />
+          <source src="videos/topics/topic-magic.mp4" type="video/mp4" />
         </video>        
         <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
         <div class="topic-header">Magic science</div>        
       </div>
       <div class="cols2__col" style="position:relative;">
         <video id="topic-light" class="topic-video" preload="auto" poster="poster.jpg" width="100" autoplay loop muted playsinline style="width: 150px; height: auto;">
-          <source src="videos/topic-light.mp4" type="video/mp4" />
+          <source src="videos/topics/topic-light.mp4" type="video/mp4" />
         </video>        
         <svg class="topic-checkmark" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><g><ellipse class="topic-checkmark-circle" /><text class="topic-checkmark-symbol" x="25%" y="73%">&#10003;</text></g></svg>
         <div class="topic-header">Light</div>        
@@ -1360,7 +1360,7 @@ function onPhysicsCarouselStep() {
   </div>
 
   <div class="step-div margin-container step-grey" id="step18">
-    <h2>How would you like to pay?</h2>
+    <h2>Select your plan</h2>
     <img src="images/steps/step18-01.png" style="margin-left: -9px; margin-top: 10px">
     <img src="images/steps/step18-02.png" style="margin-left: -9px; margin-top: 35px">
     <div class="next-button-container">
@@ -1368,7 +1368,18 @@ function onPhysicsCarouselStep() {
     </div>
   </div>
 
-  <div class="step-div margin-container" id="step19">
+  <div class="step-div margin-container step-grey" id="step19">
+    <div class="step-number">STEP 3 OF 6</div>
+    <h2>How would you like to pay?</h2>
+    <img src="images/steps/step3-01.png" style="margin-left: -9px; margin-top: 10px">
+    <div class="next-button-container">
+      <a class="next-button" href="#20">CONTINUE</a>
+    </div>
+  </div>
+
+
+
+  <div class="step-div margin-container" id="step20">
     <h2>Where should we ship to?</h2>
     <div class="form-section">
       <label for="id_email">First name for delivery&nbsp;*</label>
@@ -1403,29 +1414,29 @@ function onPhysicsCarouselStep() {
       <input type="email" name="email" maxlength="254" autocomplete="email" required="" id="id_email">
     </div>
     <div class="next-button-container">
-      <a class="next-button" href="#20">CONTINUE</a>
-    </div>
-  </div>
-
-  <div class="step-div margin-container" id="step20">
-    <h2>Your order summary</h2>
-    <img src="images/steps/step20-01.png" style="margin-left: 0px; margin-top: 20px; margin-bottom: 20px">
-    <p class="note">
-      Change or cancel anytime online
-    </p>
-    <div class="next-button-container">
       <a class="next-button" href="#21">CONTINUE</a>
     </div>
   </div>
 
   <div class="step-div margin-container" id="step21">
+    <h2>Your order summary</h2>
+    <img src="images/steps/step21-01.png" style="margin-left: 0px; margin-top: 20px; margin-bottom: 20px">
+    <p class="note">
+      Change or cancel anytime online
+    </p>
+    <div class="next-button-container">
+      <a class="next-button" href="#22">CONTINUE</a>
+    </div>
+  </div>
+
+  <div class="step-div margin-container" id="step22">
     <h2>Set up your payment</h2>
     <ul>
       <li>The first set will be shipped in 2 days</li>
       <li>No commitments</li>
       <li>Cancel online at any time</li>
     </ul>
-    <img src="images/steps/step21-01.png" style="margin-left: 0px; margin-top: 20px;">
+    <img src="images/steps/step22-01.png" style="margin-left: 0px; margin-top: 20px;">
     <p class="note">
       We accept Visa, Mastercard and Americal Express
     </p>
@@ -1433,7 +1444,7 @@ function onPhysicsCarouselStep() {
       <a class="next-button" href="#6">CHECKOUT</a>
     </div>
     <p>
-      <img src="images/steps/step21-02.png" style="margin-right: 10px"> 100% money-back guarantee
+      <img src="images/steps/step22-02.png" style="margin-right: 10px"> 100% money-back guarantee
     </p>
   </div>
 
