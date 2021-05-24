@@ -1,0 +1,80 @@
+<html>
+<head>
+  <title>Test</title>
+  <script src="../libs/clipper.js"></script>
+  <script src="../libs/matter_profile.js"></script>
+  <script src="../libs/pixi.min.js"></script>
+
+  <script src="../data/atomcolors.json"></script>
+  <script src="../data/chemistrycompoundstructures.js"></script>
+  <script src="../data/chemistryparticles.json"></script>
+  <script src="../data/periodictable.json"></script>
+
+  <script src="../src/animation.js"></script>
+  <script src="../src/atomdrawer.js"></script>
+  <script src="../src/background.js"></script>
+  <script src="../src/chemistry.js"></script>
+  <script src="../src/chemistryrender.js"></script>
+  <script src="../src/crystal.js"></script>
+  <script src="../src/debug.js"></script>
+  <script src="../src/force.js"></script>
+  <script src="../src/groups.js"></script>
+  <script src="../src/particles.js"></script>
+  <script src="../src/profiler.js"></script>
+  <script src="../src/proximity.js"></script>
+  <script src="../src/scenario.js"></script>
+  <script src="../src/temperature.js"></script>
+  <script src="../src/textureloader.js"></script>
+  <script src="../src/transformation.js"></script>
+  <script src="../src/zonemap.js"></script>
+</head>
+<body>
+<pre id="profileoutput"></pre><p><button onclick="document.getElementById('profileoutput').innerHTML = Profiler.getStatistics(true)">Output profile informationt</button></p>
+<script>
+
+ZoneMap.load("map.png", function (zoneMap) {
+    [engine, render] = Chemistry.createAndInitEngineAndRender(zoneMap, document.body, true, true);
+
+    var cmp = Matter.Composite.create();
+    var r = Matter.Bodies.rectangle(300, 300, 1800, 1800, {collisionFilter: {mask: 0}, density: 0.00001, render: {visible: true}});
+    Matter.Composite.add(cmp, r);
+    var dx = 30;
+    var dy = 30;
+    for (x=0; x<5; x++) {
+        for (y=0; y<5; y++) {
+            var b = Matter.Bodies.circle(r.position.x + x*dx, r.position.y + y*dy, 10);
+            var c = Matter.Constraint.create({
+                bodyA: r,
+                bodyB: b,
+                pointA: {x: x*dx, y:y*dy},
+                pointB: {x: 0, y:0},
+                stiffness: 0.2,
+                length: 0
+            });
+            Matter.Composite.add(cmp, [b, c]);
+        }
+    }
+    Matter.World.add(engine.world, cmp);
+//    Matter.World.add(engine.world, r);
+
+    var particleOptions = { 
+        friction: 0.05,
+        frictionStatic: 0.1,
+        render: { visible: true } 
+    };
+
+    var sb = Matter.Composites.softBody(550, 100, 5, 5, 5, 5, true, 10, particleOptions);
+
+    Matter.World.add(engine.world, sb);
+
+
+//    Matter.World.add(engine.world, b1);
+//    Matter.World.add(engine.world, b2);
+
+
+    Chemistry.run(engine, render);
+});
+
+</script>
+</body>
+</html>
